@@ -3,6 +3,7 @@ require('game_flow.src.controllers.game.ControllerCellBarrier')
 require('game_flow.src.controllers.game.ControllerCellBridge')
 require('game_flow.src.controllers.game.ControllerCellEmpty')
 require('game_flow.src.controllers.game.ControllerCellFlowPoint')
+require('game_flow.src.controllers.game.ControllerDog')
 
 require('game_flow.src.views.game.ViewGrid')
 
@@ -28,8 +29,12 @@ function ControllerGrid.init(self)
     
     self._cells = {}
     
-    local phone = 0
-    local gridCells =  GameInfo:instance():managerGame():currentLevel():grid()
+    self._dogs    = {}
+    
+    self._managerGame = GameInfo:instance():managerGame() 
+    
+    
+    local gridCells = self._managerGame:currentLevel():grid()
     
     local gridCellsViews = {}
     
@@ -107,18 +112,66 @@ function ControllerGrid.init(self)
             
         end
     end
+    
+    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
+        
+        local dogParams = 
+        {
+            flow_type = i,
+        }
+        
+        local dog = ControllerDog:new(dogParams)
+                
+        table.insert(self._dogs, dog)
+        
+        self._view:sourceView():insert(dog:view():sourceView())
+        
+    end
+    
 end
 
 function ControllerGrid.update(self, type)
     
     if(type == EControllerUpdateBase.ECUT_SCENE_ENTER)then
+        print(EControllerUpdateBase.ECUT_SCENE_ENTER)
         
         for indexRow, row in ipairs(self._cells)do
             for indexColumn, cell in ipairs(row)do
                 cell:update(type)
                 cell:view():establishBounds()
+                
+                local entry = cell:entry()
+                
+                if entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() then
+                    
+                    local dog = self._dogs[entry:flowType() + 1]
+                    
+                    local sourceDog = dog:view():sourceView()
+                    
+                    local sourceCell = cell:view():sourceView()
+                    
+                    sourceDog.x = sourceCell.x
+                    sourceDog.y = sourceCell.y
+                    
+                end
+                
             end
         end
+        
+    elseif(type == EControllerUpdate.ECUT_SET_CURRENT_CELL)then
+        
+        local currentCell = self._managerGame:currentCell()
+        
+        local dog = self._dogs[currentCell:flowType() + 1]
+        
+        local sourceDog = dog:view():sourceView()
+        
+        local controllerCell = currentCell:controller()
+        
+        local sourceCell = controllerCell:view():sourceView()
+        
+        sourceDog.x = sourceCell.x
+        sourceDog.y = sourceCell.y
         
     else
         assert(false)
@@ -138,6 +191,8 @@ function ControllerGrid.cleanup(self)
     
     self._view:cleanup()
     self._view = nil
+    
+    self._managerGame = nil
     
     Controller.cleanup(self)
 end

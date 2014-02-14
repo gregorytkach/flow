@@ -11,7 +11,7 @@ function getManagerLevels()
     local levels = {}
     
     --table.insert(levels, getLevelEditorData(true))
-    table.insert(levels, getLevelEditorData(true))
+    table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
@@ -222,7 +222,7 @@ function getLevelEditorData(isComplete)
         is_complete      = isComplete,
         progress =
         {
-            is_complete      = false,
+            is_complete      = true,
             stars_count      = 3,
         }
     }
@@ -249,7 +249,7 @@ function getLevel0Data(isComplete)
                     flow_type     = EFlowType.EFT_0,
                     is_start      = false
                 } 
-            elseif(rowIndex == 3 and columnIndex == 3)then
+            elseif(rowIndex == 3 and columnIndex == 4)then
                 cellData =
                 {
                     type          = ECellType.ECT_FLOW_POINT,
@@ -309,7 +309,7 @@ function getLevel0Data(isComplete)
         is_complete      = isComplete,
         progress =
         {
-            is_complete      = isComplete,
+            is_complete      = false,
             stars_count      = 3,
         }
     }

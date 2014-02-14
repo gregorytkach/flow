@@ -15,6 +15,7 @@ ManagerGame = classWithSuper(ManagerGameBase, 'ManagerGame')
 --Properties
 --
 
+
 function ManagerGame.currentCell(self)
     
     return self._currentCell
@@ -26,6 +27,7 @@ function ManagerGame.setCurrentCell(self, cell)
     assert(cell ~= nil)
     
     self._currentCell = cell
+    self._currentState:update(EControllerUpdate.ECUT_SET_CURRENT_CELL)
     
 end
 
@@ -177,7 +179,7 @@ function ManagerGame.destroyLine(self, cellStart)
     
     if self._currentLineFlowType == cellStart:flowType() then
     
-        self._currentCell = cellStart 
+        self:setCurrentCell(cellStart) 
         
     end
     

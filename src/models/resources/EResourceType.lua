@@ -59,6 +59,7 @@ EResourceType =
     ["ERT_STATE_GAME_CELL_DEFAULT"]             = "ERT_STATE_GAME_CELL_DEFAULT";
     ["ERT_STATE_GAME_CELL_BARRIER"]             = "ERT_STATE_GAME_CELL_BARRIER";
     ["ERT_STATE_GAME_CELL_BRIDGE"]              = "ERT_STATE_GAME_CELL_BRIDGE";
+    ["ERT_STATE_GAME_DOG_IDLE"]                 = "ERT_STATE_GAME_DOG_IDLE";
     
     --popup bonus
     ["ERT_POPUP_BONUS_VIEW_TIME"]               = "ERT_POPUP_BONUS_VIEW_TIME";

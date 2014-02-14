@@ -211,6 +211,8 @@ end
 function ControllerCell.updateCellNext(self)
     local cellNext = self._entry:cellNext()
     
+    
+   
 --    if(cellNext == nil)then
 --        
 --        self._view:hideAllLines()
