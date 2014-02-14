@@ -1,5 +1,5 @@
 
-
+require('game_flow.src.controllers.game.ControllerGrid')
 
 ControllerGridEditor = classWithSuper(ControllerGrid, 'ControllerGrid')
 
@@ -30,7 +30,7 @@ function ControllerGridEditor.update(self, type)
     
 end
 
-function ControllerGrid.cleanup(self)
+function ControllerGridEditor.cleanup(self)
     
     ControllerGrid.cleanup(self)
     

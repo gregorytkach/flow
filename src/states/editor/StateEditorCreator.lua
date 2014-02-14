@@ -1,4 +1,4 @@
-require('game_flow.src.states.game.StateEditor')
+require('game_flow.src.states.editor.StateEditor')
 
 local state = StateEditor:new()
 

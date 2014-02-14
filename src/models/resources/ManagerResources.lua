@@ -151,6 +151,8 @@ function ManagerResources.getStateBackground(self, value)
         result = '%sstate_game/background/background%s.jpg'
     elseif(value == EStateType.EST_MAP)then
         result = '%sstate_map/map/map_1%s.jpg'
+    elseif (value == EStateType.EST_EDITOR) then
+        result = '%sstate_game/background/background%s.jpg'
     else
         assert(false)
     end

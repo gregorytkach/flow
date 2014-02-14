@@ -22,6 +22,7 @@ end
 
 function GridCreator.init(self, params)
     
+    
     math.randomseed(os.time())
     
     assert(params.columns ~= nil)
@@ -52,7 +53,7 @@ function GridCreator.init(self, params)
             cellData =
             {
                 type          = ECellType.ECT_EMPTY,
-                flowType      = EFlowType.EFT_NONE,
+                flow_type      = EFlowType.EFT_NONE,
             } 
             
             table.insert(row, cellData)
@@ -73,12 +74,12 @@ function GridCreator.init(self, params)
         
         table.insert(self._points, cellData)
         
-        local flowType = columnIndex - 1
+        local flow_type = columnIndex - 1
         
         for rowIndex = 1, rowsCount, 1 do
             
             cellData = self._gridData[rowIndex][columnIndex]
-            cellData.flowType   = flowType
+            cellData.flow_type   = flow_type
             
         end
         
@@ -95,7 +96,7 @@ function GridCreator.init(self, params)
         cellData.type       = ECellType.ECT_FLOW_POINT
         table.insert(self._points, cellData)
         
-        self._counts[flowType + 1] = rowsCount
+        self._counts[flow_type + 1] = rowsCount
         
     end
     
@@ -104,7 +105,7 @@ function GridCreator.init(self, params)
     for rowIndex = 1, 5, 1 do
         
         local cellData      = self._gridData[rowIndex][columnsCount]
-        cellData.flowType   = EFlowType.EFT_3
+        cellData.flow_type   = EFlowType.EFT_3
         
     end
     
@@ -152,9 +153,9 @@ function GridCreator.init(self, params)
     
 end
 
-function GridCreator.tryAddNeighbour(self, neighbours, cell, flowType)
+function GridCreator.tryAddNeighbour(self, neighbours, cell, flow_type)
     
-    local result = cell.type ~= ECellType.ECT_BARRIER and cell.type ~= ECellType.ECT_BRIDGE and cell.flowType ~= flowType 
+    local result = cell.type ~= ECellType.ECT_BARRIER and cell.type ~= ECellType.ECT_BRIDGE and cell.flow_type ~= flow_type 
     
     if result then
         
@@ -166,15 +167,15 @@ function GridCreator.tryAddNeighbour(self, neighbours, cell, flowType)
     
 end
 
-function GridCreator.tryAddCanBridge(self, neighbour, canBridge, flowType)
+function GridCreator.tryAddCanBridge(self, neighbour, canBridge, flow_type)
     
     if self._bridgesCount > 0 
     and neighbour.type ~= ECellType.ECT_FLOW_POINT
     and canBridge.type ~= ECellType.ECT_BRIDGE
     and neighbour.type ~= ECellType.ECT_BRIDGE
     and canBridge.type ~= ECellType.ECT_BARRIER
-    and canBridge.flowType ~= flowType 
-    and canBridge.flowType ~= neighbour.flowType 
+    and canBridge.flow_type ~= flow_type 
+    and canBridge.flow_type ~= neighbour.flow_type 
     
     then
                                 
@@ -198,12 +199,12 @@ function GridCreator.neighbours (self, cell)
         
         local neighbour = self._gridData[cell.y][cell.x - 1]
         
-        if self:tryAddNeighbour(result, neighbour, cell.flowType) 
+        if self:tryAddNeighbour(result, neighbour, cell.flow_type) 
         and cell.x - 1 > 1 and self._bridgesCount > 0  
         then
             
              canBridge = self._gridData[cell.y][cell.x - 2]
-             self:tryAddCanBridge(neighbour, canBridge, cell.flowType)
+             self:tryAddCanBridge(neighbour, canBridge, cell.flow_type)
              
         else
              
@@ -217,12 +218,12 @@ function GridCreator.neighbours (self, cell)
         
         local neighbour = self._gridData[cell.y][cell.x + 1]
         
-        if self:tryAddNeighbour(result, neighbour, cell.flowType) 
+        if self:tryAddNeighbour(result, neighbour, cell.flow_type) 
         and cell.x + 1 < self._columnsCount   
         then
         
             canBridge = self._gridData[cell.y][cell.x + 2]
-            self:tryAddCanBridge(neighbour, canBridge, cell.flowType)
+            self:tryAddCanBridge(neighbour, canBridge, cell.flow_type)
         else
             
             neighbour.canBridge = nil
@@ -235,12 +236,12 @@ function GridCreator.neighbours (self, cell)
         
         local neighbour = self._gridData[cell.y - 1][cell.x]
         
-        if self:tryAddNeighbour(result, neighbour, cell.flowType)
+        if self:tryAddNeighbour(result, neighbour, cell.flow_type)
         and cell.y - 1 > 1   
         then
         
             canBridge = self._gridData[cell.y - 2][cell.x]
-            self:tryAddCanBridge(neighbour, canBridge, cell.flowType)
+            self:tryAddCanBridge(neighbour, canBridge, cell.flow_type)
             
         else
             
@@ -254,12 +255,12 @@ function GridCreator.neighbours (self, cell)
         
         local neighbour = self._gridData[cell.y + 1][cell.x]
         
-        if self:tryAddNeighbour(result, neighbour, cell.flowType)
+        if self:tryAddNeighbour(result, neighbour, cell.flow_type)
         and cell.y + 1 < self._rowsCount  
         then
         
             canBridge = self._gridData[cell.y + 2][cell.x]
-            self:tryAddCanBridge(neighbour, canBridge, cell.flowType)
+            self:tryAddCanBridge(neighbour, canBridge, cell.flow_type)
             
         else
             
@@ -342,7 +343,7 @@ function GridCreator.makeBridge(self, bridge, neighbour)
         bridge.flowAdditional =
         {
             type          = ECellType.ECT_BRIDGE,
-            flowType      = neighbour.flowType,
+            flow_type      = neighbour.flow_type,
         } 
             
     else
@@ -350,7 +351,7 @@ function GridCreator.makeBridge(self, bridge, neighbour)
         bridge.flowAdditional =
         {
             type          = ECellType.ECT_BRIDGE,
-            flowType      = bridge.flowType,
+            flow_type      = bridge.flow_type,
             _next         = bridge._next,
             _prev         = bridge._prev,
         }
@@ -362,7 +363,7 @@ function GridCreator.makeBridge(self, bridge, neighbour)
             bridge._next._prev = bridge.flowAdditional
         end
         
-        bridge.flowType = neighbour.flowType
+        bridge.flow_type = neighbour.flow_type
         
     end
     
@@ -393,14 +394,14 @@ function GridCreator.tryMakeBarrier(self)
     
     if #indexesCounts > 0 then
         
-        local flowType = indexesCounts[math.random(#indexesCounts)] - 1
+        local flow_type = indexesCounts[math.random(#indexesCounts)] - 1
         
         local points = {}
         
         for i = 1, #self._points, 1 do
             
             local point = self._points[i]
-            if point.flowType == flowType then
+            if point.flow_type == flow_type then
                 
                 table.insert(points, point)
                 
@@ -447,8 +448,8 @@ function GridCreator.tryMakeBarrier(self)
             cell._prev = nil
             cell._next = nil
             
-            self._counts[cell.flowType + 1] = self._counts[cell.flowType + 1] - 1
-            cell.flowType = EFlowType.EFT_NONE
+            self._counts[cell.flow_type + 1] = self._counts[cell.flow_type + 1] - 1
+            cell.flow_type = EFlowType.EFT_NONE
             self._barriersCount = self._barriersCount - 1
             
         end
@@ -456,9 +457,10 @@ function GridCreator.tryMakeBarrier(self)
     
 end
 
-function GridCreator.tryChange(self, point, neighbours)
+function GridCreator.tryChange(self, flow_point, neighbours)
     
     local neighbour = nil 
+    local point = flow_point
     
     if math.random(2) == 1 then
         
@@ -495,6 +497,7 @@ function GridCreator.tryChange(self, point, neighbours)
     end
 
     local countPrev = 0
+    
 
     local currentCell = neighbour
 
@@ -518,13 +521,13 @@ function GridCreator.tryChange(self, point, neighbours)
 
     local isPrevChange = false
     local isNextChange = false
-    local flowType = neighbour.flowType
+    local flow_type = neighbour.flow_type
 
     local addCells 
 
     if math.random(2) == 1 then
 
-        if self._counts[flowType + 1] - countPrev >= 3 then
+        if self._counts[flow_type + 1] - countPrev >= 3 then
 
             isPrevChange = true
 
@@ -543,7 +546,7 @@ function GridCreator.tryChange(self, point, neighbours)
             end
 
 
-        elseif self._counts[flowType + 1] - countNext >= 3 then
+        elseif self._counts[flow_type + 1] - countNext >= 3 then
 
             isNextChange = true
 
@@ -564,8 +567,9 @@ function GridCreator.tryChange(self, point, neighbours)
         end
 
     else
+    
 
-        if self._counts[flowType + 1] - countNext >= 3 then
+        if self._counts[flow_type + 1] - countNext >= 3 then
 
             isNextChange = true
 
@@ -583,7 +587,7 @@ function GridCreator.tryChange(self, point, neighbours)
                 addCells = self:changeNext(neighbour)
             end
 
-        elseif self._counts[flowType + 1] - countPrev >= 3 then
+        elseif self._counts[flow_type + 1] - countPrev >= 3 then
 
             isPrevChange = true
 
@@ -615,7 +619,7 @@ function GridCreator.tryChange(self, point, neighbours)
 
             self:makeBridge(bridge, neighbour)
 
-            if bridge.flowAdditional.flowType == flowType then
+            if bridge.flowAdditional.flow_type == flow_type then
 
                 bridge = bridge.flowAdditional
 
@@ -635,7 +639,7 @@ function GridCreator.tryChange(self, point, neighbours)
                 cell._prev = cellPrev
                 cellPrev._next = cell
                 cellPrev = cell
-                cell.flowType = point.flowType
+                cell.flow_type = point.flow_type
                 
             end
 
@@ -653,7 +657,7 @@ function GridCreator.tryChange(self, point, neighbours)
                 cell._next = cellNext
                 cellNext._prev = cell
                 cellNext = cell
-                cell.flowType = point.flowType
+                cell.flow_type = point.flow_type
             end
 
             cellNext._prev = nil
@@ -669,13 +673,14 @@ function GridCreator.tryChange(self, point, neighbours)
 
         if isNextChange then
 
-            self._counts[flowType + 1] = self._counts[flowType + 1] - countNext 
-            self._counts[point.flowType + 1] = self._counts[point.flowType + 1] + #addCells 
+            self._counts[flow_type + 1] = self._counts[flow_type + 1] - countNext 
+            self._counts[point.flow_type + 1] = self._counts[point.flow_type + 1] + #addCells 
 
         else
+        
 
-            self._counts[flowType + 1] = self._counts[flowType + 1] - countPrev 
-            self._counts[point.flowType + 1] = self._counts[point.flowType + 1] + #addCells  
+            self._counts[flow_type + 1] = self._counts[flow_type + 1] - countPrev 
+            self._counts[point.flow_type + 1] = self._counts[point.flow_type + 1] + #addCells  
 
         end
 
@@ -692,6 +697,8 @@ function GridCreator.shuffle(self)
     print(#self._points)
     
     local point = self._points[math.random(#self._points)]
+    
+    
     local neighbours = self:neighbours(point)
     
     if #neighbours > 0 then
@@ -706,13 +713,20 @@ function GridCreator.shuffle(self)
     
 end
 
-
 function GridCreator.shuffles(self, count)
     
     for j = 1, count, 1 do
 
         self:shuffle()
 
+    end
+    
+    
+    for i = 1, #self._points, 1 do
+        
+        local point = self._points[i]
+        point.is_start = false
+        
     end
     
 end

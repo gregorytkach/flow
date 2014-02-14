@@ -11,7 +11,7 @@ function getManagerLevels()
     local levels = {}
     
     --table.insert(levels, getLevelEditorData(true))
-    table.insert(levels, getLevel0Data(true))
+    table.insert(levels, getLevelEditorData(true))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
@@ -204,13 +204,13 @@ function getLevelEditorData(isComplete)
         rows    = 5,
         columns = 5,
         bridgesCount = 4,
-        barriersCount = 6
+        barriersCount = 3
 
     }
         
     local gridCreator = GridCreator:new(paramsCreator)
 
-    gridCreator:shuffles(1)
+    gridCreator:shuffles(1000)
 
     local gridData = gridCreator:gridData()
     local result =
@@ -222,7 +222,7 @@ function getLevelEditorData(isComplete)
         is_complete      = isComplete,
         progress =
         {
-            is_complete      = isComplete,
+            is_complete      = false,
             stars_count      = 3,
         }
     }

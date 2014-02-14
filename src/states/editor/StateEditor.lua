@@ -1,6 +1,6 @@
 StateEditor = classWithSuper(StateBase, 'StateEditor')
 
-require('game_flow.src.controllers.game.ControllerGridEditor')
+require('game_flow.src.controllers.editor.ControllerGridEditor')
 
 
 --
@@ -65,32 +65,12 @@ function StateEditor.update(self, updateType)
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
         self._controllerGrid:update(updateType)
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
-        
+    elseif(updateType == EControllerUpdate.ECUT_GAME_TIME)then
+    elseif(updateType == EControllerUpdateBase.ECUT_PLAYER_ENERGY)then
     else
         assert(false, updateType)
     end
     
-end
-
-function StateEditor.showPopup(self, popupType, callback)
-    self._managerGame:timerStop()
-    
-    StateBase.showPopup(self, popupType, callback)
-end
-
-function StateEditor.hidePopup(self, callback)
-    
-    local callbackWrapper = 
-    function()
-        
-        self._managerGame:timerStart()
-        
-        if(callback ~= nil)then
-            callback()
-        end
-    end
-    
-    StateBase.hidePopup(self, callbackWrapper)
 end
 
 

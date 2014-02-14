@@ -54,7 +54,7 @@ function ControllerMapItem.init(self, params)
     
     if(self._isCurrent)then
         view = ViewMapItemCurrent:new(paramsView)
-    elseif(self._entry:isComplete())then
+    elseif(self._entry:progress():isComplete())then
         view = ViewMapItemComplete:new(paramsView)
     else
         

@@ -32,6 +32,8 @@ function CellBridge.init(self, params)
     if not (params.needIgnoreFlowAdditional)then
   
          params.needIgnoreFlowAdditional = true
+         
+         params.flow_type = EFlowType.EFT_NONE
     
          self._flowAdditional = CellBridge:new(params)
          
