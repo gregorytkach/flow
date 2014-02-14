@@ -144,14 +144,14 @@ function ControllerGrid.update(self, type)
                 
                 if entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() then
                     
-                    local dog = self._dogs[entry:flowType() + 1]
                     
-                    local sourceDog = dog:view():sourceView()
+                    
+                    
                     
                     local sourceCell = cell:view():sourceView()
                     
-                    sourceDog.x = sourceCell.x
-                    sourceDog.y = sourceCell.y
+                    self:setDogPosition(entry:flowType(), sourceCell)
+                    
                     
                 end
                 
@@ -162,20 +162,26 @@ function ControllerGrid.update(self, type)
         
         local currentCell = self._managerGame:currentCell()
         
-        local dog = self._dogs[currentCell:flowType() + 1]
+
         
-        local sourceDog = dog:view():sourceView()
+        local sourceCell = currentCell:controller():view():sourceView()
         
-        local controllerCell = currentCell:controller()
-        
-        local sourceCell = controllerCell:view():sourceView()
-        
-        sourceDog.x = sourceCell.x
-        sourceDog.y = sourceCell.y
+        self:setDogPosition(currentCell:flowType(), sourceCell)
         
     else
         assert(false)
     end
+    
+end
+
+function ControllerGrid.setDogPosition(self, flowType, sourceCell)
+    
+    local dog = self._dogs[flowType + 1]
+                    
+    local sourceDog = dog:view():sourceView()
+
+    sourceDog.x = sourceCell.x
+    sourceDog.y = sourceCell.y
     
 end
 
