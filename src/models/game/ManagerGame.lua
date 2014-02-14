@@ -15,6 +15,21 @@ ManagerGame = classWithSuper(ManagerGameBase, 'ManagerGame')
 --Properties
 --
 
+function ManagerGame.currentCell(self)
+    
+    return self._currentCell
+    
+end
+
+function ManagerGame.setCurrentCell(self, cell)
+    
+    assert(cell ~= nil)
+    
+    self._currentCell = cell
+    
+end
+
+
 function ManagerGame.timeLeft(self)
     return self._timeLeft
 end
@@ -158,6 +173,14 @@ end
 function ManagerGame.destroyLine(self, cellStart)
     local cellCurrent = cellStart
     
+    -- установка текущей ячейки, если удаляется текущая линия
+    
+    if self._currentLineFlowType == cellStart:flowType() then
+    
+        self._currentCell = cellStart 
+        
+    end
+    
     while(cellCurrent ~= nil) do
         local cellNext = cellCurrent:cellNext()
         
@@ -182,17 +205,46 @@ function ManagerGame.restoreLine(self, cellStart)
 end
 
 function ManagerGame.cacheStates(self)
+    
     for rowIndex, row in ipairs(self._currentLevel:grid()) do
         for columnIndex, cell in ipairs(row) do
             cell:cacheState()
+            
+            if cell:type() == ECellType.ECT_BRIDGE then
+                
+                local flowAdditional = cell:flowAdditional()
+                
+                if flowAdditional ~= nil and flowAdditional:flowType() ~= EFlowType.EFT_NONE then
+                    
+                    flowAdditional:cacheState()
+                    
+                end
+                
+            end
+            
         end
     end
+    
 end
 
 function ManagerGame.destroyCache(self)
+    
     for rowIndex, row in ipairs(self._currentLevel:grid()) do
         for columnIndex, cell in ipairs(row) do
             cell:destroyCache()
+            
+            if cell:type() == ECellType.ECT_BRIDGE then
+                
+                local flowAdditional = cell:flowAdditional()
+                
+                if flowAdditional ~= nil then
+                    
+                    flowAdditional:destroyCache()
+                    
+                end
+                
+            end
+            
         end
     end
 end

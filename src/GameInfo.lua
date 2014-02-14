@@ -54,6 +54,7 @@ function GameInfo.registerStates(self)
     
     self._managerStates:registerState(EStateType.EST_GAME,     "game_flow.src.states.game.StateGameCreator")
     self._managerStates:registerState(EStateType.EST_MAP,      "game_flow.src.states.map.StateMapCreator")
+    self._managerStates:registerState(EStateType.EST_EDITOR,   "game_flow.src.states.map.StateMapCreator")
     
     GameInfoBase.registerStates(self)
 end
