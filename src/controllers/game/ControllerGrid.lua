@@ -166,8 +166,6 @@ function ControllerGrid.update(self, type)
         
     elseif((type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN))  then
         
-        
-        
         local flowType = self._managerGame:currentLineFlowType()
         
         
