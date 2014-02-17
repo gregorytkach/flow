@@ -44,6 +44,7 @@ end
 
 function CellBase.setCellNext(self, value)
     
+    
     if(self._cellNext == value)then
         return
     end

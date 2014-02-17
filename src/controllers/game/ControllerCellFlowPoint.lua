@@ -8,6 +8,7 @@ ControllerCellFlowPoint = classWithSuper(ControllerCell, 'ControllerCellFlowPoin
 
 function ControllerCellFlowPoint.onInsideFirstTime(self)
     
+    self._managerGame:setCurrentCell(self._entry)
     self._managerGame:destroyLinesWithType(self._entry:flowType())
     
     self:update(EControllerUpdate.ECUT_INCLUSION_IN_LINE)

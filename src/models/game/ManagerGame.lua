@@ -24,10 +24,10 @@ end
 
 function ManagerGame.setCurrentCell(self, cell)
     
-    assert(cell ~= nil)
-    
     self._currentCell = cell
-    self._currentState:update(EControllerUpdate.ECUT_SET_CURRENT_CELL)
+    if cell ~= nil then
+        self._currentState:update(EControllerUpdate.ECUT_SET_CURRENT_CELL)
+    end
     
 end
 
@@ -41,18 +41,27 @@ function ManagerGame.currentLineFlowType(self)
 end
 
 function ManagerGame.setCurrentLineFlowType(self, value)
-    if(self._currentLineFlowType == value)then
-        return
+    
+    if value ~= EFlowType.EFT_NONE and value ~= nil and value:flowType() ~= self._currentLineFlowType then
+        
+        self._currentLineFlowType = value:flowType()
+        
+        if value:cellNext() == nil then
+            self._currentState:update(EControllerUpdate.ECUT_DOG_UP)
+        end
+        
+    elseif (value == EFlowType.EFT_NONE or value == nil)  then
+        
+        if self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil  then
+            self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+        end
+        
+        self._currentLineFlowType = value
+        
     end
     
-    self._currentLineFlowType = value
     
-    --todo: remove
-    if(value == nil)then
-        print('current line is nil')
-    else
-        print('current line is ' .. value)
-    end
+    
 end
 
 
@@ -172,6 +181,17 @@ function ManagerGame.destroyLinesWithType(self, flowType)
     end
 end
 
+function ManagerGame.setCurrentCellCache(self, currentCell)
+    
+    local cacheCurrentCell = self:currentCell()
+    self:setCurrentCell(currentCell)
+
+    if cacheCurrentCell ~= nil then
+        self:setCurrentCell(cacheCurrentCell)
+    end
+    
+end
+
 function ManagerGame.destroyLine(self, cellStart)
     local cellCurrent = cellStart
     
@@ -179,7 +199,11 @@ function ManagerGame.destroyLine(self, cellStart)
     
     if self._currentLineFlowType == cellStart:flowType() then
     
-        self:setCurrentCell(cellStart) 
+        self:setCurrentCell(cellStart)
+        
+    else
+        
+        self:setCurrentCellCache(cellStart)
         
     end
     
@@ -195,15 +219,26 @@ end
 
 function ManagerGame.restoreLine(self, cellStart)
     local cellCurrent = cellStart
+    local cellNext = cellCurrent
     
-    while(cellCurrent ~= nil)  do
+    while(cellNext ~= nil)  do
         
-        if not cellCurrent:restoreState() then
+        if not cellNext:restoreState() then
+            
+            cellCurrent = cellNext
             break
+            
         end
-        
-        cellCurrent = cellCurrent:cellNext()
+        cellCurrent = cellNext
+        cellNext = cellCurrent:cellNext()
     end
+    
+    if cellCurrent ~= nil then
+        
+        self:setCurrentCellCache(cellCurrent)
+        
+    end
+    
 end
 
 function ManagerGame.cacheStates(self)
@@ -226,6 +261,8 @@ function ManagerGame.cacheStates(self)
             
         end
     end
+    
+    
     
 end
 
