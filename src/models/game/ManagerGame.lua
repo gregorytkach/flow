@@ -24,9 +24,15 @@ end
 
 function ManagerGame.setCurrentCell(self, cell)
     
+    
     self._currentCell = cell
     if cell ~= nil then
+        
         self._currentState:update(EControllerUpdate.ECUT_SET_CURRENT_CELL)
+        if cell:type() ~= ECellType.ECT_FLOW_POINT then
+            self:setCurrentLineFlowType(cell)
+        end
+        
     end
     
 end
@@ -42,18 +48,26 @@ end
 
 function ManagerGame.setCurrentLineFlowType(self, value)
     
-    if value ~= EFlowType.EFT_NONE and value ~= nil and value:flowType() ~= self._currentLineFlowType then
+    if value ~= EFlowType.EFT_NONE and value ~= nil and  self._currentLineFlowType ~= value:flowType() then
         
-        self._currentLineFlowType = value:flowType()
+        local flowType = value:flowType()
         
-        if value:cellNext() == nil then
+        if flowType ~= self._currentLineFlowType and self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil then
+            self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+        end
+        
+        self._currentLineFlowType = flowType
+        
+        if value:cellNext() == nil and self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil then
             self._currentState:update(EControllerUpdate.ECUT_DOG_UP)
+            
         end
         
     elseif (value == EFlowType.EFT_NONE or value == nil)  then
         
         if self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil  then
             self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+            
         end
         
         self._currentLineFlowType = value
@@ -197,7 +211,8 @@ function ManagerGame.destroyLine(self, cellStart)
     
     -- установка текущей ячейки, если удаляется текущая линия
     
-    if self._currentLineFlowType == cellStart:flowType() then
+    if self._currentLineFlowType == cellStart:flowType() and self._currentLineFlowType ~= EFlowType.EFT_NONE 
+    or self._currentLineFlowType == EFlowType.EFT_NONE then
     
         self:setCurrentCell(cellStart)
         

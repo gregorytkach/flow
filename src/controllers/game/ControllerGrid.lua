@@ -136,7 +136,6 @@ end
 function ControllerGrid.update(self, type)
     
     if(type == EControllerUpdateBase.ECUT_SCENE_ENTER)then
-        print(EControllerUpdateBase.ECUT_SCENE_ENTER)
         
         for indexRow, row in ipairs(self._cells)do
             for indexColumn, cell in ipairs(row)do
@@ -160,45 +159,38 @@ function ControllerGrid.update(self, type)
         
         local currentCell = self._managerGame:currentCell()
         
-        local sourceCell = currentCell:controller():view():sourceView()
+        local viewCell = currentCell:controller():view()
         
-        self:setDogPosition(currentCell:flowType(), sourceCell)
+        self._offsetYDog = - 0.75 * viewCell:realHeight()
         
-    elseif((type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN))  then
+        self:setDogPosition(currentCell:flowType(), viewCell:sourceView())
+        
+    elseif(type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN)  then
         
         local flowType = self._managerGame:currentLineFlowType()
         
         
         local dog = self._dogs[flowType + 1]
-                    
         local sourceDog = dog:view():sourceView()
         
-        local offsetY 
-        
-        if type == EControllerUpdate.ECUT_DOG_DOWN then
+        if self._tweenDogMoved ~= nil then
             
-            offsetY = self._yDog - sourceDog.y
-            if self._tweenDogMoved ~= nil then
-            
-                transition.cancel(self._tweenDogMoved)
-            
-            end
+            transition.cancel(self._tweenDogMoved)
+            self._tweenDogMoved = nil
             
         else
             
-            offsetY = - 60
-            self._yDog = sourceDog.y
+            dog._yBackDog = sourceDog.y
             
         end
         
-        local tweenParams =
-        {
-            y = sourceDog.y + offsetY,
-            onComplete = function () self._tweenDogMoved = nil end,
-            time = 2 * application.animation_duration,
-        }
+        self._isBack = type == EControllerUpdate.ECUT_DOG_DOWN 
+            
+            
         
-        self._tweenDogMoved = transition.to(sourceDog, tweenParams)
+        self:transitionDog(sourceDog, dog._yBackDog)
+            
+        
         
     else
         assert(false)
@@ -214,10 +206,56 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
     
     sourceDog.isVisible = true
     sourceDog.x = sourceCell.x
-    sourceDog.y = sourceCell.y
     
-    self._yDog = sourceDog.y
+    if self._currentDog == dog and self._tweenDogMoved ~= nil then
+        
+        transition.cancel(self._tweenDogMoved)
+        self._tweenDogMoved = nil
+        
+        sourceDog.y = sourceDog.y + (sourceCell.y -  dog._yBackDog) 
+        
+        self:transitionDog(sourceDog, sourceCell.y)
+        
+    elseif self._currentDog ~= dog and self._tweenDogMoved ~= nil then
+        
+        transition.cancel(self._tweenDogMoved)
+        
+        local sourceCurrentDog = self._currentDog:view():sourceView()
+        
+        sourceCurrentDog.y = self._currentDog._yBackDog
+        
+    else
+        
+        sourceDog.y = sourceCell.y
+        
+    end
     
+    dog._yBackDog = sourceCell.y
+    
+    self._currentDog = dog
+    
+end
+
+function ControllerGrid.transitionDog(self, sourceDog, backY)
+    
+    local offsetY = 0
+    local onComplete = nil
+        
+    if self._isBack then
+        
+        onComplete = function () self._tweenDogMoved = nil end
+    else
+        offsetY = self._offsetYDog
+    end
+
+    local tweenParams =
+    {
+        y = backY + offsetY,
+        time = 4 * application.animation_duration * math.abs((sourceDog.y - (backY + offsetY))/ self._offsetYDog),
+        onComplete = onComplete,
+    }
+
+    self._tweenDogMoved = transition.to(sourceDog, tweenParams)    
 end
 
 function ControllerGrid.cleanup(self)
@@ -239,6 +277,7 @@ function ControllerGrid.cleanup(self)
     self._view = nil
     
     self._managerGame = nil
+    self._currentDog = nil
     
     Controller.cleanup(self)
 end

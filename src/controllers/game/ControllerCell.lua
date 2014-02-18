@@ -26,7 +26,11 @@ function ControllerCell.touch(self, event)
                 
                 self:onInsideFirstTime()
                 
-                self._managerGame:setCurrentLineFlowType(self._entry)
+                local currentLineFlowType = self._managerGame:currentLineFlowType()
+                
+                if currentLineFlowType == EFlowType.EFT_NONE or currentLineFlowType == nil then
+                    self._managerGame:setCurrentLineFlowType(self._entry)
+                end
                 
                 self._managerGame:cacheStates()
                 
@@ -106,7 +110,6 @@ function ControllerCell.touch(self, event)
             
             if(canSelectTarget)then
                 
-                --self._managerGame:setCurrentCell(entry)
                 self:onTrySelect(target)
                 
                 if entry:flowType() == EFlowType.EFT_NONE 
@@ -124,7 +127,9 @@ function ControllerCell.touch(self, event)
                 self._managerGame:setCurrentLineFlowType(target)
                 
             else
+                
                 self._managerGame:setCurrentLineFlowType(EFlowType.EFT_NONE)
+                
             end
             
         end

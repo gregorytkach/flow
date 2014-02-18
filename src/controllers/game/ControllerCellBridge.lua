@@ -152,6 +152,10 @@ function ControllerCellBridge.update(self, updateType)
         self._view:setPath(self._entry:flowType())
         self._view:setPathAbove(self._entry:flowAdditional():flowType())
         
+    elseif(updateType == EControllerUpdate.ECUT_DOG_DOWN) or (updateType == EControllerUpdate.ECUT_DOG_UP)then
+        
+        ControllerCell.update(self, updateType)
+        
     end
     
 end
