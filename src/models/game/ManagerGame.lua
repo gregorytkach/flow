@@ -194,12 +194,12 @@ end
 
 function ManagerGame.setCurrentCellCache(self, currentCell)
     
-    local cacheCurrentCell = self:currentCell()
+    local cacheCurrentCell = self._currentCell
     self:setCurrentCell(currentCell)
 
-    if cacheCurrentCell ~= nil then
-        self:setCurrentCell(cacheCurrentCell)
-    end
+    self._setCurrentCell = cacheCurrentCell
+    self:setCurrentCell(cacheCurrentCell)
+   
     
 end
 

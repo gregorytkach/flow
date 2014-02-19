@@ -222,6 +222,7 @@ function getLevelEditorData(isComplete)
         progress         =
         {
             is_complete      = isComplete,
+            stars_count      = 3,
         }
     }
     

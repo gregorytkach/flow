@@ -292,7 +292,7 @@ function ControllerCell.tryBuildLine(self, lineCell, newCell)
         
         self._managerGame:setCurrentLineFlowType(newCell)
         self._managerGame:setCurrentCell(newCell)
-       
+        
     end
     
 end
