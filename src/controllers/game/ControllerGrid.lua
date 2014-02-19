@@ -244,8 +244,11 @@ function ControllerGrid.transitionDog(self, sourceDog, backY)
     if self._isBackDog then
         
         onComplete = function () self._tweenDogMoved = nil end
+        
     else
+        
         offsetY = self._offsetYDog
+        
     end
 
     local tweenParams =
