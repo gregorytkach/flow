@@ -1,4 +1,5 @@
 require('game_flow.src.views.game.ViewDog')
+require('game_flow.src.views.game.EDogAnimationType')
 
 ControllerDog = classWithSuper(Controller, 'ControllerDog')
 
@@ -14,11 +15,34 @@ end
 --
 
 
+
+
+
 --
 --Methods
 --
 
-
+function ControllerDog.update(self, type)
+    
+    if(type ==  EControllerUpdate.ECUT_DOG_UP) then
+        
+        self._view:setCurrentAnimation(EDogAnimationType.EDAT_UP)
+        
+    elseif (type ==  EControllerUpdate.ECUT_DOG_DOWN) then
+        
+        self._view:setCurrentAnimation(EDogAnimationType.EDAT_DOWN)
+        
+    elseif (type ==  EControllerUpdate.ECUT_DOG_IDLE) then
+        
+        self._view:setCurrentAnimation(EDogAnimationType.EDAT_IDLE)
+        
+    else
+        
+        assert(false)
+        
+    end
+        
+end
 
 function ControllerDog.init(self, params)
     
@@ -43,15 +67,6 @@ function ControllerDog.init(self, params)
     
 end
 
-function ControllerDog.update(self, updateType)
-    
-    if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
-        
-    else
-        assert(false)
-    end
-    
-end
 
 function ControllerDog.cleanup(self)
     

@@ -58,7 +58,7 @@ function ManagerResources.init(self)
     self._resources[EResourceType.ERT_STATE_GAME_CELL_START]        = '%sstate_game/dogs/%s/cell_start/cell_start%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_END]          = '%sstate_game/dogs/%s/cell_end/cell_end%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_PATH]         = '%sstate_game/dogs/%s/cell_path/cell_path%s.png'
-    self._resources[EResourceType.ERT_STATE_GAME_DOG_IDLE]          = '%sstate_game/dogs/%s/animation/%s/idle/idle_01.png'
+   
     self._resources[EResourceType.ERT_STATE_GAME_CELL_DEFAULT]      = '%sstate_game/cells/default/%s/cell_default%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_BARRIER]      = '%sstate_game/cells/barrier/cell_barrier%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_BRIDGE]       = '%sstate_game/cells/bridge/cell_bridge%s.png'
@@ -142,6 +142,54 @@ function ManagerResources.initAnimations(self)
     
     self._resources[EResourceType.ERT_STATE_MAP_ITEM_CURRENT_ANIMATION]    = '%sstate_map/button_level/current/animation/spritesheet%s.png'
     self._animations[EResourceType.ERT_POPUP_GAME_OVER_VIEW_ANIMATION_DOG] = stateMapItemCurrentAnimation
+    
+    local gameAnimationDogDown = 
+    {
+        {
+            name    = "default",
+            start   = 1,
+            count   = 14,
+            time  = application.animation_duration * 4
+        }
+    }
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_DOWN]    = '%sstate_game/dogs/%s/animation/down/spritesheet%s.png'
+    self._animations[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_DOWN] = gameAnimationDogDown
+    
+    local gameAnimationDogIdle = 
+    {
+        {
+            name    = "default",
+            start   = 1,
+            count   = 9,
+            time  = application.animation_duration * 4
+        }
+    }
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_IDLE]  = '%sstate_game/dogs/%s/animation/idle/spritesheet%s.png'
+    self._animations[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_IDLE] = gameAnimationDogIdle
+    
+    local gameAnimationDogUp = 
+    {
+        {
+            name    = "default",
+            start   = 1,
+            count   = 19,
+            time  = application.animation_duration * 4
+        }
+    }
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_UP]  = '%sstate_game/dogs/%s/animation/up/spritesheet%s.png'
+    self._animations[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_UP] = gameAnimationDogUp
+    
+    
+    
+end
+
+function ManagerResources.setDogAnimationResource(self, flowType)
+    
+    assert(flowType ~= nil)
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_DOWN] = '%sstate_game/dogs/'..flowType..'/animation/down/spritesheet%s.png'
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_IDLE] = '%sstate_game/dogs/'..flowType..'/animation/idle/spritesheet%s.png'
+    self._resources[EResourceType.ERT_STATE_GAME_ANIMATION_DOG_UP] = '%sstate_game/dogs/'..flowType..'/animation/up/spritesheet%s.png'
+    
     
 end
 
