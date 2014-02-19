@@ -66,7 +66,7 @@ function getManagerPlayers()
     local playerData =
     {
         currency_soft                   = 100,
-        energy                          = 3,
+        energy                          = 0,
         
         free_purchase_count_add_time    = 10,
         free_purchase_count_resolve     = 3,
@@ -109,7 +109,7 @@ function getManagerBonus()
     result.energy       = 
     {
         time_period = 15 * 60,
-        time_left   = 5,
+        time_left   = 14 * 60,
         bonus       =
         {
             type            = EBonusType.EBT_ENERGY,
@@ -170,8 +170,6 @@ function getManagerPurchasesData()
     }
     
     table.insert(result, purchaseDataAddTime)
-    
-    
     
     local purchaseResolve =
     {

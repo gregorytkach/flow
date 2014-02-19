@@ -54,10 +54,10 @@ end
 function StateGame.initLayerPopups(self)
     StateBase.initLayerPopups(self)
     
---    self:registerPopup(ControllerPopupShop:new())
---    self:registerPopup(ControllerPopupWin:new())
---    self:registerPopup(ControllerPopupGameOver:new())
---    self:registerPopup(ControllerPopupNoCurrency:new())
+    self:registerPopup(ControllerPopupShop:new())
+    self:registerPopup(ControllerPopupWin:new())
+    self:registerPopup(ControllerPopupGameOver:new())
+    self:registerPopup(ControllerPopupNoCurrency:new())
     
 end
 

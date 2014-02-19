@@ -21,13 +21,27 @@ function ControllerMapItem.onViewClicked(self, target, event)
     
     if(not result)then
         if(target == self._view:button())then
-            local paramsGame = 
-            {
-                currentLevel = self._entry
-            }
             
-            GameInfoBase:instance():onGameStart(ManagerGame:new(paramsGame))
-            GameInfoBase:instance():managerStates():setState(EStateType.EST_GAME)
+            local playerCurrent = GameInfo:instance():managerPlayers():playerCurrent()
+            
+            if (playerCurrent:energy() > 0) then
+                
+                --todo: send data to server
+                
+                playerCurrent:setEnergy(playerCurrent:energy() - 1)
+                
+                local paramsGame = 
+                {
+                    currentLevel = self._entry
+                }
+                
+                GameInfoBase:instance():onGameStart(ManagerGame:new(paramsGame))
+                GameInfoBase:instance():managerStates():setState(EStateType.EST_GAME)
+            else
+                
+                GameInfoBase:instance():managerStates():currentState():showPopup(EPopupType.EPT_NO_ENERGY)
+                
+            end
         end
     end
     

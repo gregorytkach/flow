@@ -64,6 +64,8 @@ function StateMap.initLayerPopups(self)
     self:registerPopup(ControllerPopupBonus:new())
     self:registerPopup(ControllerPopupShop:new())
     self:registerPopup(ControllerPopupNoEnergy:new())
+    
+    
 end
 
 function StateMap.update(self, updateType)
@@ -101,9 +103,6 @@ function StateMap.placeViews(self)
     
     self._controllerStateMap:view():placeViews()
     self._controllerUIMap:view():placeViews()
-    
-    --todo: remove 
---    self:showPopup(EPopupType.EPT_NO_ENERGY)
 end
 
 function StateMap.cleanup(self)
