@@ -7,6 +7,7 @@ require('game_flow.src.controllers.game.ControllerDog')
 
 require('game_flow.src.views.game.ViewGrid')
 
+
 ControllerGrid = classWithSuper(Controller, 'ControllerGrid')
 
 --
@@ -178,15 +179,12 @@ function ControllerGrid.update(self, type)
             transition.cancel(self._tweenDogMoved)
             self._tweenDogMoved = nil
             
-        else
-            
-            dog._yBackDog = sourceDog.y
             
         end
         
         self._isBackDog = type == EControllerUpdate.ECUT_DOG_DOWN 
         self:transitionDog(sourceDog, dog._yBackDog)
-            
+        dog:update(type)    
         
     else
         assert(false)
@@ -214,15 +212,14 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
         
     elseif self._currentDog ~= dog and self._tweenDogMoved ~= nil then
         
-        transition.cancel(self._tweenDogMoved)
         
         local sourceCurrentDog = self._currentDog:view():sourceView()
         
-        local currentDogFlowType = table.indexOf(self._dogs, self._currentDog) - 1
-        
-        if self._managerGame:currentLineFlowType() ~= currentDogFlowType then
-            sourceCurrentDog.y = self._currentDog._yBackDog
-        end
+            
+        transition.cancel(self._tweenDogMoved)
+
+        sourceCurrentDog.y = self._currentDog._yBackDog
+        self._currentDog:update(EControllerUpdate.ECUT_DOG_IDLE)
         
     else
         
@@ -243,7 +240,12 @@ function ControllerGrid.transitionDog(self, sourceDog, backY)
         
     if self._isBackDog then
         
-        onComplete = function () self._tweenDogMoved = nil end
+        onComplete = function () 
+            
+                        self._tweenDogMoved = nil 
+                        self._currentDog:update(EControllerUpdate.ECUT_DOG_IDLE)
+                        
+                     end
         
     else
         
