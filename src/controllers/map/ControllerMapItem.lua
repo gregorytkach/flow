@@ -54,7 +54,7 @@ function ControllerMapItem.init(self, params)
     
     if(self._isCurrent)then
         view = ViewMapItemCurrent:new(paramsView)
-    elseif(self._entry:isComplete())then
+    elseif(self._entry:progress():isComplete())then
         view = ViewMapItemComplete:new(paramsView)
     else
         
@@ -73,7 +73,7 @@ function ControllerMapItem.init(self, params)
 end
 
 function ControllerMapItem.showIcon(self, delay)
-    if(not self._isCurrent and self._entry:isComplete())then
+    if(not self._isCurrent and self._entry:progress():isComplete())then
         self._view:animateIcon(delay)
     end
 end
