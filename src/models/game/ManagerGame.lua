@@ -15,6 +15,26 @@ ManagerGame = classWithSuper(ManagerGameBase, 'ManagerGame')
 --Properties
 --
 
+
+function ManagerGame.currentCell(self)
+    
+    return self._currentCell
+    
+end
+
+function ManagerGame.setCurrentCell(self, cell)
+    
+    
+    self._currentCell = cell
+    if cell ~= nil  then
+        
+        self._currentState:update(EControllerUpdate.ECUT_SET_CURRENT_CELL)
+        
+    end
+    
+end
+
+
 function ManagerGame.timeLeft(self)
     return self._timeLeft
 end
@@ -24,18 +44,35 @@ function ManagerGame.currentLineFlowType(self)
 end
 
 function ManagerGame.setCurrentLineFlowType(self, value)
-    if(self._currentLineFlowType == value)then
-        return
+    
+    if value ~= EFlowType.EFT_NONE and value ~= nil and  self._currentLineFlowType ~= value:flowType() then
+        
+        local flowType = value:flowType()
+        
+        if flowType ~= self._currentLineFlowType and self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil then
+            self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+        end
+        
+        self._currentLineFlowType = flowType
+        
+        if value:cellNext() == nil and self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil then
+            self._currentState:update(EControllerUpdate.ECUT_DOG_UP)
+            
+        end
+        
+    elseif (value == EFlowType.EFT_NONE or value == nil)  then
+        
+        if self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil  then
+            self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+            
+        end
+        
+        self._currentLineFlowType = value
+        
     end
     
-    self._currentLineFlowType = value
     
-    --todo: remove
-    if(value == nil)then
-        print('current line is nil')
-    else
-        print('current line is ' .. value)
-    end
+    
 end
 
 
@@ -155,8 +192,32 @@ function ManagerGame.destroyLinesWithType(self, flowType)
     end
 end
 
+function ManagerGame.setCurrentCellCache(self, currentCell)
+    
+    local cacheCurrentCell = self:currentCell()
+    self:setCurrentCell(currentCell)
+
+    if cacheCurrentCell ~= nil then
+        self:setCurrentCell(cacheCurrentCell)
+    end
+    
+end
+
 function ManagerGame.destroyLine(self, cellStart)
     local cellCurrent = cellStart
+    
+    -- установка текущей ячейки, если удаляется текущая линия
+    
+    if self._currentLineFlowType == cellStart:flowType() and self._currentLineFlowType ~= EFlowType.EFT_NONE 
+    or self._currentLineFlowType == EFlowType.EFT_NONE then
+    
+        self:setCurrentCell(cellStart)
+        
+    else
+        
+        self:setCurrentCellCache(cellStart)
+        
+    end
     
     while(cellCurrent ~= nil) do
         local cellNext = cellCurrent:cellNext()
@@ -170,29 +231,71 @@ end
 
 function ManagerGame.restoreLine(self, cellStart)
     local cellCurrent = cellStart
+    local cellNext = cellCurrent
     
-    while(cellCurrent ~= nil)  do
+    while(cellNext ~= nil)  do
         
-        if not cellCurrent:restoreState() then
+        if not cellNext:restoreState() then
+            
+            cellCurrent = cellNext
             break
+            
         end
-        
-        cellCurrent = cellCurrent:cellNext()
+        cellCurrent = cellNext
+        cellNext = cellCurrent:cellNext()
     end
+    
+    if cellCurrent ~= nil then
+        
+        self:setCurrentCellCache(cellCurrent)
+        
+    end
+    
 end
 
 function ManagerGame.cacheStates(self)
+    
     for rowIndex, row in ipairs(self._currentLevel:grid()) do
         for columnIndex, cell in ipairs(row) do
             cell:cacheState()
+            
+            if cell:type() == ECellType.ECT_BRIDGE then
+                
+                local flowAdditional = cell:flowAdditional()
+                
+                if flowAdditional ~= nil and flowAdditional:flowType() ~= EFlowType.EFT_NONE then
+                    
+                    flowAdditional:cacheState()
+                    
+                end
+                
+            end
+            
         end
     end
+    
+    
+    
 end
 
 function ManagerGame.destroyCache(self)
+    
     for rowIndex, row in ipairs(self._currentLevel:grid()) do
         for columnIndex, cell in ipairs(row) do
             cell:destroyCache()
+            
+            if cell:type() == ECellType.ECT_BRIDGE then
+                
+                local flowAdditional = cell:flowAdditional()
+                
+                if flowAdditional ~= nil then
+                    
+                    flowAdditional:destroyCache()
+                    
+                end
+                
+            end
+            
         end
     end
 end

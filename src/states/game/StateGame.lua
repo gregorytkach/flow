@@ -54,10 +54,10 @@ end
 function StateGame.initLayerPopups(self)
     StateBase.initLayerPopups(self)
     
-    self:registerPopup(ControllerPopupShop:new())
-    self:registerPopup(ControllerPopupWin:new())
-    self:registerPopup(ControllerPopupGameOver:new())
-    self:registerPopup(ControllerPopupNoCurrency:new())
+--    self:registerPopup(ControllerPopupShop:new())
+--    self:registerPopup(ControllerPopupWin:new())
+--    self:registerPopup(ControllerPopupGameOver:new())
+--    self:registerPopup(ControllerPopupNoCurrency:new())
     
 end
 
@@ -75,6 +75,14 @@ function StateGame.update(self, updateType)
         
     elseif(updateType == EControllerUpdateBase.ECUT_PLAYER_ENERGY)then
         --do nothing
+        
+    elseif(updateType == EControllerUpdate.ECUT_SET_CURRENT_CELL)then
+        
+        self._controllerGrid:update(updateType)
+        
+    elseif(updateType ==  EControllerUpdate.ECUT_DOG_UP) or (updateType ==  EControllerUpdate.ECUT_DOG_DOWN) then
+        
+        self._controllerGrid:update(updateType)
         
     elseif(updateType == EControllerUpdate.ECUT_FREE_PURCHASE_ADD_TIME or
         updateType == EControllerUpdate.ECUT_FREE_PURCHASE_SHOW_TURN or

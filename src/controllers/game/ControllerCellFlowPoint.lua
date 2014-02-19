@@ -8,6 +8,7 @@ ControllerCellFlowPoint = classWithSuper(ControllerCell, 'ControllerCellFlowPoin
 
 function ControllerCellFlowPoint.onInsideFirstTime(self)
     
+    self._managerGame:setCurrentCell(self._entry)
     self._managerGame:destroyLinesWithType(self._entry:flowType())
     
     self:update(EControllerUpdate.ECUT_INCLUSION_IN_LINE)
@@ -67,14 +68,13 @@ function ControllerCellFlowPoint.onTrySelect(self, target)
         
         self._managerGame:destroyLine(cellPrev)
         
-    
     end
     
     if(target:type() == ECellType.ECT_FLOW_POINT)  then
         
         if(target:flowType() == self._entry:flowType())then
         
-            self:buildLine(self._entry, target)
+            self:tryBuildLine(self._entry, target)
             
         else
             --do nothing
@@ -82,11 +82,11 @@ function ControllerCellFlowPoint.onTrySelect(self, target)
         
     elseif isNext and cellPrev ~= nil then
         
-        self:buildLine(cellPrev, target)
+        self:tryBuildLine(cellPrev, target)
         
     else 
         
-        self:buildLine(self._entry, target)
+        self:tryBuildLine(self._entry, target)
         
     end
     

@@ -1,0 +1,14 @@
+#OSX files
+*.DS_Store
+
+#flash sources
+*.fla
+
+#flash binaries
+*.swf
+
+#win files
+desktop.ini
+
+#assets
+/assets/*

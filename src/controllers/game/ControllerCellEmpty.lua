@@ -34,7 +34,7 @@ function ControllerCellEmpty.onTrySelect(self, target)
         else
             self._managerGame:destroyLine(target:cellPrev())
             
-            self:buildLine(self._entry, target)
+            self:tryBuildLine(self._entry, target)
         end
         
     else
@@ -45,13 +45,15 @@ function ControllerCellEmpty.onTrySelect(self, target)
                 if(target:cellNext() ~=  nil)then
                     self._managerGame:destroyLine(target)
                 else
-                    self:buildLine(self._entry, target)
+                    self:tryBuildLine(self._entry, target)
                 end
                 
             end
             
         else
-            self:buildLine(self._entry, target)
+            
+            self:tryBuildLine(self._entry, target)
+            
         end
     end
     

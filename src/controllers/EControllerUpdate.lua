@@ -6,7 +6,9 @@ EControllerUpdate =
     ["ECUT_BONUS_ENERGY_TIME"]          = "ECUT_BONUS_ENERGY_TIME";
     
     ["ECUT_GAME_TIME"]                  = "ECUT_GAME_TIME";
-    
+    ["ECUT_SET_CURRENT_CELL"]           = "ECUT_SET_CURRENT_CELL";
+    ["ECUT_DOG_UP"]                     = "ECUT_DOG_UP";
+    ["ECUT_DOG_DOWN"]                   = "ECUT_DOG_DOWN";
     
     ["ECUT_FREE_PURCHASE_ADD_TIME"]     = "ECUT_FREE_PURCHASE_ADD_TIME";
     ["ECUT_FREE_PURCHASE_SHOW_TURN"]    = "ECUT_FREE_PURCHASE_SHOW_TURN";

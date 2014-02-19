@@ -1,6 +1,6 @@
-require('game_flow.src.states.map.StateMap')
+require('game_flow.src.states.editor.StateEditor')
 
-local state = StateMap:new()
+local state = StateEditor:new()
 
 GameInfo:instance():managerStates():onCurrentStateCreated(state);
 

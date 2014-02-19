@@ -58,6 +58,7 @@ function ManagerResources.init(self)
     self._resources[EResourceType.ERT_STATE_GAME_CELL_START]        = '%sstate_game/dogs/%s/cell_start/cell_start%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_END]          = '%sstate_game/dogs/%s/cell_end/cell_end%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_PATH]         = '%sstate_game/dogs/%s/cell_path/cell_path%s.png'
+    self._resources[EResourceType.ERT_STATE_GAME_DOG_IDLE]          = '%sstate_game/dogs/%s/animation/%s/idle/idle_01.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_DEFAULT]      = '%sstate_game/cells/default/%s/cell_default%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_BARRIER]      = '%sstate_game/cells/barrier/cell_barrier%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_BRIDGE]       = '%sstate_game/cells/bridge/cell_bridge%s.png'
@@ -151,6 +152,8 @@ function ManagerResources.getStateBackground(self, value)
         result = '%sstate_game/background/background%s.jpg'
     elseif(value == EStateType.EST_MAP)then
         result = '%sstate_map/map/map_1%s.jpg'
+    elseif (value == EStateType.EST_EDITOR) then
+        result = '%sstate_game/background/background%s.jpg'
     else
         assert(false)
     end

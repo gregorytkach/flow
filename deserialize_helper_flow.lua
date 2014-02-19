@@ -1,7 +1,9 @@
+
 require('game_flow.src.models.purchases.EPurchaseType')
 require('game_flow.src.models.bonus.EBonusType')
 
 require('sdk.models.purchases.EPurchaseTypeBase')
+require('game_flow.src.models.game.GridCreator')
 
 
 function getManagerLevels()
@@ -9,6 +11,7 @@ function getManagerLevels()
     
     local levels = {}
     
+    --table.insert(levels, getLevelEditorData(true))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
@@ -195,6 +198,40 @@ function getManagerPurchasesData()
     return result
 end
 
+function getLevelEditorData(isComplete)
+    
+    local paramsCreator =
+    {
+        rows    = 5,
+        columns = 5,
+        bridgesCount = 4,
+        barriersCount = 3
+
+    }
+        
+    local gridCreator = GridCreator:new(paramsCreator)
+
+    gridCreator:shuffles(1000)
+
+    local gridData = gridCreator:gridData()
+    local result =
+    {
+        grid_data        = gridData,
+        time_left        = 60,
+        
+        reward_scores    = 5,
+        is_complete      = isComplete,
+        progress =
+        {
+            is_complete      = true,
+        }
+    }
+    
+    return result
+    
+end
+
+
 function getLevel0Data(isComplete)
     local gridData = {}
     
@@ -212,7 +249,7 @@ function getLevel0Data(isComplete)
                     flow_type     = EFlowType.EFT_0,
                     is_start      = false
                 } 
-            elseif(rowIndex == 3 and columnIndex == 3)then
+            elseif(rowIndex == 3 and columnIndex == 4)then
                 cellData =
                 {
                     type          = ECellType.ECT_FLOW_POINT,
@@ -239,7 +276,7 @@ function getLevel0Data(isComplete)
                     type          = ECellType.ECT_BRIDGE,
                     flow_type     = EFlowType.EFT_NONE,
                 }
-            elseif(rowIndex == 4 and columnIndex == 2)then
+            elseif(rowIndex == 5 and columnIndex == 5)then
                 cellData =
                 {
                     type          = ECellType.ECT_BARRIER,
@@ -269,13 +306,12 @@ function getLevel0Data(isComplete)
         time_left        = 60,
         
         reward_scores    = 5,
-        
+        is_complete      = isComplete,
         progress =
         {
-            is_complete      = isComplete
+            is_complete      = false,
         }
     }
     
     return result
 end
-

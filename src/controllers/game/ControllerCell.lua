@@ -17,7 +17,6 @@ end
 
 function ControllerCell.touch(self, event)
     
-    local currentLineFlowType = self._managerGame:currentLineFlowType()
     
     if(event.phase == ETouchEvent.ETE_BEGAN) then
         
@@ -27,19 +26,26 @@ function ControllerCell.touch(self, event)
                 
                 self:onInsideFirstTime()
                 
-                self._managerGame:setCurrentLineFlowType(self._entry:flowType())
+                local currentLineFlowType = self._managerGame:currentLineFlowType()
+                
+                if currentLineFlowType == EFlowType.EFT_NONE or currentLineFlowType == nil then
+                    self._managerGame:setCurrentLineFlowType(self._entry)
+                end
                 
                 self._managerGame:cacheStates()
                 
+                
             end
+            
         end
         
-    elseif(event.phase == ETouchEvent.ETE_MOVED) then
+    elseif(event.phase == ETouchEvent.ETE_MOVED)  then
         
         if(self._view:isInsideEvent(event))then
             
             if not self._isInside then
                 self:onInside()
+                
             end
             
         elseif(self._isInside == true)then
@@ -48,41 +54,85 @@ function ControllerCell.touch(self, event)
             
             local target = nil
             
+            local entry = self._entry
+            
             if(event.x > self._view:x1())then
                 
-                target = self._entry:neighborRight()
+                target = entry:neighborRight()
                 
             elseif( event.x < self._view:x0())then
                 
-                target = self._entry:neighborLeft() 
+                target = entry:neighborLeft() 
                 
             elseif(event.y > self._view:y1())then
                 
-                target = self._entry:neighborDown() 
+                target = entry:neighborDown() 
                 
             elseif(event.y < self._view:y0())then
                 
-                target = self._entry:neighborUp()
+                target = entry:neighborUp()
                 
             end
             
+            --если на мост переходим по горизонтали, то берём дополнительную (верхнюю) ячейку
+            if target ~= nil and target:type() == ECellType.ECT_BRIDGE and 
+            (target == self._entry:neighborRight() or target == self._entry:neighborLeft()) 
+            then
+                
+                target = target:flowAdditional()
+                
+            end
+    
+            local canSelectTarget = false
             
-            if(target ~= nil and self:canSelectTarget(target))then
+            if target ~= nil then
+                canSelectTarget = self:canSelectTarget(target)
+                
+                local currentCell = self._managerGame:currentCell()
+                if  currentCell == nil and
+                (entry:flowType() ~= EFlowType.EFT_NONE) then
+                    self._managerGame:setCurrentLineFlowType(entry)
+                    self._managerGame:setCurrentCell(entry)
+                    
+                end
+            end
+            
+            --если c моста переходим по горизонтали, то берём дополнительную (верхнюю) ячейку
+            if(target ~= nil) and (entry:type() == ECellType.ECT_BRIDGE) 
+            and (target == entry:neighborRight() or target == entry:neighborLeft()) 
+            then
+                                    
+                entry = entry:flowAdditional()
+                
+                if canSelectTarget then
+                    self._managerGame:setCurrentLineFlowType(entry)
+                    self._managerGame:setCurrentCell(entry)
+                end
+                
+            end
+            
+            if(canSelectTarget)then
                 
                 self:onTrySelect(target)
                 
-                if self._entry:flowType() == EFlowType.EFT_NONE 
-                    and self._entry:flowTypeCached() ~= EFlowType.EFT_NONE 
-                    and target ~= self._entry:cellPrevCached() then
+                if entry:flowType() == EFlowType.EFT_NONE 
+                and entry:flowTypeCached() ~= EFlowType.EFT_NONE 
+                and target ~= entry:cellPrevCached() 
+                and target:flowType() ~= entry:flowTypeCached()  
+                then
                     
-                    self._managerGame:restoreLine(self._entry:cellPrevCached())
+                    self._managerGame:restoreLine(entry:cellPrevCached())
                     
                 end
                 
             elseif (target ~= nil and target:type() ~= ECellType.ECT_FLOW_POINT)then
-                self._managerGame:setCurrentLineFlowType(target:flowType())
+                
+                self._managerGame:setCurrentLineFlowType(target)
+                
             else
+                
                 self._managerGame:setCurrentLineFlowType(EFlowType.EFT_NONE)
+                
             end
             
         end
@@ -93,6 +143,7 @@ function ControllerCell.touch(self, event)
         
         self._managerGame:setCurrentLineFlowType(nil)
         self._managerGame:destroyCache()
+        self._managerGame:setCurrentCell(nil)
         
     end
 end
@@ -125,8 +176,7 @@ function ControllerCell.init(self, params)
     self._isPair = params.isPair 
     self._entry  = params.entry
     self._entry:setController(self)
-    
-    
+   
     
     local paramsController = 
     {
@@ -186,31 +236,33 @@ end
 function ControllerCell.updateCellNext(self)
     local cellNext = self._entry:cellNext()
     
-    if(cellNext == nil)then
-        
-        self._view:hideAllLines()
-        
-    elseif(cellNext == self._entry:neighborDown())then
-        
-        self._view:showLineDown(EFlowType.EFT_0)
-        
-    elseif(cellNext == self._entry:neighborUp())then
-        
-        self._view:showLineUp()
-        
-    elseif(cellNext == self._entry:neighborLeft())then
-        
-        self._view:showLineLeft()
-        
-    elseif(cellNext == self._entry:neighborRight())then
-        
-        self._view:showLineRight()
-        
-    else
-        
-        assert(false)
-        
-    end
+    
+   
+--    if(cellNext == nil)then
+--        
+--        self._view:hideAllLines()
+--        
+--    elseif(cellNext == self._entry:neighborDown())then
+--        
+--        self._view:showLineDown(EFlowType.EFT_0)
+--        
+--    elseif(cellNext == self._entry:neighborUp())then
+--        
+--        self._view:showLineUp()
+--        
+--    elseif(cellNext == self._entry:neighborLeft())then
+--        
+--        self._view:showLineLeft()
+--        
+--    elseif(cellNext == self._entry:neighborRight())then
+--        
+--        self._view:showLineRight()
+--        
+--    else
+--        
+--        assert(false)
+--        
+--    end
     
 end
 
@@ -223,14 +275,6 @@ function ControllerCell.canSelectTarget(self, target)
     local currentLineIsEmpty    = currentLineFlowType   == self._entry:flowType()
     local currentLineSame       = currentLineFlowType   == nil
     
-    if(currentLineIsEmpty)then
-        --        print(1)
-    end
-    
-    if(currentLineSame)then
-        --        print(1)
-    end
-    
     result = (not isTargetBarrier) and (currentLineSame or currentLineIsEmpty)
     
     if target:type() == ECellType.ECT_FLOW_POINT then
@@ -241,10 +285,16 @@ function ControllerCell.canSelectTarget(self, target)
     
 end
 
-function ControllerCell.buildLine(self, lineCell, newCell)
-    lineCell:setCellNext(newCell)
+function ControllerCell.tryBuildLine(self, lineCell, newCell)
     
-    self._managerGame:setCurrentLineFlowType(lineCell:flowType())
+    if self._managerGame:currentCell() == lineCell then -- проверка на совпадение с текущей ячейкой 
+        lineCell:setCellNext(newCell)
+        
+        self._managerGame:setCurrentLineFlowType(newCell)
+        self._managerGame:setCurrentCell(newCell)
+       
+    end
+    
 end
 
 
