@@ -13,6 +13,7 @@ require("game_flow.src.models.sounds.ManagerSounds")
 require('game_flow.src.models.string.ManagerString')
 require('game_flow.src.models.players.PlayerInfo')
 require('game_flow.src.models.game.ManagerGame')
+require('game_flow.src.models.editor.ManagerEditor')
 
 require('game_flow.src.views.popups.base.ViewPopupFlowBase')
 

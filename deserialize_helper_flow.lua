@@ -3,7 +3,7 @@ require('game_flow.src.models.purchases.EPurchaseType')
 require('game_flow.src.models.bonus.EBonusType')
 
 require('sdk.models.purchases.EPurchaseTypeBase')
-require('game_flow.src.models.game.GridCreator')
+require('game_flow.src.models.editor.GridCreator')
 
 
 function getManagerLevels()
@@ -11,7 +11,7 @@ function getManagerLevels()
     
     local levels = {}
     
-    --table.insert(levels, getLevelEditorData(true))
+    table.insert(levels, getLevelEditorData(false))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
@@ -201,10 +201,10 @@ function getLevelEditorData(isComplete)
     
     local paramsCreator =
     {
-        rows    = 5,
-        columns = 5,
-        bridgesCount = 4,
-        barriersCount = 3
+        rows            = 5,
+        columns         = 5,
+        bridgesCount    = 10,
+        barriersCount   = 3
 
     }
         
@@ -219,10 +219,9 @@ function getLevelEditorData(isComplete)
         time_left        = 60,
         
         reward_scores    = 5,
-        is_complete      = isComplete,
-        progress =
+        progress         =
         {
-            is_complete      = true,
+            is_complete      = isComplete,
         }
     }
     
@@ -305,10 +304,9 @@ function getLevel0Data(isComplete)
         time_left        = 60,
         
         reward_scores    = 5,
-        is_complete      = isComplete,
-        progress =
+        progress         =
         {
-            is_complete      = false,
+            is_complete      = isComplete,
         }
     }
     
