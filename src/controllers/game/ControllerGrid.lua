@@ -185,12 +185,8 @@ function ControllerGrid.update(self, type)
         end
         
         self._isBackDog = type == EControllerUpdate.ECUT_DOG_DOWN 
-            
-            
-        
         self:transitionDog(sourceDog, dog._yBackDog)
             
-        
         
     else
         assert(false)
