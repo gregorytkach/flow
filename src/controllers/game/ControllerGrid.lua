@@ -184,7 +184,7 @@ function ControllerGrid.update(self, type)
             
         end
         
-        self._isBack = type == EControllerUpdate.ECUT_DOG_DOWN 
+        self._isBackDog = type == EControllerUpdate.ECUT_DOG_DOWN 
             
             
         
@@ -222,7 +222,11 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
         
         local sourceCurrentDog = self._currentDog:view():sourceView()
         
-        sourceCurrentDog.y = self._currentDog._yBackDog
+        local currentDogFlowType = table.indexOf(self._dogs, self._currentDog) - 1
+        
+        if self._managerGame:currentLineFlowType() ~= currentDogFlowType then
+            sourceCurrentDog.y = self._currentDog._yBackDog
+        end
         
     else
         
@@ -241,7 +245,7 @@ function ControllerGrid.transitionDog(self, sourceDog, backY)
     local offsetY = 0
     local onComplete = nil
         
-    if self._isBack then
+    if self._isBackDog then
         
         onComplete = function () self._tweenDogMoved = nil end
     else

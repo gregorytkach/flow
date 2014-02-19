@@ -90,8 +90,10 @@ function ControllerCell.touch(self, event)
                 
                 local currentCell = self._managerGame:currentCell()
                 if  currentCell == nil and
-                (self._entry:flowType() ~= EFlowType.EFT_NONE) then
-                    self._managerGame:setCurrentCell(self._entry)
+                (entry:flowType() ~= EFlowType.EFT_NONE) then
+                    self._managerGame:setCurrentLineFlowType(entry)
+                    self._managerGame:setCurrentCell(entry)
+                    
                 end
             end
             
@@ -103,6 +105,7 @@ function ControllerCell.touch(self, event)
                 entry = entry:flowAdditional()
                 
                 if canSelectTarget then
+                    self._managerGame:setCurrentLineFlowType(entry)
                     self._managerGame:setCurrentCell(entry)
                 end
                 
@@ -286,9 +289,10 @@ function ControllerCell.tryBuildLine(self, lineCell, newCell)
     
     if self._managerGame:currentCell() == lineCell then -- проверка на совпадение с текущей ячейкой 
         lineCell:setCellNext(newCell)
-    
+        
+        self._managerGame:setCurrentLineFlowType(newCell)
         self._managerGame:setCurrentCell(newCell)
-        self._managerGame:setCurrentLineFlowType(lineCell)
+       
     end
     
 end

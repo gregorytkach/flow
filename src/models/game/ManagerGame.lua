@@ -26,12 +26,9 @@ function ManagerGame.setCurrentCell(self, cell)
     
     
     self._currentCell = cell
-    if cell ~= nil then
+    if cell ~= nil  then
         
         self._currentState:update(EControllerUpdate.ECUT_SET_CURRENT_CELL)
-        if cell:type() ~= ECellType.ECT_FLOW_POINT then
-            self:setCurrentLineFlowType(cell)
-        end
         
     end
     
