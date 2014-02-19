@@ -5,6 +5,17 @@ PlayerInfo = classWithSuper(PlayerInfoBase, 'PlayerInfo')
 -- Properties
 --
 
+function PlayerInfo.setEnergy(self, value)
+    if(self._energy == value) then
+        return
+    end
+    
+    PlayerInfoBase.setEnergy(self, value)
+    
+    GameInfo:instance():managerBonus():onEnergyChanged()
+    
+end
+
 function PlayerInfo.freePurchaseAddTime(self)
     return self._freePurchaseAddTime
 end

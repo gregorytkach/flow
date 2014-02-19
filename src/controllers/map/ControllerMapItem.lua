@@ -26,10 +26,6 @@ function ControllerMapItem.onViewClicked(self, target, event)
             
             if (playerCurrent:energy() > 0) then
                 
-                --todo: send data to server
-                
-                playerCurrent:setEnergy(playerCurrent:energy() - 1)
-                
                 local paramsGame = 
                 {
                     currentLevel = self._entry

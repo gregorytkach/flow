@@ -91,6 +91,10 @@ function ControllerUIMap.update(self, updateType)
         
         self._view:setEnergy(self._managerPlayers:playerCurrent():energy()) 
         
+        if(self._managerPlayers:playerCurrent():energy() == Constants.ENERGY_LIMIT)then
+            
+        end
+        
     elseif(updateType == EControllerUpdateBase.ECUT_BONUS_TIME)then
         
         self:updateTimerBonus()

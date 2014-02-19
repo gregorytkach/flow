@@ -66,7 +66,7 @@ function getManagerPlayers()
     local playerData =
     {
         currency_soft                   = 100,
-        energy                          = 0,
+        energy                          = 4,
         
         free_purchase_count_add_time    = 10,
         free_purchase_count_resolve     = 3,
@@ -108,8 +108,9 @@ function getManagerBonus()
     
     result.energy       = 
     {
+        limit       = 5,
         time_period = 15 * 60,
-        time_left   = 14 * 60,
+        time_left   = 1,
         bonus       =
         {
             type            = EBonusType.EBT_ENERGY,
