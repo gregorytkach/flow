@@ -11,7 +11,7 @@ function getManagerLevels()
     
     local levels = {}
     
-    table.insert(levels, getLevelEditorData(false))
+    --table.insert(levels, getLevelEditorData(false))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
     table.insert(levels, getLevel0Data(true))
@@ -195,39 +195,6 @@ function getManagerPurchasesData()
     table.insert(result, purchaseShowTurn)
     
     return result
-end
-
-function getLevelEditorData(isComplete)
-    
-    local paramsCreator =
-    {
-        rows            = 5,
-        columns         = 5,
-        bridgesCount    = 10,
-        barriersCount   = 3
-
-    }
-        
-    local gridCreator = GridCreator:new(paramsCreator)
-
-    gridCreator:shuffles(1000)
-
-    local gridData = gridCreator:gridData()
-    local result =
-    {
-        grid_data        = gridData,
-        time_left        = 60,
-        
-        reward_scores    = 5,
-        progress         =
-        {
-            is_complete      = isComplete,
-            stars_count      = 3,
-        }
-    }
-    
-    return result
-    
 end
 
 

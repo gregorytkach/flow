@@ -11,6 +11,12 @@ require('game_flow.src.models.game.cells.flowPoint.CellFlowPoint')
 
 ManagerGame = classWithSuper(ManagerGameBase, 'ManagerGame') 
 
+function ManagerGame.grid(self)
+    
+    return self._currentLevel:grid()
+    
+end
+
 --
 --Properties
 --
@@ -136,7 +142,7 @@ function ManagerGame.init(self, params)
     
     self._cellsBytTypes = {}
     
-    for rowIndex, row in ipairs(self._currentLevel:grid()) do
+    for rowIndex, row in ipairs(self:grid()) do
         for columnIndex, cell in ipairs(row) do
             
             local cells = self._cellsBytTypes[cell:type()]

@@ -35,7 +35,7 @@ function ControllerGrid.init(self)
     self._managerGame = GameInfo:instance():managerGame() 
     
     
-    local gridCells = self._managerGame:currentLevel():grid()
+    local gridCells = self._managerGame:grid()
     
     local gridCellsViews = {}
     

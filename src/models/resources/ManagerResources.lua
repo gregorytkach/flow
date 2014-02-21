@@ -85,6 +85,10 @@ function ManagerResources.init(self)
     
     self._resources[EResourceType.ERT_STATE_MAP_ITEM_CLOSE]         = '%sstate_map/button_level/close/level_close%s.png'
     
+    --editor
+    
+    self._resources[EResourceType.ERT_STATE_EDITOR_BUTTON_SHUFFLE]  = '%scommon/button_blue_0/%s%s.png'
+    
     
 end
 

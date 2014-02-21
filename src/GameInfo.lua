@@ -28,11 +28,11 @@ require('game_flow.src.controllers.popups.no_currency.ControllerPopupNoCurrency'
 require('game_flow.src.controllers.popups.bonus.ControllerPopupBonus')
 
 
-GameInfo = classWithSuper(GameInfoBase, 'GameInfo') 
---
--- Properties
---
+GameInfo = classWithSuper(GameInfoBase, 'GameInfo')
 
+--
+-- Methods
+--
 function GameInfo.init(self)
     
     application.assets_dir = 'game_flow/assets/'

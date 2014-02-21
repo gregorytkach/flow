@@ -12,7 +12,7 @@ function PlayerInfo.setEnergy(self, value)
     
     PlayerInfoBase.setEnergy(self, value)
     
-    GameInfo:instance():managerBonus():onEnergyChanged()
+    --GameInfo:instance():managerBonus():onEnergyChanged()
     
 end
 

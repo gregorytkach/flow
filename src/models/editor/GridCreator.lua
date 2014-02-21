@@ -102,7 +102,7 @@ function GridCreator.initFlowLines(self)
         local cellData      = self._gridData[1][columnIndex]
         cellData.type       = ECellType.ECT_FLOW_POINT
         
-        table.insert(self._points, cellData)
+        self:addPoint(cellData)
         
         local flow_type = columnIndex - 1
         
@@ -120,7 +120,7 @@ function GridCreator.initFlowLines(self)
         end
         
         cellData.type       = ECellType.ECT_FLOW_POINT
-        table.insert(self._points, cellData)
+        self:addPoint(cellData)
         
         self._counts[flow_type + 1] = self._rowsCount
         
@@ -287,6 +287,8 @@ function GridCreator.addPoint(self, point)
             
         end
         
+        point.is_start = false
+        
     end
     
     return result
@@ -362,6 +364,9 @@ function GridCreator.makeBridge(self, bridge, neighbour)
         bridge.flow_type = neighbour.flow_type
         
     end
+    
+    bridge.flowAdditional.x = bridge.x
+    bridge.flowAdditional.y = bridge.y
     
     self._bridgesCountLeft = self._bridgesCountLeft - 1
 end
@@ -702,6 +707,54 @@ function GridCreator.shuffle(self)
     
 end
 
+function GridCreator.dataBaseCells(self)
+    
+    local result = {}
+    
+    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
+        
+        local cellsByType 
+        
+        local point
+        for j = 1, #self._points, 1 do
+            
+            point = self._points[j]
+            if point.flow_type == i then
+                break
+            end
+            
+        end
+        
+        if point._prev ~= nil then
+           cellsByType = self:getCellsToStartFrom(point) 
+        else
+           cellsByType = self:getCellsToEndFrom(point) 
+        end
+        
+        for j = #cellsByType, 1, -1 do
+            
+            local cell = cellsByType[j]
+            local needCell = cell.type == ECellType.ECT_FLOW_POINT or cell.type == ECellType.ECT_BRIDGE or  ECellType.ECT_BARRIER
+            
+            if not needCell then
+                
+                needCell = cell._prev.x ~= cell._next.x and cell._prev.y ~= cell._next.y 
+            end
+                
+            if not needCell then
+                table.remove(cellsByType, j)
+            end
+            
+        end
+        
+        table.insert(result, cellsByType)
+        
+    end
+    
+    return result
+    
+end
+
 function GridCreator.shuffles(self, count)
     
     for j = 1, count, 1 do
@@ -710,10 +763,6 @@ function GridCreator.shuffles(self, count)
         
     end
     
-    for i = 1, #self._points, 1 do
-        
-        local point = self._points[i]
-        point.is_start = false
-        
-    end
+    
+    
 end

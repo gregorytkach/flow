@@ -57,7 +57,7 @@ end
 function StateEditor.update(self, updateType)
     
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
-        self._controllerGrid:update(updateType)
+        self._controllerGrid:update(EControllerUpdate.ECUT_EDIT)
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
     
     elseif(updateType == EControllerUpdateBase.ECUT_PLAYER_ENERGY)then

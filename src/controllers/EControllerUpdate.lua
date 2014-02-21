@@ -15,5 +15,7 @@ EControllerUpdate =
     ["ECUT_FREE_PURCHASE_SHOW_TURN"]    = "ECUT_FREE_PURCHASE_SHOW_TURN";
     ["ECUT_FREE_PURCHASE_RESOLVE"]      = "ECUT_FREE_PURCHASE_RESOLVE";
     
+    ["ECUT_EDIT"]                       = "ECUT_EDIT";
+    
 }
 
