@@ -122,7 +122,7 @@ function ControllerGrid.init(self)
         }
         
         local dog = ControllerDog:new(dogParams)
-                
+        
         table.insert(self._dogs, dog)
         
         local sourceDog = dog:view():sourceView()
@@ -170,17 +170,12 @@ function ControllerGrid.update(self, type)
         
         local flowType = self._managerGame:currentLineFlowType()
         
-        
         local dog = self._dogs[flowType + 1]
         local sourceDog = dog:view():sourceView()
         
-        if self._tweenDogMoved ~= nil then
-            
-            transition.cancel(self._tweenDogMoved)
-            self._tweenDogMoved = nil
-            
-            
-        end
+        
+        self:tryCleanupTweenDogMoved()
+        
         
         self._isDownDog = type == EControllerUpdate.ECUT_DOG_DOWN 
         self:transitionDog(sourceDog, dog._yBackDog)
@@ -197,7 +192,7 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
     local dog = self._dogs[flowType + 1]
     
     local viewDog = dog:view()
-                    
+    
     local sourceDog = viewDog:sourceView()
     
     sourceDog.isVisible = true
@@ -210,7 +205,7 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
         transition.cancel(self._tweenDogMoved)
         
         sourceDog.y = sourceDog.y + (yTarget -  dog._yBackDog) 
-         
+        
         self:transitionDog(sourceDog, yTarget)
         
     elseif self._currentDog ~= dog and self._tweenDogMoved ~= nil then
@@ -220,7 +215,7 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
         local flowType = table.indexOf(self._dogs, self._currentDog) - 1
         
         if flowType ~= self._managerGame:currentLineFlowType() then
-        
+            
             transition.cancel(self._tweenDogMoved)
             
             sourceCurrentDog.y = self._currentDog._yBackDog
@@ -246,15 +241,15 @@ function ControllerGrid.transitionDog(self, sourceDog, backY)
     
     local offsetY = 0
     local onComplete = nil
-        
+    
     if self._isDownDog then
         
         onComplete = function () 
             
-                        self._tweenDogMoved = nil 
-                        self._currentDog:update(EControllerUpdate.ECUT_DOG_IDLE)
-                        
-                     end
+            self._tweenDogMoved = nil 
+            self._currentDog:update(EControllerUpdate.ECUT_DOG_IDLE)
+            
+        end
         
     else
         
@@ -263,26 +258,32 @@ function ControllerGrid.transitionDog(self, sourceDog, backY)
     end
     
     if sourceDog.y ~= backY + offsetY then
-
+        
         local tweenParams =
         {
             y = backY + offsetY,
             time = 2 * application.animation_duration * math.abs((sourceDog.y - (backY + offsetY))/ self._offsetYDog),
             onComplete = onComplete,
         }
-
+        
         self._tweenDogMoved = transition.to(sourceDog, tweenParams) 
         
     end
     
 end
 
-function ControllerGrid.cleanup(self)
-    
+function ControllerGrid.tryCleanupTweenDogMoved(self)
     if self._tweenDogMoved ~= nil then
         transition.cancel(self._tweenDogMoved)
         self._tweenDogMoved = nil
     end
+end
+
+
+
+function ControllerGrid.cleanup(self)
+    
+    self:tryCleanupTweenDogMoved()
     
     for indexRow, row in ipairs(self._cells)do
         for indexColumn, controllerCell in ipairs(row)do
