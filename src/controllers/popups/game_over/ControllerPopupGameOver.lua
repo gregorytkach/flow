@@ -11,6 +11,16 @@ function ControllerPopupGameOver.getType(self)
 end
 
 --
+-- Events
+--
+
+function ControllerPopupGameOver.onButtonCloseClicked(self)
+    GameInfo:instance():onGameEnd()
+    
+    GameInfo:instance():managerStates():setState(EStateType.EST_MAP)
+end
+
+--
 -- Methods
 --
 

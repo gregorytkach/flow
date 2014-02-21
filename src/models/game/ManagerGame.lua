@@ -21,6 +21,9 @@ end
 --Properties
 --
 
+function ManagerGame.isPlayerWin(self)
+    return self._isPlayerWin
+end
 
 function ManagerGame.currentCell(self)
     
@@ -70,32 +73,38 @@ end
 --Events
 --
 
-function ManagerGame.timerStart(self)
-    self._timerGame = timer.performWithDelay(application.animation_duration * 4, 
-    function() 
-        self:onTimerTick()
-    end, 
-    self._timeLeft)
-end
-
-function ManagerGame.timerStop(self)
-    if(self._timerGame ~= nil)then
-        timer.cancel(self._timerGame)
-        self._timerGame = nil
-    end
-end
-
 function ManagerGame.onGameEnd(self)
     
     
     ManagerGameBase.onGameEnd(self)
 end
 
+function ManagerGame.onPlayerWin(self)
+    self._isPlayerWin = true
+    
+    self:onGameEnd()
+end
+
+function ManagerGame.onPlayerLose(self)
+    self._isPlayerWin = false
+    
+    local playerCurrent = GameInfo:instance():managerPlayers():playerCurrent()
+    
+    playerCurrent:setEnergy(playerCurrent:energy() - 1)
+    
+    self:onGameEnd()
+end
+
+
 function ManagerGame.onTimerTick(self)
     
     self._timeLeft = self._timeLeft - 1
     
     self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
+    
+    if(self._timeLeft == 0)then
+        self:onPlayerLose()
+    end
 end
 
 --
@@ -104,13 +113,16 @@ end
 
 function ManagerGame.onBuyAddTime(self)
     
-    self:timerStop()
+    --todo: implement
+--    self:timerStop()
+--    
+--    self._timeLeft = self._timeLeft + 15
+--    
+--    self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
+--    
+--    self:timerStart()
     
-    self._timeLeft = self._timeLeft + 15
-    
-    self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
-    
-    self:timerStart()
+    self:onPlayerLose()
     
 end
 
@@ -122,7 +134,8 @@ end
 function ManagerGame.init(self, params)
     ManagerGameBase.init(self, params)
     
-    self._timeLeft  = self._currentLevel:timeLeft()
+    self._isPlayerWin   = false
+    self._timeLeft      = self._currentLevel:timeLeft()
     
     self._cellsBytTypes = {}
     
@@ -139,6 +152,21 @@ function ManagerGame.init(self, params)
             
             self._cellsBytTypes[cell:type()] = cells
         end
+    end
+end
+
+function ManagerGame.timerStart(self)
+    self._timerGame = timer.performWithDelay(application.animation_duration * 4, 
+    function() 
+        self:onTimerTick()
+    end, 
+    self._timeLeft)
+end
+
+function ManagerGame.timerStop(self)
+    if(self._timerGame ~= nil)then
+        timer.cancel(self._timerGame)
+        self._timerGame = nil
     end
 end
 
@@ -186,10 +214,10 @@ function ManagerGame.setCurrentCellCache(self, currentCell)
     
     local cacheCurrentCell = self._currentCell
     self:setCurrentCell(currentCell)
-
+    
     self._setCurrentCell = cacheCurrentCell
     self:setCurrentCell(cacheCurrentCell)
-   
+    
     
 end
 
@@ -199,8 +227,8 @@ function ManagerGame.destroyLine(self, cellStart)
     -- установка текущей ячейки, если удаляется текущая линия
     
     if self._currentLineFlowType == cellStart:flowType() and self._currentLineFlowType ~= EFlowType.EFT_NONE 
-    or self._currentLineFlowType == EFlowType.EFT_NONE then
-    
+        or self._currentLineFlowType == EFlowType.EFT_NONE then
+        
         self:setCurrentCell(cellStart)
         
     else

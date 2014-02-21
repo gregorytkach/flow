@@ -45,7 +45,7 @@ function ManagerString.initLanguageEnglish(self)
     
     --game over
     language[EStringType.EST_POPUP_GAME_OVER_BUTTON_CLOSE]  = 'OK'
-    language[EStringType.EST_POPUP_GAME_OVER_TEXT]          = 'YOU LOST'
+    language[EStringType.EST_POPUP_GAME_OVER_TEXT]          = 'YOU LOSE'
     language[EStringType.EST_POPUP_GAME_OVER_TITLE]         = 'GAME OVER'
     
     
