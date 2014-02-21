@@ -7,10 +7,10 @@ ViewDog = classWithSuper(ViewBase, 'ViewDog')
 
 function ViewDog.setCurrentAnimation(self, type)
     
-    if(self._currentAnimationType == type)then
-        assert(false, 'Review this assert')
-        return
-    end
+--    if(self._currentAnimationType == type)then
+--        assert(false, 'Review this assert')
+--        return
+--    end
     
     self._currentAnimationType = type
     

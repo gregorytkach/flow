@@ -47,7 +47,6 @@ end
 function ControllerDog.init(self, params)
     
     assert(params.flow_type ~= nil)
-    print('ControllerDog')
     
     self._flowType = params.flow_type
     

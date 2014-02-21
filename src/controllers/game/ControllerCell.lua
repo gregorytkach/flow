@@ -193,6 +193,8 @@ function ControllerCell.init(self, params)
     self._isInside = false
     
     self._managerGame = GameInfo:instance():managerGame()
+    self._currentState = GameInfo:instance():managerStates():currentState()
+    
 end
 
 function ControllerCell.createView(self)
@@ -304,6 +306,8 @@ function ControllerCell.cleanup(self)
     
     self._view:cleanup()
     self._view = nil
+    
+    self._currentState = nil
     
     Controller.cleanup(self)
 end
