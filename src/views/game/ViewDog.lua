@@ -7,19 +7,29 @@ ViewDog = classWithSuper(ViewBase, 'ViewDog')
 
 function ViewDog.setCurrentAnimation(self, type)
     
-    self._currentAnimation:pause()
-    self._currentAnimation.isVisible = false
+    if(self._currentAnimationType == type)then
+        assert(false, 'Review this assert')
+        return
+    end
     
-    local animation = self._animations[type]
-    animation.isVisible = true
-    animation:play()
+    self._currentAnimationType = type
     
-    self._currentAnimation = animation
+    print(type)
+    
+    for animationType, animation in pairs(self._animations) do
+        
+        if (animationType == self._currentAnimationType)then
+            animation:play()
+            animation.visible = true
+        else
+            animation.visible = false
+            animation:pause()
+        end
+    end
     
 end
 
 function ViewDog.init(self, params)
-    
     
     ViewBase.init(self, params)
     
@@ -29,43 +39,34 @@ function ViewDog.init(self, params)
     
     local managerResources = GameInfo:instance():managerResources()
     
-    managerResources:setDogAnimationResource(params.flow_type)
-    
     self._animations = {}
     
-    local animationIdle = managerResources:getAsAnimation(EResourceType.ERT_STATE_GAME_ANIMATION_DOG_IDLE)
-    self._animations[EDogAnimationType.EDAT_IDLE] = animationIdle
-    animationIdle:play()
+    local animationIdle =  managerResources:getAsAnimationWithParam(EResourceType.ERT_STATE_GAME_ANIMATION_DOG_IDLE, params.flow_type)
     self._sourceView:insert(animationIdle)
-    self._currentAnimation = animationIdle
     
-    local animationDown = managerResources:getAsAnimation(EResourceType.ERT_STATE_GAME_ANIMATION_DOG_DOWN)
-    self._animations[EDogAnimationType.EDAT_DOWN] = animationDown
-    animationDown.isVisible = false
+    self._animations[EDogAnimationType.EDAT_IDLE] = animationIdle
+    
+    local animationDown = managerResources:getAsAnimationWithParam(EResourceType.ERT_STATE_GAME_ANIMATION_DOG_DOWN, params.flow_type)
     self._sourceView:insert(animationDown)
     
-    local animationUp = managerResources:getAsAnimation(EResourceType.ERT_STATE_GAME_ANIMATION_DOG_UP)
-    self._animations[EDogAnimationType.EDAT_UP] = animationUp
-    animationUp.isVisible = false
+    self._animations[EDogAnimationType.EDAT_DOWN] = animationDown
+    
+    local animationUp = managerResources:getAsAnimationWithParam(EResourceType.ERT_STATE_GAME_ANIMATION_DOG_UP, params.flow_type)
     self._sourceView:insert(animationUp)
     
+    self._animations[EDogAnimationType.EDAT_UP] = animationUp
+    
+    self:setCurrentAnimation(EDogAnimationType.EDAT_IDLE)
 end
 
 
 function ViewDog.cleanup(self)
     
     self._animations[EDogAnimationType.EDAT_IDLE]:cleanup()
-    self._animations[EDogAnimationType.EDAT_IDLE] = nil
-    
     self._animations[EDogAnimationType.EDAT_UP]:cleanup()
-    self._animations[EDogAnimationType.EDAT_UP] = nil
-    
     self._animations[EDogAnimationType.EDAT_DOWN]:cleanup()
-    self._animations[EDogAnimationType.EDAT_DOWN] = nil
     
-     self._animations = nil
-    
-    self._currentAnimation = nil
+    self._animations = nil
     
     self._sourceView:removeSelf()
     self._sourceView = nil
