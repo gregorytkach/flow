@@ -1,9 +1,26 @@
 ViewDog = classWithSuper(ViewBase, 'ViewDog')
 
+--
+--Properties
+--
+
+function ViewDog.currentAnimation(self)
+    
+    return self._animations[self._currentAnimationType]
+    
+end
 
 --
 --Methods
 --
+
+function ViewDog.setDogPosition(self, sourceCell)
+    
+    self._sourceView.x = sourceCell.x
+    self._sourceView.y = sourceCell.y - 45
+    
+    
+end
 
 function ViewDog.setCurrentAnimation(self, type)
     
