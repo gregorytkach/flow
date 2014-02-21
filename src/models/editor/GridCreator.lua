@@ -734,7 +734,7 @@ function GridCreator.dataBaseCells(self)
         for j = #cellsByType, 1, -1 do
             
             local cell = cellsByType[j]
-            local needCell = cell.type == ECellType.ECT_FLOW_POINT or cell.type == ECellType.ECT_BRIDGE or  ECellType.ECT_BARRIER
+            local needCell = cell.type == ECellType.ECT_FLOW_POINT or cell.type == ECellType.ECT_BRIDGE or  cell.type == ECellType.ECT_BARRIER
             
             if not needCell then
                 
