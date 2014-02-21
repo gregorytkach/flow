@@ -58,3 +58,7 @@ function ControllerCellEmpty.onTrySelect(self, target)
     end
     
 end
+
+function ControllerCellEmpty.cleanup(self)
+    ControllerCell.cleanup(self)
+end

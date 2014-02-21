@@ -123,8 +123,6 @@ function ControllerGrid.init(self)
     
     local firstCellView = gridCellsViews[1][1] 
     
-    --    local viewCell = currentCell:controller():view()
-    
     self._offsetYDog = -0.3 * firstCellView:realHeight()
 end
 
@@ -140,6 +138,7 @@ function ControllerGrid.initControllersDogs(self, flowTypes)
         dog = ControllerDog:new(dogParams)
         
         local sourceDog = dog:view():sourceView()
+        dog:view():hide()
         
         self._view:sourceView():insert(sourceDog)
         
@@ -167,6 +166,12 @@ function ControllerGrid.update(self, type)
                 end
                 
             end
+        end
+        
+        for flowType, controllerDog in pairs(self._dogs)do
+            --            controllerDog:view():sourceView().isVisible = true
+            controllerDog:view():show()
+            
         end
         
     elseif(type == EControllerUpdate.ECUT_SET_CURRENT_CELL)then

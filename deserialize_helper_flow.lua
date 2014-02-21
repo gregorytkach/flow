@@ -268,11 +268,12 @@ function getLevel0Data(isComplete)
     
     local result =
     {
-        grid_data        = gridData,
-        time_left        = 60,
+        grid_data               = gridData,
+        time_left               = 60,
         
-        reward_scores    = 5,
-        progress         =
+        reward_currency_soft    = 50,
+        reward_scores           = 5,
+        progress                =
         {
             is_complete      = isComplete,
         }

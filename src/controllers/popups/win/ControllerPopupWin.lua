@@ -11,6 +11,16 @@ function ControllerPopupWin.getType(self)
 end
 
 --
+-- Events
+--
+
+function ControllerPopupWin.onButtonCloseClicked(self)
+    GameInfo:instance():onGameEnd()
+    
+    GameInfo:instance():managerStates():setState(EStateType.EST_MAP)
+end
+
+--
 -- Methods
 --
 
@@ -31,6 +41,12 @@ function ControllerPopupWin.init(self)
     
     
     self._view:setRewardCurrency(100)
+    
+    local managerGame = GameInfo:instance():managerGame()
+    
+    assert(managerGame ~= nil)
+    
+    self._view:setRewardCurrency(managerGame:currentLevel():rewardCurrencySoft())
     
 end
 

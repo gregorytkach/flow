@@ -121,3 +121,7 @@ function ControllerCellFlowPoint.isLineComplete(self)
     
     return result
 end
+
+function ControllerCellFlowPoint.cleanup(self)
+    ControllerCell.cleanup(self)
+end

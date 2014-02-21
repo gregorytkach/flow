@@ -159,3 +159,8 @@ function ControllerCellBridge.update(self, updateType)
     end
     
 end
+
+function ControllerCellBridge.cleanup(self)
+    ControllerCell.cleanup(self)
+end
+

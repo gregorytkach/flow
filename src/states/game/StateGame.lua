@@ -89,6 +89,15 @@ function StateGame.update(self, updateType)
         updateType == EControllerUpdate.ECUT_FREE_PURCHASE_RESOLVE)then
         
         self._controllerUI:update(updateType)
+        
+    elseif(updateType == EControllerUpdateBase.ECUT_GAME_FINISHED)then
+        
+        if(self._managerGame:isPlayerWin()) then
+            self:showPopup(EPopupType.EPT_WIN)
+        else
+            self:showPopup(EPopupType.EPT_GAME_OVER)
+        end
+        
     else
         assert(false, updateType)
     end

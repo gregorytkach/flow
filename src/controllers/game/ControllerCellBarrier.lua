@@ -34,3 +34,8 @@ end
 function ControllerCellBarrier.onTrySelect(self, target)
     assert(false)
 end
+
+function ControllerCellBarrier.cleanup(self)
+    ControllerCell.cleanup(self)
+end
+
