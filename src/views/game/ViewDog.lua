@@ -17,7 +17,6 @@ function ViewDog.setCurrentAnimation(self, type)
     print(type)
     
     for animationType, animation in pairs(self._animations) do
-        
         if (animationType == self._currentAnimationType)then
             animation:play()
             animation.visible = true
