@@ -49,17 +49,11 @@ function ControllerGrid.init(self)
         for indexColumn, cell in ipairs(row)do
             
             if indexColumn > 1 then
-                
                 isPair = not isPair
-                
             elseif (indexRow / 2) == math.floor(indexRow / 2) then
-                
                 isPair = false
-                
             else
-                
                 isPair = true
-                
             end
             
             local paramsController =
@@ -124,30 +118,33 @@ function ControllerGrid.init(self)
         end
     end
     
-    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
-        
+    
+    self:initControllersDogs(flowTypes)
+    
+    local firstCellView = gridCellsViews[1][1] 
+    
+    --    local viewCell = currentCell:controller():view()
+    
+    self._offsetYDog = -0.3 * firstCellView:realHeight()
+end
+
+function ControllerGrid.initControllersDogs(self, flowTypes)
+    for i, flowType in  ipairs(flowTypes)do    
         local dog = {}
         
-        if table.indexOf(flowTypes, i) ~= nil then
-            
-            local dogParams = 
-            {
-                flow_type = i,
-            }
-
-            dog = ControllerDog:new(dogParams)
-
-            local sourceDog = dog:view():sourceView()
-
-            self._view:sourceView():insert(sourceDog)
-            
-            
-        end
+        local dogParams = 
+        {
+            flow_type = flowType,
+        }
         
-        table.insert(self._dogs, dog) 
+        dog = ControllerDog:new(dogParams)
         
+        local sourceDog = dog:view():sourceView()
+        
+        self._view:sourceView():insert(sourceDog)
+        
+        self._dogs[flowType] = dog
     end
-    
 end
 
 function ControllerGrid.update(self, type)
@@ -178,20 +175,18 @@ function ControllerGrid.update(self, type)
         
         local viewCell = currentCell:controller():view()
         
-        self._offsetYDog = - 0.75 * viewCell:realHeight()
+        self._offsetYDog = -0.3 * viewCell:realHeight()
         
-        self:setDogPosition(currentCell:flowType(), viewCell:sourceView())
+        self:setDogPosition(currentCell:flowType(), currentCell:controller():view():sourceView())
         
     elseif(type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN)  then
         
         local flowType = self._managerGame:currentLineFlowType()
         
-        local dog = self._dogs[flowType + 1]
+        local dog = self._dogs[flowType]
         local sourceDog = dog:view():sourceView()
         
-        
         self:tryCleanupTweenDogMoved()
-        
         
         self._isDownDog = type == EControllerUpdate.ECUT_DOG_DOWN 
         self:transitionDog(sourceDog, dog._yBackDog)
@@ -205,9 +200,9 @@ end
 
 function ControllerGrid.setDogPosition(self, flowType, sourceCell)
     
-    local dog = self._dogs[flowType + 1]
+    local controllerDog = self._dogs[flowType]
     
-    local viewDog = dog:view()
+    local viewDog = controllerDog:view()
     
     local sourceDog = viewDog:sourceView()
     
@@ -215,19 +210,19 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
     
     local yTarget = sourceCell.y - viewDog:realHeight() / 2
     
-    if self._currentDog == dog and self._tweenDogMoved ~= nil then
+    if self._currentDog == controllerDog and self._tweenDogMoved ~= nil then
         
         transition.cancel(self._tweenDogMoved)
         
-        sourceDog.y = sourceDog.y + (yTarget -  dog._yBackDog) 
+        sourceDog.y = sourceDog.y + (yTarget -  controllerDog._yBackDog) 
         
         self:transitionDog(sourceDog, yTarget)
         
-    elseif self._currentDog ~= dog and self._tweenDogMoved ~= nil then
+    elseif self._currentDog ~= controllerDog and self._tweenDogMoved ~= nil then
         
         local sourceCurrentDog = self._currentDog:view():sourceView()
         
-        local flowType = table.indexOf(self._dogs, self._currentDog) - 1
+        local flowType =  self._currentDog:flowType()
         
         if flowType ~= self._managerGame:currentLineFlowType() then
             
@@ -238,17 +233,13 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
             
         end
         
-        
-        
     else
-        
         sourceDog.y = yTarget
-        
     end
     
-    dog._yBackDog = yTarget
+    controllerDog._yBackDog = yTarget
     
-    self._currentDog = dog
+    self._currentDog = controllerDog
     
 end
 
@@ -260,10 +251,8 @@ function ControllerGrid.transitionDog(self, sourceDog, backY)
     if self._isDownDog then
         
         onComplete = function () 
-            
             self._tweenDogMoved = nil 
             self._currentDog:update(EControllerUpdate.ECUT_DOG_IDLE)
-            
         end
         
     else
@@ -276,9 +265,9 @@ function ControllerGrid.transitionDog(self, sourceDog, backY)
         
         local tweenParams =
         {
-            y = backY + offsetY,
-            time = 2 * application.animation_duration * math.abs((sourceDog.y - (backY + offsetY))/ self._offsetYDog),
-            onComplete = onComplete,
+            y           = backY + offsetY,
+            time        = application.animation_duration * math.abs((sourceDog.y - (backY + offsetY)) / self._offsetYDog),
+            onComplete  = onComplete,
         }
         
         self._tweenDogMoved = transition.to(sourceDog, tweenParams) 
