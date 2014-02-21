@@ -104,11 +104,21 @@ function ControllerGrid.init(self)
     
     self:view():setCellsViews(gridCellsViews)
     
+    local flowTypes = {}
     for i, row in ipairs(self._cells)do
         for i, controllerCell in ipairs(row)do
             
             if(controllerCell:entry():type() == ECellType.ECT_FLOW_POINT)then
                 controllerCell:view():sourceView():toFront()
+                
+                local flowType = controllerCell:entry():flowType()
+                
+                if table.indexOf(flowTypes, flowType) == nil then
+                    
+                    table.insert(flowTypes, flowType)
+                    
+                end
+                
             end
             
         end
@@ -116,19 +126,25 @@ function ControllerGrid.init(self)
     
     for i = 0, EFlowType.EFT_COUNT - 1, 1 do
         
-        local dogParams = 
-        {
-            flow_type = i,
-        }
+        local dog = {}
         
-        local dog = ControllerDog:new(dogParams)
+        if table.indexOf(flowTypes, i) ~= nil then
+            
+            local dogParams = 
+            {
+                flow_type = i,
+            }
+
+            dog = ControllerDog:new(dogParams)
+
+            local sourceDog = dog:view():sourceView()
+
+            self._view:sourceView():insert(sourceDog)
+            
+            
+        end
         
-        table.insert(self._dogs, dog)
-        
-        local sourceDog = dog:view():sourceView()
-        
-        self._view:sourceView():insert(sourceDog)
-        sourceDog.isVisible = false
+        table.insert(self._dogs, dog) 
         
     end
     
@@ -195,7 +211,6 @@ function ControllerGrid.setDogPosition(self, flowType, sourceCell)
     
     local sourceDog = viewDog:sourceView()
     
-    sourceDog.isVisible = true
     sourceDog.x = sourceCell.x
     
     local yTarget = sourceCell.y - viewDog:realHeight() / 2
