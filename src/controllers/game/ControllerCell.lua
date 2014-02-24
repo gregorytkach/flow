@@ -50,6 +50,7 @@ function ControllerCell.touch(self, event)
         
         if(self._view:isInsideEvent(event))then
             
+            
             if not self._isInside then
                 self:onInside()
                 
@@ -78,6 +79,12 @@ function ControllerCell.touch(self, event)
             elseif(event.y < self._view:y0())then
                 
                 target = entry:neighborUp()
+                
+            end
+            
+            if target == nil and  (event.x > self._view:x1() or event.x < self._view:x0() or event.y < self._view:y0() or event.y < self._view:y0())  then
+                
+                self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
                 
             end
             
@@ -151,13 +158,13 @@ function ControllerCell.touch(self, event)
         
         if self._isInsideFirstTime  then
            self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+           
+            self._managerGame:setCurrentLineFlowType(nil)
+            self._managerGame:destroyCache()
+            self._managerGame:setCurrentCell(nil)
         end
         
         self._isInsideFirstTime = false
-        
-        self._managerGame:setCurrentLineFlowType(nil)
-        self._managerGame:destroyCache()
-        self._managerGame:setCurrentCell(nil)
         
     end
 end
@@ -170,12 +177,16 @@ function ControllerCell.onInsideFirstTime(self)
 end
 
 function ControllerCell.onInside(self)
+    
     self._isInside = true
+    
+    
 end
 
 function ControllerCell.onOutside(self)
     
     self._isInside = false
+    
     
 end
 

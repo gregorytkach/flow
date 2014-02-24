@@ -6,8 +6,11 @@ ControllerPurchases = classWithSuper(Controller, 'ControllerPurchases')
 -- Events
 --
 
+
+
 function ControllerPurchases.onViewClicked(self, target, event)
     local needShowPopupNoCurrency = false
+    
     
     if (self._view:buttonResolve() == target) then
         

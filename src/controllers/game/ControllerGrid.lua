@@ -231,8 +231,11 @@ function ControllerGrid.update(self, type)
             controllerDog = self._currentDog
             
         end
-       
-        controllerDog:update(type)    
+        
+        
+        if controllerDog then
+            controllerDog:update(type)
+        end
         
     else
         assert(false)
