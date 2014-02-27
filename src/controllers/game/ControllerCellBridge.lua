@@ -22,12 +22,11 @@ function ControllerCellBridge.canSelectTarget(self, target)
         
         flowTypeAdditional = self._entry:flowAdditional():flowType()
     end
-        
     
     local currentLineFlowType = self._managerGame:currentLineFlowType()
     
-    local isTargetHorizontal    = (target == self._entry:neighborLeft()  or target == self._entry:neighborRight()) and flowTypeAdditional ~= EFlowType.EFT_NONE
-    local isTargetVertical      = (target == self._entry:neighborUp()    or target == self._entry:neighborDown()) and flowType ~= EFlowType.EFT_NONE
+    local isTargetHorizontal            = (target == self._entry:neighborLeft()  or target == self._entry:neighborRight()) and flowTypeAdditional ~= EFlowType.EFT_NONE
+    local isTargetVertical              = (target == self._entry:neighborUp()    or target == self._entry:neighborDown()) and flowType ~= EFlowType.EFT_NONE
     
     local isTargetBarrier               = target:type() == ECellType.ECT_BARRIER
     local currentLineIsEmpty            = currentLineFlowType == nil

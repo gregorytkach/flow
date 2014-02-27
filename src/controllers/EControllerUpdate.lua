@@ -1,6 +1,7 @@
 EControllerUpdate = 
 {
     ["ECUT_CELL_PURCHASED"]             = "ECUT_CELL_PURCHASED";
+    ["ECUT_CELL_NEXT"]                  = "ECUT_CELL_NEXT";
 
     ["ECUT_INCLUSION_IN_LINE"]          = "ECUT_INCLUSION_IN_LINE";
     ["ECUT_EXCLUSION_FROM_LINE"]        = "ECUT_EXCLUSION_FROM_LINE";

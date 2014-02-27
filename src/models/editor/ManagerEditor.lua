@@ -1,3 +1,5 @@
+require('game_flow.src.models.editor.GridCreator')
+
 ManagerEditor = classWithSuper(ManagerGame, 'ManagerEditor')
 
 --

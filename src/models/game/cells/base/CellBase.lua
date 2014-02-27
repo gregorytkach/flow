@@ -89,10 +89,12 @@ end
 -- Events
 -- 
 
-function CellBase.onPurchased(self)
+function CellBase.onPurchased(self, flowType)
     assert(not self._isPurchased, 'Cell already purchased')
+    assert(flowType ~= nil)
     
-    self._isPurchased = true
+    self._isPurchased   = true
+    self._flowType      = flowType
     
     self._controller:update(EControllerUpdate.ECUT_CELL_PURCHASED)
 end
@@ -168,6 +170,9 @@ end
 --
 
 function CellBase.cacheState(self)
+    if(self._isPurchased)then
+        return
+    end
     
     self._cellPrevCached = self._cellPrev
     self._cellNextCached = self._cellNext
@@ -176,6 +181,9 @@ function CellBase.cacheState(self)
 end
 
 function CellBase.destroyCache(self)
+    if(self._isPurchased)then
+        return
+    end
     
     self._cellPrevCached = nil
     self._cellNextCached = nil
@@ -184,12 +192,17 @@ function CellBase.destroyCache(self)
 end
 
 function CellBase.canRestoreState(self)
+    local cellNextFlowTypeIsNone    = self._cellNext ~= nil and (self._cellNext:flowType() == EFlowType.EFT_NONE)
+    local cellNextIsNil             = self._cellNext == nil
     
-    return self._cellNext ~= nil and self._cellNext:flowType() == EFlowType.EFT_NONE or self._cellNext == nil
-    
+    return (cellNextFlowTypeIsNone or cellNextIsNil) and not self._isPurchased
 end
 
 function CellBase.restoreState(self)
+    
+    if (self._isPurchased)then
+        return false
+    end
     
     local result = true
     

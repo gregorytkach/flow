@@ -23,12 +23,12 @@ function ViewCell.setIsEnabled(self, value)
     
     self._isEnabled = value
     
-    if(self._isEnabled)then
-        self._sourceView:setColor(1, 1, 1)
-    else
-        self._sourceView:setColor(0.5, 0.5, 0.5)
-    end
-    
+    --todo: enable color
+--    if(self._isEnabled)then
+--        self._sourceView:setColor(1, 1, 1)
+--    else
+--        self._sourceView:setColor(0.5, 0.5, 0.5)
+--    end
 end
 
 --
@@ -39,7 +39,9 @@ function ViewCell.setPath(self, flowType)
     for i = 0, #self._pathsViews - 1, 1 do
         
         local path = self._pathsViews[i + 1]
-        path:sourceView().isVisible = (i == flowType)
+        
+        local isPathViewVisible = tostring(i) == tostring(flowType)
+        path:sourceView().isVisible = isPathViewVisible
         
     end
 end

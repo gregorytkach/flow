@@ -140,7 +140,7 @@ function ManagerGame.onBuyPurchaseLine(self)
     local lineData = self._notPurchasedLines[targetFlowType]
     
     for i, cell in ipairs(lineData)do
-        cell:onPurchased()
+        cell:onPurchased(targetFlowType)
     end
     
     self._notPurchasedLines[targetFlowType] = nil
@@ -296,7 +296,7 @@ end
 
 function ManagerGame.cacheStates(self)
     
-    for rowIndex, row in ipairs(self._currentLevel:grid()) do
+    for rowIndex, row in ipairs(self:grid()) do
         for columnIndex, cell in ipairs(row) do
             cell:cacheState()
             
@@ -321,7 +321,7 @@ end
 
 function ManagerGame.destroyCache(self)
     
-    for rowIndex, row in ipairs(self._currentLevel:grid()) do
+    for rowIndex, row in ipairs(self:grid()) do
         for columnIndex, cell in ipairs(row) do
             cell:destroyCache()
             

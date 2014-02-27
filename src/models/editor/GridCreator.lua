@@ -1,6 +1,7 @@
 require('game_flow.src.models.game.cells.base.ECellType')
 require('game_flow.src.models.game.cells.EFlowType')
 
+--todo: remove and move all functions to manager editor
 GridCreator     = classWithSuper(Object, 'GridCreator')
 
 --self._bridgesCountLeft      = 4
@@ -727,9 +728,9 @@ function GridCreator.dataBaseCells(self)
         end
         
         if point._prev ~= nil then
-           cellsByType = self:getCellsToStartFrom(point) 
+            cellsByType = self:getCellsToStartFrom(point) 
         else
-           cellsByType = self:getCellsToEndFrom(point) 
+            cellsByType = self:getCellsToEndFrom(point) 
         end
         
         for j = #cellsByType, 1, -1 do
@@ -741,7 +742,7 @@ function GridCreator.dataBaseCells(self)
                 
                 needCell = cell._prev.x ~= cell._next.x and cell._prev.y ~= cell._next.y 
             end
-                
+            
             if not needCell then
                 table.remove(cellsByType, j)
             end
@@ -759,23 +760,23 @@ function GridCreator.dataBaseCells(self)
     
 end
 
-
-
 function GridCreator.createFunctionGridData(self)
     
-    local result = 'function function getGridData_'..os.time()..'()\n'
+    local result = 'local function getDataGrid_'..os.time()..'()\n'..
     
-    result = result..'\tlocal result = {}\n\n'
+    '\tlocal result = {}\n\n'..
     
-    result = result..'\tfor rowIndex = 1, '..self._rowsCount..', 1 do\n\n'
+    '\tfor rowIndex = 1, '..self._rowsCount..', 1 do\n\n'..
     
-    result = result..'\t\tlocal row = {}\n\n'
+    '\t\tlocal row = {}\n\n'..
     
-    result = result..'\t\tfor columnIndex = 1, '..self._columnsCount..', 1 do\n\n'
+    '\t\tfor columnIndex = 1, '..self._columnsCount..', 1 do\n\n'..
     
-    result = result..'\t\t\tlocal cellData\n\n'
+    '\t\t\tlocal cellData\n\n'
     
     local elsePrefix = ''
+    
+    local tabsCellData = '\t\t\t\t'
     
     for rowIndex = 1, self._rowsCount, 1 do
         for columnIndex = 1, self._columnsCount, 1 do
@@ -783,28 +784,24 @@ function GridCreator.createFunctionGridData(self)
             local cellData = self._gridData[rowIndex][columnIndex]
             if cellData.type ~= ECellType.ECT_EMPTY then
                 
-                result = result..'\t\t\t'..elsePrefix..'if(rowIndex == '..rowIndex..' and columnIndex == '..columnIndex..')then\n'
-                result = result..'\t\t\t\tcellData = \n'
-                result = result..'\t\t\t\t{\n'
-                if(cellData.type == ECellType.ECT_FLOW_POINT)then
-                    result = result..'\t\t\t\t\ttype = ECellType.ECT_FLOW_POINT,\n'
-                elseif(cellData.type == ECellType.ECT_FLOW_BRIDGE)then
-                    result = result..'\t\t\t\t\ttype = ECellType.ECT_FLOW_BRIDGE,\n'
-                elseif(cellData.type == ECellType.ECT_FLOW_BARRIER)then
-                    result = result..'\t\t\t\t\ttype = ECellType.ECT_FLOW_BARRIER,\n'
-                end
-                result = result..'\t\t\t\t\tflow_type = EFlowType.EFT_'..cellData.flow_type..',\n'
+                result = result..'\t\t\t'..elsePrefix..'if(rowIndex == '..rowIndex..' and columnIndex == '..columnIndex..')then\n'..
+                tabsCellData..'cellData = \n'..
+                tabsCellData..'{\n'..
                 
-            if(cellData.type == ECellType.ECT_FLOW_POINT)then
+                tabsCellData..'\ttype = ECellType.'..cellData.type..',\n'..
+                
+                tabsCellData..'\tflow_type = EFlowType.EFT_'..cellData.flow_type..',\n'
+                
+                if(cellData.type == ECellType.ECT_FLOW_POINT)then
                     local is_start = 'false'
                     
                     if cellData.is_start then
                         is_start = 'true'
                     end
-                    result = result..'\t\t\t\t\tis_start = '..is_start..',\n'
+                    
+                    result = result..tabsCellData..'\tis_start = '..is_start..'\n'..
+                    tabsCellData..'}\n'
                 end
-                
-                
                 
             end
             
@@ -812,25 +809,25 @@ function GridCreator.createFunctionGridData(self)
         end
     end
     
-    result = result..'\t\t\telse\n'
-    result = result..'\t\t\t\tcellData = \n'
-    result = result..'\t\t\t\t{\n'
+    result = result..'\t\t\telse\n'..
+    tabsCellData..'cellData = \n'..
+    tabsCellData..'{\n'..
     
-    result = result..'\t\t\t\t\ttype = ECellType.ECT_FLOW_EMPTY,\n'
-    result = result..'\t\t\t\t\tflow_type = EFlowType.EFT_NONE,\n'
-    result = result..'\t\t\t\t}\n'
-    result = result..'\t\t\tend\n\n'
+    tabsCellData..'\ttype = ECellType.ECT_FLOW_EMPTY,\n'..
+    tabsCellData..'\tflow_type = EFlowType.EFT_NONE,\n'..
+    tabsCellData..'}\n'..
+    '\t\t\tend\n\n'..
     
-    result = result..'\t\t\tcellData.x = columnIndex..\n'
-    result = result..'\t\t\tcellData.y = rowIndex\n\n'
-    result = result..'\t\t\ttable.insert(row, cellData)\n'
-    result = result..'\t\tend\n\n'
+    '\t\t\tcellData.x = columnIndex\n'..
+    '\t\t\tcellData.y = rowIndex\n\n'..
+    '\t\t\ttable.insert(row, cellData)\n'..
+    '\t\tend\n\n'..
     
-    result = result..'\t\ttable.insert(result, row)\n'
-    result = result..'\tend\n\n'
+    '\t\ttable.insert(result, row)\n'..
+    '\tend\n\n'..
     
-    result = result..'\treturn result\n\n'
-    result = result..'end'
+    '\treturn result\n\n'..
+    'end'
     
     return result
     

@@ -194,9 +194,9 @@ function ControllerGrid.update(self, type)
             
             local maxRowControllerDog = self._dogs[1]
             for key, controllerDog in pairs(self._dogs) do
-               
+                
                 if table.indexOf(self._dogs, controllerDog) == nil and controllerDog:row() > maxRowControllerDog:row() then
-                                        
+                    
                     maxRowControllerDog = controllerDog
                 end
                 
@@ -222,7 +222,7 @@ function ControllerGrid.update(self, type)
         if (type ==  EControllerUpdate.ECUT_DOG_UP) then
             
             local flowType = self._managerGame:currentLineFlowType()
-
+            
             controllerDog = self._dogs[flowType]
             self._currentDog = controllerDog
             
@@ -248,7 +248,11 @@ end
 
 function ControllerGrid.cleanup(self)
     
-    self:tryCleanupTweenDogMoved()
+    if self._currentDog ~= nil then
+        
+        self._currentDog:tryCleanupTweenDogMoved()
+        
+    end
     
     for indexRow, row in ipairs(self._cells)do
         for indexColumn, controllerCell in ipairs(row)do
