@@ -13,7 +13,7 @@ function ControllerCellFlowPoint.onInsideFirstTime(self)
     
     self:update(EControllerUpdate.ECUT_INCLUSION_IN_LINE)
     
-    ControllerCell.onInside(self)
+    ControllerCell.onInsideFirstTime(self)
 end
 
 function ControllerCellFlowPoint.canSelectTarget(self, target)

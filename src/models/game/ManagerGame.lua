@@ -52,27 +52,11 @@ end
 
 function ManagerGame.setCurrentLineFlowType(self, value)
     
-    if value ~= EFlowType.EFT_NONE and value ~= nil and  self._currentLineFlowType ~= value:flowType() then
+    if value ~= EFlowType.EFT_NONE and value ~= nil   then
         
-        local flowType = value:flowType()
-        
-        if flowType ~= self._currentLineFlowType and self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil then
-            self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
-        end
-        
-        self._currentLineFlowType = flowType
-        
-        if value:cellNext() == nil and self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil then
-            self._currentState:update(EControllerUpdate.ECUT_DOG_UP)
-            
-        end
+        self._currentLineFlowType = value:flowType()
         
     elseif (value == EFlowType.EFT_NONE or value == nil)  then
-        
-        if self._currentLineFlowType ~= EFlowType.EFT_NONE and self._currentLineFlowType ~= nil  then
-            self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
-            
-        end
         
         self._currentLineFlowType = value
         

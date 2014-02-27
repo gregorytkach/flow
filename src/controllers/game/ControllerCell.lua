@@ -24,6 +24,8 @@ function ControllerCell.touch(self, event)
             
             if( self._isInside == false)then
                 
+                local isInsideFirstTime = self._isInsideFirstTime
+                
                 self:onInsideFirstTime()
                 
                 local currentLineFlowType = self._managerGame:currentLineFlowType()
@@ -31,10 +33,15 @@ function ControllerCell.touch(self, event)
                 if currentLineFlowType == EFlowType.EFT_NONE or currentLineFlowType == nil then
                     self._managerGame:setCurrentLineFlowType(self._entry)
                 end
-                
                 self._managerGame:cacheStates()
                 
+                if not isInsideFirstTime then
+                                        
+                    self._currentState:update(EControllerUpdate.ECUT_DOG_UP)
+                    
+                end
                 
+              
             end
             
         end
@@ -42,6 +49,7 @@ function ControllerCell.touch(self, event)
     elseif(event.phase == ETouchEvent.ETE_MOVED)  then
         
         if(self._view:isInsideEvent(event))then
+            
             
             if not self._isInside then
                 self:onInside()
@@ -71,6 +79,12 @@ function ControllerCell.touch(self, event)
             elseif(event.y < self._view:y0())then
                 
                 target = entry:neighborUp()
+                
+            end
+            
+            if target == nil and  (event.x > self._view:x1() or event.x < self._view:x0() or event.y < self._view:y0() or event.y < self._view:y0())  then
+                
+                self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
                 
             end
             
@@ -137,30 +151,42 @@ function ControllerCell.touch(self, event)
             
         end
         
-    elseif(event.phase == ETouchEvent.ETE_ENDED or event.phase == ETouchEvent.ETE_CANCELLED)then
-        
+    elseif((event.phase == ETouchEvent.ETE_ENDED or event.phase == ETouchEvent.ETE_CANCELLED)) 
+    then
+    
         self._isInside = false
         
-        self._managerGame:setCurrentLineFlowType(nil)
-        self._managerGame:destroyCache()
-        self._managerGame:setCurrentCell(nil)
+        if self._isInsideFirstTime  then
+           self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+           
+            self._managerGame:setCurrentLineFlowType(nil)
+            self._managerGame:destroyCache()
+            self._managerGame:setCurrentCell(nil)
+        end
+        
+        self._isInsideFirstTime = false
         
     end
 end
 
 function ControllerCell.onInsideFirstTime(self)
     
-    self._isInside = true
+    self._isInside          = true
+    self._isInsideFirstTime = true
     
 end
 
 function ControllerCell.onInside(self)
+    
     self._isInside = true
+    
+    
 end
 
 function ControllerCell.onOutside(self)
     
     self._isInside = false
+    
     
 end
 
@@ -193,6 +219,8 @@ function ControllerCell.init(self, params)
     self._isInside = false
     
     self._managerGame = GameInfo:instance():managerGame()
+    self._currentState = GameInfo:instance():managerStates():currentState()
+    
 end
 
 function ControllerCell.createView(self)
@@ -306,6 +334,8 @@ function ControllerCell.cleanup(self)
     
     self._view:cleanup()
     self._view = nil
+    
+    self._currentState = nil
     
     Controller.cleanup(self)
 end

@@ -47,8 +47,6 @@ function ViewGrid.placeViews(self)
     local currentY = startY
     
     
-    
-    
     for indexRow, row in ipairs(self._cells)do
         
         for indexColumn, cellView in ipairs(row)do

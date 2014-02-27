@@ -709,7 +709,8 @@ end
 
 function GridCreator.dataBaseCells(self)
     
-    local result = {}
+    local result = 'data_lines =\n'
+    local dataBaseCells = {}
     
     for i = 0, EFlowType.EFT_COUNT - 1, 1 do
         
@@ -734,7 +735,7 @@ function GridCreator.dataBaseCells(self)
         for j = #cellsByType, 1, -1 do
             
             local cell = cellsByType[j]
-            local needCell = cell.type == ECellType.ECT_FLOW_POINT or cell.type == ECellType.ECT_BRIDGE or  cell.type == ECellType.ECT_BARRIER
+            local needCell = cell.type == ECellType.ECT_FLOW_POINT 
             
             if not needCell then
                 
@@ -747,9 +748,89 @@ function GridCreator.dataBaseCells(self)
             
         end
         
-        table.insert(result, cellsByType)
+        table.insert(dataBaseCells, cellsByType)
         
     end
+    
+    result = result..'data_lines =\n'
+    
+    
+    return result
+    
+end
+
+
+
+function GridCreator.createFunctionGridData(self)
+    
+    local result = 'function function getGridData_'..os.time()..'()\n'
+    
+    result = result..'\tlocal result = {}\n\n'
+    
+    result = result..'\tfor rowIndex = 1, '..self._rowsCount..', 1 do\n\n'
+    
+    result = result..'\t\tlocal row = {}\n\n'
+    
+    result = result..'\t\tfor columnIndex = 1, '..self._columnsCount..', 1 do\n\n'
+    
+    result = result..'\t\t\tlocal cellData\n\n'
+    
+    local elsePrefix = ''
+    
+    for rowIndex = 1, self._rowsCount, 1 do
+        for columnIndex = 1, self._columnsCount, 1 do
+            
+            local cellData = self._gridData[rowIndex][columnIndex]
+            if cellData.type ~= ECellType.ECT_EMPTY then
+                
+                result = result..'\t\t\t'..elsePrefix..'if(rowIndex == '..rowIndex..' and columnIndex == '..columnIndex..')then\n'
+                result = result..'\t\t\t\tcellData = \n'
+                result = result..'\t\t\t\t{\n'
+                if(cellData.type == ECellType.ECT_FLOW_POINT)then
+                    result = result..'\t\t\t\t\ttype = ECellType.ECT_FLOW_POINT,\n'
+                elseif(cellData.type == ECellType.ECT_FLOW_BRIDGE)then
+                    result = result..'\t\t\t\t\ttype = ECellType.ECT_FLOW_BRIDGE,\n'
+                elseif(cellData.type == ECellType.ECT_FLOW_BARRIER)then
+                    result = result..'\t\t\t\t\ttype = ECellType.ECT_FLOW_BARRIER,\n'
+                end
+                result = result..'\t\t\t\t\tflow_type = EFlowType.EFT_'..cellData.flow_type..',\n'
+                
+            if(cellData.type == ECellType.ECT_FLOW_POINT)then
+                    local is_start = 'false'
+                    
+                    if cellData.is_start then
+                        is_start = 'true'
+                    end
+                    result = result..'\t\t\t\t\tis_start = '..is_start..',\n'
+                end
+                
+                
+                
+            end
+            
+            elsePrefix = 'else'
+        end
+    end
+    
+    result = result..'\t\t\telse\n'
+    result = result..'\t\t\t\tcellData = \n'
+    result = result..'\t\t\t\t{\n'
+    
+    result = result..'\t\t\t\t\ttype = ECellType.ECT_FLOW_EMPTY,\n'
+    result = result..'\t\t\t\t\tflow_type = EFlowType.EFT_NONE,\n'
+    result = result..'\t\t\t\t}\n'
+    result = result..'\t\t\tend\n\n'
+    
+    result = result..'\t\t\tcellData.x = columnIndex..\n'
+    result = result..'\t\t\tcellData.y = rowIndex\n\n'
+    result = result..'\t\t\ttable.insert(row, cellData)\n'
+    result = result..'\t\tend\n\n'
+    
+    result = result..'\t\ttable.insert(result, row)\n'
+    result = result..'\tend\n\n'
+    
+    result = result..'\treturn result\n\n'
+    result = result..'end'
     
     return result
     
