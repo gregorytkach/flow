@@ -17,7 +17,7 @@ end
 function ManagerEditor.shuffle(self, count)
     
     self._gridCreator:shuffles(count)
-    self._gridCreator:dataBaseCells()
+    print(self._gridCreator:getDataLines_timestamp())
     
 end
 

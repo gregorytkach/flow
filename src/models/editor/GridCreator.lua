@@ -707,7 +707,7 @@ function GridCreator.shuffle(self)
     
 end
 
-function GridCreator.dataBaseCells(self)
+function GridCreator.getDataLines_timestamp(self)
     
     local result = 'data_lines =\n'
     local dataBaseCells = {}
@@ -748,16 +748,68 @@ function GridCreator.dataBaseCells(self)
             
         end
         
-        table.insert(dataBaseCells, cellsByType)
+        for i = 1, #cellsByType, 1 do
+            local cell = cellsByType[i]
+            table.insert(dataBaseCells, cell)
+        end
+        
         
     end
     
     result = result..'data_lines =\n'
+    result = result..'\t{\n'
     
+    local j = 1
+    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
+        
+        result = result..'\t\t[EFlowType.EFT_'..i..'] =\n'
+        result = result..'\t\t{\n'
+        
+        local cell = dataBaseCells[j]
+        
+        
+        while cell.flow_type == i do
+            
+            result = result..'\t\t\t{\n'
+            
+            result = result..'\t\t\t\tx = '..cell.x..',\n'
+            result = result..'\t\t\t\ty = '..cell.y..',\n'
+            result = result..'\t\t\t}'
+            
+            if j < #dataBaseCells then
+                j = j + 1
+                cell = dataBaseCells[j]
+                
+                if cell.flow_type ~= i then
+                    result = result..'\n' 
+                
+                else
+                    result = result..',\n' 
+                end
+            else
+                result = result..'\n' 
+                break
+            end
+        end
+        
+        if i == EFlowType.EFT_COUNT - 1 then
+        
+            result = result..'\t\t}\n'
+            
+        else
+            
+            result = result..'\t\t},\n'
+            
+        end
+        
+    end
+    
+    result = result..'\t}\n'
     
     return result
     
 end
+
 
 
 
