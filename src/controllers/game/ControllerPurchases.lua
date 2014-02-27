@@ -13,6 +13,8 @@ function ControllerPurchases.onViewClicked(self, target, event)
         
     elseif (self._view:buttonShowTurn() == target) then
         
+        self._managerGame:onBuyPurchaseLine()
+        
     elseif (self._view:buttonAddTime() == target) then
         
         local applyPurchase = false

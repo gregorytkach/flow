@@ -58,8 +58,6 @@ function CellBase.setCellNext(self, value)
         self._cellNext._cellPrev = nil
         
         self._cellNext._controller:update(EControllerUpdate.ECUT_EXCLUSION_FROM_LINE)
-        
-        --todo: exclusion
     end
     
     self._cellNext = value
@@ -81,6 +79,22 @@ function CellBase.setCellNext(self, value)
     
     self._controller:update(EControllerUpdate.ECUT_CELL_NEXT)
     
+end
+
+function CellBase.isPurchased(self)
+    return self._isPurchased
+end
+
+--
+-- Events
+-- 
+
+function CellBase.onPurchased(self)
+    assert(not self._isPurchased, 'Cell already purchased')
+    
+    self._isPurchased = true
+    
+    self._controller:update(EControllerUpdate.ECUT_CELL_PURCHASED)
 end
 
 --
@@ -141,9 +155,10 @@ function CellBase.init(self, params)
     assert(params.x             ~= nil)
     assert(params.y             ~= nil)
     
-    self._flowType  = params.flow_type
-    self._x         = params.x
-    self._y         = params.y
+    self._flowType      = params.flow_type
+    self._x             = params.x
+    self._y             = params.y
+    self._isPurchased   = false
     
 end
 
@@ -181,7 +196,7 @@ function CellBase.restoreState(self)
     self._cellPrev = self._cellPrevCached 
     self._cellNext = self._cellNextCached 
     self._flowType = self._flowTypeCached
-   
+    
     self._controller:update(EControllerUpdate.ECUT_INCLUSION_IN_LINE)
     
     result = self:canRestoreState()

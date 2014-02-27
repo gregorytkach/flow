@@ -14,11 +14,15 @@ require('game_flow.src.models.string.ManagerString')
 require('game_flow.src.models.players.PlayerInfo')
 require('game_flow.src.models.game.ManagerGame')
 require('game_flow.src.models.editor.ManagerEditor')
+require('game_flow.src.models.cache.ManagerCacheFlow')
+require('game_flow.src.models.remote.ManagerRemoteFlow')
 
 require('game_flow.src.views.popups.base.ViewPopupFlowBase')
 
 require('game_flow.src.controllers.popups.EPopupType')
 require('game_flow.src.models.purchases.EPurchaseType')
+require('game_flow.src.models.bonus.EBonusType')
+
 
 require('game_flow.src.controllers.popups.shop.ControllerPopupShop')
 require('game_flow.src.controllers.popups.win.ControllerPopupWin')
@@ -35,8 +39,30 @@ GameInfo = classWithSuper(GameInfoBase, 'GameInfo')
 --
 function GameInfo.init(self)
     
-    application.assets_dir = 'game_flow/assets/'
+    application.dir_assets  = 'game_flow/assets/'
+    application.dir_data    = 'game_flow/data/'
     
+    self._managerCache          = ManagerCacheFlow:new()
+    
+    local paramsRemote = 
+    {
+        managerCache = self._managerCache 
+    }
+    
+    if(application.debug)then
+        paramsRemote.server_url          = application.server_url_dev
+    else
+        paramsRemote.server_url          = application.server_url
+    end
+    
+    self._managerRemote     = ManagerRemoteFlow:new(paramsRemote)
+    
+    self:onManagerRemoteInitComplete()
+    
+    GameInfoBase.init(self)
+end
+
+function GameInfo.onManagerRemoteInitComplete(self)
     self._managerResources      = ManagerResources:new()
     self._managerFonts          = ManagerFontsBase:new()
     self._managerParticles      = ManagerParticles:new()
@@ -44,11 +70,10 @@ function GameInfo.init(self)
     self._managerString         = ManagerString:new()
     self._managerSounds         = ManagerSounds:new()
     self._managerPurchases      = ManagerPurchasesBase:new()
-    self._managerBonus          = ManagerBonusEnergyBase:new(BonusInfoBase)
+    self._managerBonus          = ManagerBonusBase:new(BonusInfoBase)
+    self._managerBonusEnergy    = ManagerBonusEnergyBase:new(BonusInfoBase)
     self._managerPlayers        = ManagerPlayersBase:new(PlayerInfo)
-    self._managerLevels         = ManagerLevelsBase:new(LevelInfo)
-    
-    GameInfoBase.init(self)
+    self._managerLevels         = ManagerLevelsBase:new(LevelInfo) 
 end
 
 function GameInfo.registerStates(self)
@@ -62,7 +87,7 @@ end
 
 function GameInfo.loadFonts(self)
     
-    local fontsDir = application.assets_dir..'fonts/'
+    local fontsDir = application.dir_assets..'fonts/'
     
     local font0Pattern = string.format("%sfont_%i%s", fontsDir, EFontType.EFT_0, application.scaleSuffix)
     self._managerFonts:loadFont(EFontType.EFT_0, font0Pattern..'.fnt', font0Pattern..'.png', 20)

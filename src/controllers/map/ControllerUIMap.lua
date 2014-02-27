@@ -30,6 +30,8 @@ function ControllerUIMap.onViewClicked(self, target, event)
         
         self._currentState:showPopup(EPopupType.EPT_SHOP)
         
+    elseif(target == self._view:buttonFreeCurrency())then
+        print('implement it')
     else
         
         assert(false)
@@ -57,10 +59,11 @@ function ControllerUIMap.init(self)
     
     Controller.init(self, paramsController)
     
-    self._currentState      = GameInfo:instance():managerStates():currentState()
+    self._currentState          = GameInfo:instance():managerStates():currentState()
     
-    self._managerPlayers    = GameInfo:instance():managerPlayers()
-    self._managerBonus      = GameInfo:instance():managerBonus()
+    self._managerPlayers        = GameInfo:instance():managerPlayers()
+    self._managerBonus          = GameInfo:instance():managerBonus()
+    self._managerBonusEnergy    = GameInfo:instance():managerBonusEnergy()
     
     self:update(EControllerUpdateBase.ECUT_PLAYER_CURERNCY)
     self:update(EControllerUpdateBase.ECUT_PLAYER_ENERGY)
@@ -117,7 +120,7 @@ end
 
 
 function ControllerUIMap.updateTimerEnergy(self)
-    self._view:setTimeEnergy(self._managerBonus:timeLeftEnergy())
+    self._view:setTimeEnergy(self._managerBonusEnergy:timeLeft())
 end
 
 function ControllerUIMap.cleanup(self)

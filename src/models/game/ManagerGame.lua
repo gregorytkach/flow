@@ -12,9 +12,7 @@ require('game_flow.src.models.game.cells.flowPoint.CellFlowPoint')
 ManagerGame = classWithSuper(ManagerGameBase, 'ManagerGame') 
 
 function ManagerGame.grid(self)
-    
-    return self._currentLevel:grid()
-    
+    return self._grid 
 end
 
 --
@@ -130,16 +128,38 @@ end
 function ManagerGame.onBuyAddTime(self)
     
     --todo: implement
---    self:timerStop()
---    
---    self._timeLeft = self._timeLeft + 15
---    
---    self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
---    
---    self:timerStart()
+    --    self:timerStop()
+    --    
+    --    self._timeLeft = self._timeLeft + 15
+    --    
+    --    self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
+    --    
+    --    self:timerStart()
     
     self:onPlayerLose()
     
+end
+
+function ManagerGame.onBuyPurchaseLine(self)
+    
+    local notPurchasedFlowTypes = {}
+    
+    for flowType, lineData in pairs(self._notPurchasedLines)do
+        table.insert(notPurchasedFlowTypes, flowType)
+    end
+    
+    assert(#notPurchasedFlowTypes > 0)
+    
+    local targetFlowTypeIndex = math.random(1, #notPurchasedFlowTypes)
+    local targetFlowType = notPurchasedFlowTypes[targetFlowTypeIndex]
+    
+    local lineData = self._notPurchasedLines[targetFlowType]
+    
+    for i, cell in ipairs(lineData)do
+        cell:onPurchased()
+    end
+    
+    self._notPurchasedLines[targetFlowType] = nil
 end
 
 
@@ -149,6 +169,9 @@ end
 
 function ManagerGame.init(self, params)
     ManagerGameBase.init(self, params)
+    
+    self._grid                  = self._currentLevel:gridClone()
+    self._notPurchasedLines     = self._currentLevel:createNotPurchasedLinesFor(self._grid)
     
     self._isPlayerWin   = false
     self._timeLeft      = self._currentLevel:timeLeft()

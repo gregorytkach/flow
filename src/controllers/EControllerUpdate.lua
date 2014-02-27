@@ -1,5 +1,7 @@
 EControllerUpdate = 
 {
+    ["ECUT_CELL_PURCHASED"]             = "ECUT_CELL_PURCHASED";
+
     ["ECUT_INCLUSION_IN_LINE"]          = "ECUT_INCLUSION_IN_LINE";
     ["ECUT_EXCLUSION_FROM_LINE"]        = "ECUT_EXCLUSION_FROM_LINE";
     
@@ -16,6 +18,5 @@ EControllerUpdate =
     ["ECUT_FREE_PURCHASE_RESOLVE"]      = "ECUT_FREE_PURCHASE_RESOLVE";
     
     ["ECUT_EDIT"]                       = "ECUT_EDIT";
-    
 }
 

@@ -15,6 +15,22 @@ end
 --Properties
 --
 
+function ViewCell.setIsEnabled(self, value)
+    
+    if(self._isEnabled == value)then
+        return
+    end
+    
+    self._isEnabled = value
+    
+    if(self._isEnabled)then
+        self._sourceView:setColor(1, 1, 1)
+    else
+        self._sourceView:setColor(0.5, 0.5, 0.5)
+    end
+    
+end
+
 --
 --Methods
 --
@@ -33,6 +49,8 @@ function ViewCell.init(self, params)
     assert(params.isPair ~= nil)
     
     ViewBase.init(self, params)
+    
+    self._isEnabled  = true
     
     self._sourceView = display.newGroup()
     
