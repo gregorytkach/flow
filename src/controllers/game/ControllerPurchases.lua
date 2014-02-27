@@ -14,9 +14,11 @@ function ControllerPurchases.onViewClicked(self, target, event)
     
     if (self._view:buttonResolve() == target) then
         
+        self._managerGame:onBuyPurchaseResolve()
+        
     elseif (self._view:buttonShowTurn() == target) then
         
-        self._managerGame:onBuyPurchaseLine()
+        self._managerGame:onBuyPurchaseShowTurn()
         
     elseif (self._view:buttonAddTime() == target) then
         

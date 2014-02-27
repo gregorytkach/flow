@@ -111,20 +111,17 @@ end
 
 function ManagerGame.onBuyAddTime(self)
     
-    --todo: implement
-    --    self:timerStop()
-    --    
-    --    self._timeLeft = self._timeLeft + 15
-    --    
-    --    self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
-    --    
-    --    self:timerStart()
+    self:timerStop()
     
-    self:onPlayerLose()
+    self._timeLeft = self._timeLeft + 15
+    
+    self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
+    
+    self:timerStart()
     
 end
 
-function ManagerGame.onBuyPurchaseLine(self)
+function ManagerGame.onBuyPurchaseShowTurn(self)
     
     local notPurchasedFlowTypes = {}
     
@@ -137,13 +134,27 @@ function ManagerGame.onBuyPurchaseLine(self)
     local targetFlowTypeIndex = math.random(1, #notPurchasedFlowTypes)
     local targetFlowType = notPurchasedFlowTypes[targetFlowTypeIndex]
     
-    local lineData = self._notPurchasedLines[targetFlowType]
+    self:onPurchaseFlowType(targetFlowType)
+end
+
+function ManagerGame.onBuyPurchaseResolve(self)
+    for flowType, lineData in pairs(self._notPurchasedLines)do
+        self:onPurchaseFlowType(flowType)
+    end
+end
+
+function ManagerGame.onPurchaseFlowType(self, flowType)
+    assert(flowType ~= nil)
+    
+    local lineData = self._notPurchasedLines[flowType]
+    
+    assert(lineData ~= nil)
     
     for i, cell in ipairs(lineData)do
-        cell:onPurchased(targetFlowType)
+        cell:onPurchased(flowType)
     end
     
-    self._notPurchasedLines[targetFlowType] = nil
+    self._notPurchasedLines[flowType] = nil
 end
 
 
