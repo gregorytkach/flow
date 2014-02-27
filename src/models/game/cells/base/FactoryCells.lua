@@ -4,6 +4,10 @@ function FactoryCells.getCell(params)
     local result
     
     assert(params   ~= nil)
+    if(params.type == nil)then
+        print(1)
+    end
+    
     assert(params.type  ~= nil)
     
     if(params.type == ECellType.ECT_EMPTY)then

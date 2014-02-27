@@ -1,5 +1,88 @@
 
-local function getDataGrid_1393510123()
+local function getDataLines_1393514976()
+    local result =
+    {
+        [EFlowType.EFT_0] =
+        {
+            {
+                x = 5,
+                y = 4,
+            },
+            {
+                x = 5,
+                y = 5,
+            },
+            {
+                x = 4,
+                y = 5,
+            }
+        },
+        [EFlowType.EFT_1] =
+        {
+            {
+                x = 5,
+                y = 1,
+            },
+            {
+                x = 4,
+                y = 1,
+            },
+            {
+                x = 4,
+                y = 4,
+            }
+        },
+        [EFlowType.EFT_2] =
+        {
+            {
+                x = 2,
+                y = 3,
+            },
+            {
+                x = 2,
+                y = 1,
+            },
+            {
+                x = 3,
+                y = 1,
+            },
+            {
+                x = 3,
+                y = 2,
+            },
+            {
+                x = 1,
+                y = 2,
+            },
+            {
+                x = 1,
+                y = 5,
+            },
+            {
+                x = 3,
+                y = 5,
+            }
+        },
+        [EFlowType.EFT_3] =
+        {
+            {
+                x = 5,
+                y = 3,
+            },
+            {
+                x = 3,
+                y = 3,
+            },
+            {
+                x = 3,
+                y = 4,
+            }
+        }
+    }
+    return result
+end	
+
+local function getDataGrid_1393514976()
     local result = {}
     
     for rowIndex = 1, 5, 1 do
@@ -13,50 +96,73 @@ local function getDataGrid_1393510123()
             if(rowIndex == 1 and columnIndex == 1)then
                 cellData = 
                 {
-                    type = ECellType.ECT_FLOW_POINT,
-                    flow_type = EFlowType.EFT_0,
-                    is_start = false
+                    type = ECellType.ECT_BARRIER,
+                    flow_type = EFlowType.EFT_NONE,
                 }
-            elseif(rowIndex == 1 and columnIndex == 2)then
+            elseif(rowIndex == 1 and columnIndex == 5)then
                 cellData = 
                 {
                     type = ECellType.ECT_FLOW_POINT,
                     flow_type = EFlowType.EFT_1,
                     is_start = false
                 }
-            elseif(rowIndex == 1 and columnIndex == 3)then
+            elseif(rowIndex == 2 and columnIndex == 2)then
+                cellData = 
+                {
+                    type = ECellType.ECT_BRIDGE,
+                    flow_type = EFlowType.EFT_2,
+                }
+            elseif(rowIndex == 2 and columnIndex == 5)then
+                cellData = 
+                {
+                    type = ECellType.ECT_BARRIER,
+                    flow_type = EFlowType.EFT_NONE,
+                }
+            elseif(rowIndex == 3 and columnIndex == 2)then
                 cellData = 
                 {
                     type = ECellType.ECT_FLOW_POINT,
                     flow_type = EFlowType.EFT_2,
                     is_start = false
                 }
-            elseif(rowIndex == 1 and columnIndex == 4)then
+            elseif(rowIndex == 3 and columnIndex == 4)then
+                cellData = 
+                {
+                    type = ECellType.ECT_BRIDGE,
+                    flow_type = EFlowType.EFT_1,
+                }
+            elseif(rowIndex == 3 and columnIndex == 5)then
                 cellData = 
                 {
                     type = ECellType.ECT_FLOW_POINT,
                     flow_type = EFlowType.EFT_3,
                     is_start = false
                 }
-            elseif(rowIndex == 1 and columnIndex == 5)then
+            elseif(rowIndex == 4 and columnIndex == 2)then
+                cellData = 
+                {
+                    type = ECellType.ECT_BARRIER,
+                    flow_type = EFlowType.EFT_NONE,
+                }
+            elseif(rowIndex == 4 and columnIndex == 3)then
                 cellData = 
                 {
                     type = ECellType.ECT_FLOW_POINT,
                     flow_type = EFlowType.EFT_3,
                     is_start = false
                 }
-            elseif(rowIndex == 5 and columnIndex == 1)then
-                cellData = 
-                {
-                    type = ECellType.ECT_FLOW_POINT,
-                    flow_type = EFlowType.EFT_0,
-                    is_start = false
-                }
-            elseif(rowIndex == 5 and columnIndex == 2)then
+            elseif(rowIndex == 4 and columnIndex == 4)then
                 cellData = 
                 {
                     type = ECellType.ECT_FLOW_POINT,
                     flow_type = EFlowType.EFT_1,
+                    is_start = false
+                }
+            elseif(rowIndex == 4 and columnIndex == 5)then
+                cellData = 
+                {
+                    type = ECellType.ECT_FLOW_POINT,
+                    flow_type = EFlowType.EFT_0,
                     is_start = false
                 }
             elseif(rowIndex == 5 and columnIndex == 3)then
@@ -66,10 +172,17 @@ local function getDataGrid_1393510123()
                     flow_type = EFlowType.EFT_2,
                     is_start = false
                 }
+            elseif(rowIndex == 5 and columnIndex == 4)then
+                cellData = 
+                {
+                    type = ECellType.ECT_FLOW_POINT,
+                    flow_type = EFlowType.EFT_0,
+                    is_start = false
+                }
             else
                 cellData = 
                 {
-                    type = ECellType.ECT_FLOW_EMPTY,
+                    type = ECellType.ECT_EMPTY,
                     flow_type = EFlowType.EFT_NONE,
                 }
             end
@@ -87,27 +200,13 @@ local function getDataGrid_1393510123()
     
 end	
 
-
-
 local function getDataLevel0_0()
     
     local result =
     {
-        data_grid                   = getDataGrid_1393510123(),
-        data_lines                  = 
-        {
-            [EFlowType.EFT_0]       = 
-            {
-                {
-                    x = 1,
-                    y = 1,
-                },
-                {
-                    x = 5,
-                    y = 1
-                }
-            }
-        },                
+        data_grid                   = getDataGrid_1393514976(),
+        data_lines                  = getDataLines_1393514976(),
+        
         time_left               = 600,
         
         reward_currency_soft    = 50,

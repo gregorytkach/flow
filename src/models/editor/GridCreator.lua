@@ -608,8 +608,6 @@ function GridCreator.tryChange(self, flow_point, neighbours)
     
     if  result then
         
-        --print(#addCells)
-        
         if bridge ~= nil then
             
             self:makeBridge(bridge, neighbour)
@@ -687,8 +685,6 @@ end
 
 function GridCreator.shuffle(self)
     
-    print(#self._points)
-    
     local point = self._points[math.random(#self._points)]
     
     
@@ -708,9 +704,11 @@ function GridCreator.shuffle(self)
     
 end
 
-function GridCreator.dataBaseCells(self)
+function GridCreator.createFunctionDataLines(self)
     
-    local result = 'data_lines =\n'
+    local result = 'local function getDataLines_'..os.time()..'()\n'..
+    
+    '\tlocal result =\n'
     local dataBaseCells = {}
     
     for i = 0, EFlowType.EFT_COUNT - 1, 1 do
@@ -749,18 +747,70 @@ function GridCreator.dataBaseCells(self)
             
         end
         
-        table.insert(dataBaseCells, cellsByType)
+        for i = 1, #cellsByType, 1 do
+            local cell = cellsByType[i]
+            table.insert(dataBaseCells, cell)
+        end
+        
         
     end
     
-    result = result..'data_lines =\n'
+    result = result..'\t{\n'
     
+    local j = 1
+    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
+        
+        result = result..'\t\t[EFlowType.EFT_'..i..'] =\n'
+        result = result..'\t\t{\n'
+        
+        local cell = dataBaseCells[j]
+        
+        
+        while cell.flow_type == i do
+            
+            result = result..'\t\t\t{\n'
+            
+            result = result..'\t\t\t\tx = '..cell.x..',\n'
+            result = result..'\t\t\t\ty = '..cell.y..',\n'
+            result = result..'\t\t\t}'
+            
+            if j < #dataBaseCells then
+                j = j + 1
+                cell = dataBaseCells[j]
+                
+                if cell.flow_type ~= i then
+                    result = result..'\n' 
+                    
+                else
+                    result = result..',\n' 
+                end
+            else
+                result = result..'\n' 
+                break
+            end
+        end
+        
+        if i == EFlowType.EFT_COUNT - 1 then
+            
+            result = result..'\t\t}\n'
+            
+        else
+            
+            result = result..'\t\t},\n'
+            
+        end
+        
+    end
+    
+    result = result..'\t}\n'..
+    'return result\n'..
+    'end'
     
     return result
     
 end
 
-function GridCreator.createFunctionGridData(self)
+function GridCreator.createFunctionDataGrid(self)
     
     local result = 'local function getDataGrid_'..os.time()..'()\n'..
     
@@ -799,10 +849,11 @@ function GridCreator.createFunctionGridData(self)
                         is_start = 'true'
                     end
                     
-                    result = result..tabsCellData..'\tis_start = '..is_start..'\n'..
-                    tabsCellData..'}\n'
+                    result = result..tabsCellData..'\tis_start = '..is_start..'\n'
                 end
                 
+                result = result..tabsCellData..'}\n'
+              
             end
             
             elsePrefix = 'else'
@@ -813,7 +864,7 @@ function GridCreator.createFunctionGridData(self)
     tabsCellData..'cellData = \n'..
     tabsCellData..'{\n'..
     
-    tabsCellData..'\ttype = ECellType.ECT_FLOW_EMPTY,\n'..
+    tabsCellData..'\ttype = ECellType.ECT_EMPTY,\n'..
     tabsCellData..'\tflow_type = EFlowType.EFT_NONE,\n'..
     tabsCellData..'}\n'..
     '\t\t\tend\n\n'..
@@ -830,7 +881,6 @@ function GridCreator.createFunctionGridData(self)
     'end'
     
     return result
-    
 end
 
 function GridCreator.shuffles(self, count)

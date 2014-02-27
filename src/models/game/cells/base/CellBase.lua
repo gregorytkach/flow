@@ -152,6 +152,10 @@ end
 --
 
 function CellBase.init(self, params)
+    if(params.flow_type == nil)then
+        print(1)
+    end
+    
     assert(params               ~= nil)
     assert(params.flow_type     ~= nil)
     assert(params.x             ~= nil)

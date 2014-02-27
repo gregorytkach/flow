@@ -7,8 +7,7 @@ function ControllerGridEditor.onViewClicked(self, target, event)
     
     if (self._buttonShuffle == target) then
                     
-        self._managerGame:shuffle(1000)
-        self._managerGame:shuffle(1000)
+        self._managerGame:shuffle(500)
         
     else
         assert(false)

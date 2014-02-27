@@ -19,21 +19,23 @@ end
 function ManagerEditor.shuffle(self, count)
     
     self._gridCreator:shuffles(count)
-    self._gridCreator:dataBaseCells()
+    
+    print(self._gridCreator:createFunctionDataLines())
+    print(self._gridCreator:createFunctionDataGrid())
     
 end
 
 function ManagerEditor.init(self, params)
-
+    
     local paramsCreator =
     {
         rows            = 5,
         columns         = 5,
         bridgesCount    = 2,
         barriersCount   = 3
-
-    }
         
+    }
+    
     self._gridCreator = GridCreator:new(paramsCreator)
     
     
@@ -52,7 +54,7 @@ function ManagerEditor.init(self, params)
             if cellData.type == ECellType.ECT_BRIDGE and cellData.flowAdditional ~= nil then
                 
                 --not setter for _flowAdditional
-                                
+                
                 cell._flowAdditional = FactoryCells.getCell(cellData.flowAdditional)
                 
                 
@@ -66,7 +68,7 @@ function ManagerEditor.init(self, params)
         
     end
     
-    print(self._gridCreator:createFunctionGridData())
+
     ManagerGame.init(self, params)
     
 end
