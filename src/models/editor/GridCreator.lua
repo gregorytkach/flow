@@ -853,10 +853,11 @@ function GridCreator.createFunctionDataGrid(self)
                 end
                 
                 result = result..tabsCellData..'}\n'
-              
+                
+                elsePrefix = 'else'
+                
             end
             
-            elsePrefix = 'else'
         end
     end
     
@@ -891,6 +892,23 @@ function GridCreator.shuffles(self, count)
         
     end
     
+    local flowPoints = {}
     
+    for r, row in ipairs(self._gridData)do
+        
+        for c, cell in ipairs(row)do
+            
+            if(cell.type == ECellType.ECT_FLOW_POINT)then
+                
+                cell.is_start = flowPoints[cell.flow_type] == nil
+                
+                if(cell.is_start)then
+                    flowPoints[cell.flow_type] = cell
+                end
+                
+            end
+            
+        end
+    end
     
 end
