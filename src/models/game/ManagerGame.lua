@@ -146,6 +146,8 @@ end
 function ManagerGame.onPurchaseFlowType(self, flowType)
     assert(flowType ~= nil)
     
+    self:destroyLinesWithType(flowType)
+    
     local lineData = self._notPurchasedLines[flowType]
     
     assert(lineData ~= nil)
@@ -155,6 +157,15 @@ function ManagerGame.onPurchaseFlowType(self, flowType)
     end
     
     self._notPurchasedLines[flowType] = nil
+end
+
+function ManagerGame.validate(self)
+    
+    local emptyCells    = {}
+    
+    
+    local bridgeCells   = {}
+    
 end
 
 

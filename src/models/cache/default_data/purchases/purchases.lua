@@ -69,6 +69,7 @@ local function getDataPurchases()
         type            = EPurchaseType.EPT_SHOW_TURN
     }
     
+    table.insert(result, purchaseShowTurn)
     
     return result
 end

@@ -28,6 +28,8 @@ function PlayerInfo.setFreePurchaseAddTime(self, value)
     
     self._freePurchaseAddTime = value
     
+    self:trySaveProgress()
+    
     self:tryUpdateCurrentState(EControllerUpdate.ECUT_FREE_PURCHASE_ADD_TIME)
 end
 
@@ -42,6 +44,8 @@ function PlayerInfo.setFreePurchaseResolve(self, value)
     
     self._freePurchaseResolve = value
     
+    self:trySaveProgress()
+    
     self:tryUpdateCurrentState(EControllerUpdate.ECUT_FREE_PURCHASE_RESOLVE)
 end
 
@@ -55,6 +59,8 @@ function PlayerInfo.setFreePurchaseShowTurn(self, value)
     end
     
     self._freePurchaseShowTurn = value
+    
+    self:trySaveProgress()
     
     self:tryUpdateCurrentState(EControllerUpdate.ECUT_FREE_PURCHASE_SHOW_TURN)
 end
@@ -75,6 +81,16 @@ end
 function PlayerInfo.init(self)
     PlayerInfoBase.init(self)
     
+end
+
+function PlayerInfo.serialize(self)
+    local result = PlayerInfoBase.serialize(self)
+    
+    result.free_purchase_count_add_time     = self._freePurchaseAddTime 
+    result.free_purchase_count_resolve      = self._freePurchaseResolve
+    result.free_purchase_count_show_turn    = self._freePurchaseShowTurn
+    
+    return result
 end
 
 
