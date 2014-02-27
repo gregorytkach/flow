@@ -64,7 +64,7 @@ function ManagerEditor.init(self, params)
         
     end
     
-    
+    print(self._gridCreator:createFunctionGridData())
     ManagerGame.init(self, params)
     
 end
