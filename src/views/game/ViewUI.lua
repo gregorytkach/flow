@@ -58,9 +58,7 @@ function ViewUI.init(self, params)
     self._viewCurrency = self:createSprite(managerResources:getAsImage(EResourceType.ERT_VIEW_CURRENCY))
     self._viewTime = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_GAME_VIEW_TIME)) 
     
-    self._buttonShop         = self:createButton(managerResources:getAsButton(EResourceType.ERT_BUTTON_SHOP))
-    
-    
+    self._buttonShop = self:createButton(managerResources:getAsButton(EResourceType.ERT_BUTTON_SHOP))
     self._buttonHelp = self:createButton(managerResources:getAsButton(EResourceType.ERT_BUTTON_HELP))
     self._buttonHome = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_HOME))
     

@@ -211,12 +211,6 @@ function ControllerGrid.update(self, type)
         
     elseif(type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN)  then
         
-        if self._currentDog ~= nil then
-            
-            self._currentDog:tryCleanupTweenDogMoved()
-            
-        end
-        
         local controllerDog 
         
         if (type ==  EControllerUpdate.ECUT_DOG_UP) then
@@ -233,7 +227,7 @@ function ControllerGrid.update(self, type)
         end
         
         
-        if controllerDog then
+        if controllerDog ~= nil then
             controllerDog:update(type)
         end
         
@@ -244,15 +238,13 @@ function ControllerGrid.update(self, type)
 end
 
 
-
-
 function ControllerGrid.cleanup(self)
     
-    if self._currentDog ~= nil then
-        
-        self._currentDog:tryCleanupTweenDogMoved()
-        
+    for _, controllerDog in pairs(self._dogs)do
+        controllerDog:cleanup()
     end
+    
+    self._currentDog = nil
     
     for indexRow, row in ipairs(self._cells)do
         for indexColumn, controllerCell in ipairs(row)do
@@ -266,7 +258,6 @@ function ControllerGrid.cleanup(self)
     self._view = nil
     
     self._managerGame = nil
-    self._currentDog = nil
     
     Controller.cleanup(self)
 end

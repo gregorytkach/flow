@@ -78,9 +78,9 @@ end
 
 function ViewDog.cleanup(self)
     
-    self._animations[EDogAnimationType.EDAT_IDLE]:cleanup()
-    self._animations[EDogAnimationType.EDAT_UP]:cleanup()
-    self._animations[EDogAnimationType.EDAT_DOWN]:cleanup()
+    self._animations[EDogAnimationType.EDAT_IDLE]:removeSelf()
+    self._animations[EDogAnimationType.EDAT_UP]:removeSelf()
+    self._animations[EDogAnimationType.EDAT_DOWN]:removeSelf()
     
     self._animations = nil
     

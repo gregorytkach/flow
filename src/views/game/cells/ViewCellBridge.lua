@@ -61,5 +61,4 @@ function ViewCellBridge.cleanup(self)
     self._layerPathAbove = nil
     
     ViewCellWithView.cleanup(self)
-    
 end

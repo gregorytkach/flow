@@ -377,5 +377,11 @@ function ManagerGame.cleanup(self)
     
     self:timerStop()
     
+    for _, row in ipairs(self._grid)do
+        for _, cell in ipairs(row)do
+            cell:cleanup()
+        end
+    end
+    
     ManagerGameBase.cleanup(self)
 end

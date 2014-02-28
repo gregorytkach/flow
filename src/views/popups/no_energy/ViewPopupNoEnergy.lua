@@ -25,3 +25,7 @@ function ViewPopupNoEnergy.placeViews(self)
     
 end
 
+function ViewPopupNoEnergy.cleanup(self)
+    ViewPopupNoResource.cleanup(self)
+end
+

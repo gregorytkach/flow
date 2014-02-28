@@ -57,6 +57,8 @@ end
 
 function ControllerDog.transitionDog(self, type)
     
+    self:tryCleanupTweenDogMoved()
+    
     local source = self._view:currentAnimation()
     
     local yTarget = 0
@@ -118,6 +120,8 @@ end
 
 function ControllerDog.tryCleanupTweenDogMoved(self)
    
+   print('cleanup tween dog')
+   
     if self._tweenDogMoved ~= nil then
         transition.cancel(self._tweenDogMoved)
         self._tweenDogMoved = nil
@@ -130,6 +134,9 @@ function ControllerDog.cleanup(self)
     self:tryCleanupTweenDogMoved()
     
     self._managerGame = nil
+    
+    self._view:cleanup()
+    self._view = nil
     
     Controller.cleanup(self)
     

@@ -58,4 +58,11 @@ function ControllerPopupNoEnergy.init(self)
     
 end
 
+function ControllerPopupNoEnergy.init(self)
+    self._view:cleanup()
+    self._view = nil
+    
+    ControllerPopup.cleanup(self)
+end
+
 

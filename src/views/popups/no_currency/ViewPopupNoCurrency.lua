@@ -25,3 +25,7 @@ function ViewPopupNoCurrency.placeViews(self)
     
 end
 
+function ViewPopupNoCurrency.cleanup(self)
+    ViewPopupNoResource.cleanup(self)
+end
+
