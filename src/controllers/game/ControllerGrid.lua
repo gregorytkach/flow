@@ -200,7 +200,7 @@ function ControllerGrid.update(self, type)
         
         self:sortDogs()
         
-    elseif(type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN)  then
+    elseif((type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN))  then
         
         local controllerDog 
         
@@ -218,8 +218,9 @@ function ControllerGrid.update(self, type)
         end
         
         
-        if controllerDog ~= nil then
+        if controllerDog ~= nil and type ~= self._updateType then
             controllerDog:update(type)
+            self._updateType = type
         end
         
     else
