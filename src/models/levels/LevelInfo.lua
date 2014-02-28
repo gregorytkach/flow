@@ -40,7 +40,6 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
         
         local cells = {}
         
-        local positionCellPrev = nil
         
         for i, positionCellCurrent in ipairs(dataLine)do
             assert(positionCellCurrent.x ~= nil)
@@ -50,7 +49,6 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
             
             assert(cell ~= nil, 'Not found cell')
             
-            table.insert(cells, cell)
             
             if i > 1 then
                 
@@ -80,6 +78,10 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
                         table.insert(cells, cell)
                     end
                     
+                end
+                
+                if i == #dataLine then
+                    table.insert(cells, cell)
                 end
                 
             end
