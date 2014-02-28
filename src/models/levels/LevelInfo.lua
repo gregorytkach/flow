@@ -40,19 +40,51 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
         
         local cells = {}
         
-        local positionCellPrev = nil
         
         for i, positionCellCurrent in ipairs(dataLine)do
             assert(positionCellCurrent.x ~= nil)
             assert(positionCellCurrent.y ~= nil)
             
-            --todo: fill all cells
-            
             local cell = grid[positionCellCurrent.y][positionCellCurrent.x]
             
             assert(cell ~= nil, 'Not found cell')
             
-            table.insert(cells, cell)
+            
+            if i > 1 then
+                
+                local positionCellPrev = dataLine[i - 1]
+                if positionCellPrev.x == positionCellCurrent.x then
+                    local step = 1
+                    
+                    if positionCellPrev.y > positionCellCurrent.y then
+                        step = -1
+                    end
+                    
+                    for j = positionCellPrev.y, positionCellCurrent.y - step, step do
+                        local cell = grid[j][positionCellCurrent.x]
+                        table.insert(cells, cell)
+                    end
+                    
+                else
+                    
+                    local step = 1
+                    
+                    if positionCellPrev.x > positionCellCurrent.x then
+                        step = -1
+                    end
+                    
+                    for j = positionCellPrev.x, positionCellCurrent.x - step, step do
+                        local cell = grid[positionCellCurrent.y][j]
+                        table.insert(cells, cell)
+                    end
+                    
+                end
+                
+                if i == #dataLine then
+                    table.insert(cells, cell)
+                end
+                
+            end
         end
         
         result[flowType] = cells

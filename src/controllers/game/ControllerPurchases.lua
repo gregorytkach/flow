@@ -152,7 +152,7 @@ function ControllerPurchases.updateButtonShowTurn(self)
     
     if(self._playerCurrent:freePurchaseShowTurn() > 0)then
         text = string.format(self._textFormatFree, self._playerCurrent:freePurchaseShowTurn())
-        iconCurrencyVisible  = false
+        iconCurrencyVisible = false
     else
         text                = self._purchaseShowTurn:priceSoft()
         iconCurrencyVisible = true
