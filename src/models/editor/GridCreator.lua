@@ -48,9 +48,9 @@ function GridCreator.init(self, params)
     self._counts[4] = self._counts[4] * 2
     
     --todo: rewrite
-    for rowIndex = 1, 5, 1 do
+    for rowIndex = 1, self._rowsCount, 1 do
         local cellData          = self._gridData[rowIndex][self._columnsCount]
-        cellData.flow_type      = EFlowType.EFT_3
+        cellData.flow_type      = EFlowType.EFT_COUNT - 1
     end
     
     for columnIndex = 1, self._columnsCount - 1, 1 do
