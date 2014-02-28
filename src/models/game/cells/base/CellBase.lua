@@ -90,6 +90,8 @@ end
 -- 
 
 function CellBase.onPurchased(self, flowType)
+    print(self._x..' '..self._y)
+    print(flowType)
     assert(not self._isPurchased, 'Cell already purchased')
     assert(flowType ~= nil)
     

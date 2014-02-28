@@ -32,6 +32,7 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
     assert(grid                 ~= nil)
     assert(self._dataLines      ~= nil)
     
+    
     local result = {}
     
     for flowType, dataLine in pairs(self._dataLines)do
@@ -60,9 +61,12 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
                         step = -1
                     end
                     
-                    for j = positionCellPrev.y, positionCellCurrent.y - step, step do
+                    for j = positionCellPrev.y, positionCellCurrent.y , step do
                         local cell = grid[j][positionCellCurrent.x]
-                        table.insert(cells, cell)
+                        
+                        if table.indexOf(cells, cell) == nil then
+                            table.insert(cells, cell)
+                        end
                     end
                     
                 else
@@ -73,19 +77,30 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
                         step = -1
                     end
                     
-                    for j = positionCellPrev.x, positionCellCurrent.x - step, step do
+                    for j = positionCellPrev.x, positionCellCurrent.x , step do
                         local cell = grid[positionCellCurrent.y][j]
-                        table.insert(cells, cell)
+                        
+                        if cell:type() == ECellType.ECT_BRIDGE then
+                            cell = cell:flowAdditional()
+                        end
+                        if table.indexOf(cells, cell) == nil then
+                            table.insert(cells, cell)
+                        end
                     end
                     
                 end
                 
-                if i == #dataLine then
-                    table.insert(cells, cell)
-                end
+                
                 
             end
+            
+            if table.indexOf(cells, cell) == nil then
+                table.insert(cells, cell)
+            end
+            
         end
+        
+        
         
         result[flowType] = cells
         
@@ -105,6 +120,7 @@ function LevelInfo.deserialize(self, data)
     self._timeLeft  = data.time_left
     self._dataGrid  = data.data_grid 
     self._dataLines = data.data_lines
+    
 end
 
 function LevelInfo.createGrid(self, dataGrid)
