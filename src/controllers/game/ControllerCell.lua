@@ -261,6 +261,8 @@ function ControllerCell.update(self, updateType)
         self._view:setPath(self._entry:flowType())
         self._view:setIsEnabled(false)
         
+        Runtime:removeEventListener(ERuntimeEvent.ERE_TOUCH, self)
+        
     else
         assert(false)
     end
@@ -306,8 +308,9 @@ function ControllerCell.canSelectTarget(self, target)
     local isTargetBarrier       = target:type()         == ECellType.ECT_BARRIER
     local currentLineIsEmpty    = currentLineFlowType   == self._entry:flowType()
     local currentLineSame       = currentLineFlowType   == nil
+    local isTargetPurchased     = target:isPurchased()
     
-    result = (not isTargetBarrier) and (currentLineSame or currentLineIsEmpty)
+    result = (not isTargetBarrier) and (currentLineSame or currentLineIsEmpty) and (not isTargetPurchased)
     
     if target:type() == ECellType.ECT_FLOW_POINT then
         result = result and currentLineFlowType == self._entry:flowType()

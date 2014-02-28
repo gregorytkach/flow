@@ -232,7 +232,9 @@ end
 function ManagerGame.getCellsByTypeAndFlow(self, type, flowType)
     local result = {}
     
-    for i, cell in ipairs(self:getCellsByType(type))do
+    local cellsWithType = self:getCellsByType(type)
+    
+    for i, cell in ipairs(cellsWithType)do
         
         if(cell:flowType() == flowType)then
             table.insert(result, cell)
