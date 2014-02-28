@@ -40,7 +40,7 @@ GameInfo = classWithSuper(GameInfoBase, 'GameInfo')
 function GameInfo.init(self)
     
     application.dir_assets  = 'game_flow/assets/'
-    application.dir_data    = 'game_flow/data/'
+    application.dir_data    = 'game_flow/sdata/'
     
     self._managerCache          = ManagerCacheFlow:new()
     

@@ -19,7 +19,6 @@ function ViewDog.setDogPosition(self, sourceCell)
     self._sourceView.x = sourceCell.x
     self._sourceView.y = sourceCell.y - 45
     
-    
 end
 
 function ViewDog.setCurrentAnimation(self, type)
