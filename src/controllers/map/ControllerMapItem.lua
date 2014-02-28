@@ -30,11 +30,9 @@ function ControllerMapItem.onViewClicked(self, target, event)
                 {
                     currentLevel = self._entry
                 }
-                --todo change
-                GameInfoBase:instance():managerStates():setState(EStateTypeBase.EST_EMPTY)
                 
-                --                GameInfoBase:instance():onGameStart(ManagerGame:new(paramsGame))
-                --                GameInfoBase:instance():managerStates():setState(EStateType.EST_GAME)
+                GameInfoBase:instance():onGameStart(ManagerGame:new(paramsGame))
+                GameInfoBase:instance():managerStates():setState(EStateType.EST_GAME)
             else
                 
                 GameInfoBase:instance():managerStates():currentState():showPopup(EPopupType.EPT_NO_ENERGY)

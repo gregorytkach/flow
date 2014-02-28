@@ -40,12 +40,13 @@ function ControllerCellEmpty.onTrySelect(self, target)
     else
         if(target:type() == ECellType.ECT_FLOW_POINT)then
             
-            if(target:flowType() == self._entry:flowType()) then --and target ~= self._entry:cellPrev()
+            if(target:flowType() == self._entry:flowType()) then
                 
                 if(target:cellNext() ~=  nil)then
                     self._managerGame:destroyLine(target)
                 else
                     self:tryBuildLine(self._entry, target)
+                    self._managerGame:tryValidate()
                 end
                 
             end

@@ -92,11 +92,16 @@ function StateGame.update(self, updateType)
         
     elseif(updateType == EControllerUpdateBase.ECUT_GAME_FINISHED)then
         
-        if(self._managerGame:isPlayerWin()) then
-            self:showPopup(EPopupType.EPT_WIN)
-        else
-            self:showPopup(EPopupType.EPT_GAME_OVER)
-        end
+        self._blockerScene.alpha = 0.01
+        
+        timer.performWithDelay(application.animation_duration * 4 * 2, 
+        function() 
+            if(self._managerGame:isPlayerWin()) then
+                self:showPopup(EPopupType.EPT_WIN)
+            else
+                self:showPopup(EPopupType.EPT_GAME_OVER)
+            end
+        end,1)
         
     else
         assert(false, updateType)
