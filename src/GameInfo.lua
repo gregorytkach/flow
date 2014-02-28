@@ -35,6 +35,45 @@ require('game_flow.src.controllers.popups.bonus.ControllerPopupBonus')
 GameInfo = classWithSuper(GameInfoBase, 'GameInfo')
 
 --
+-- Events
+--
+
+function GameInfo.onGameStartComplete(self, response)
+    if(response:status() == EResponseType.ERT_OK)then
+        local data = response:response()
+        
+        assert(data.players         ~= nil)
+        assert(data.purchases       ~= nil)
+        assert(data.bonus           ~= nil)
+        assert(data.bonus_energy    ~= nil)
+        assert(data.levels          ~= nil)
+        
+        local managerLevels = GameInfo:instance():managerLevels()
+        managerLevels:deserialize(data.levels)
+        
+        --todo: implement server side deserialization in manager proxy
+        self._managerString:setCurrentLanguage(ELanguageType.ELT_ENGLISH)
+        self._managerBonusEnergy:deserialize(data.bonus_energy)
+        self._managerPlayers:deserialize(data.players)
+        self._managerPurchases:deserialize(data.purchases)
+        self._managerBonus:deserialize(data.bonus)
+        
+        local paramsGame = 
+        {
+            currentLevel = managerLevels:firstIncompleteLevel()
+        }
+        
+        --        self:onGameStart(ManagerEditor:new(paramsGame))
+        --        self._managerStates:setState(EStateType.EST_EDITOR)
+        --        
+        self:onGameStart(ManagerGame:new(paramsGame))
+        self._managerStates:setState(EStateType.EST_GAME)
+        
+        --        self._managerStates:setState(EStateType.EST_MAP)
+    end
+end
+
+--
 -- Methods
 --
 function GameInfo.init(self)
@@ -75,41 +114,6 @@ function GameInfo.initManagers(self)
     self._managerLevels         = ManagerLevelsBase:new(LevelInfo) 
     
     GameInfoBase.initManagers(self)
-end
-
-function GameInfo.onGameStartComplete(self, response)
-    if(response:status() == EResponseType.ERT_OK)then
-        local data = response:response()
-        
-        assert(data.players         ~= nil)
-        assert(data.purchases       ~= nil)
-        assert(data.bonus           ~= nil)
-        assert(data.bonus_energy    ~= nil)
-        assert(data.levels          ~= nil)
-        
-        local managerLevels = GameInfo:instance():managerLevels()
-        managerLevels:deserialize(data.levels)
-        
-        --todo: implement server side deserialization in manager proxy
-        self._managerString:setCurrentLanguage(ELanguageType.ELT_ENGLISH)
-        self._managerBonusEnergy:deserialize(data.bonus_energy)
-        self._managerPlayers:deserialize(data.players)
-        self._managerPurchases:deserialize(data.purchases)
-        self._managerBonus:deserialize(data.bonus)
-        
-        local paramsGame = 
-        {
-            currentLevel = managerLevels:firstIncompleteLevel()
-        }
-        
-        --        self:onGameStart(ManagerEditor:new(paramsGame))
-        --        self._managerStates:setState(EStateType.EST_EDITOR)
-        --        
-        self:onGameStart(ManagerGame:new(paramsGame))
-        self._managerStates:setState(EStateType.EST_GAME)
-        
-        --        self._managerStates:setState(EStateType.EST_MAP)
-    end
 end
 
 function GameInfo.registerStates(self)
