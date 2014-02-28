@@ -838,21 +838,25 @@ function GridCreator.createFunctionDataGrid(self)
                 tabsCellData..'cellData = \n'..
                 tabsCellData..'{\n'..
                 
-                tabsCellData..'\ttype = ECellType.'..cellData.type..',\n'..
+                tabsCellData..'\ttype = ECellType.'..cellData.type..',\n'
                 
-                tabsCellData..'\tflow_type = EFlowType.EFT_'..cellData.flow_type..',\n'
+                local flowType = EFlowType.EFT_NONE
                 
                 if(cellData.type == ECellType.ECT_FLOW_POINT)then
+                    flowType = cellData.flow_type
                     local is_start = 'false'
                     
                     if cellData.is_start then
                         is_start = 'true'
                     end
                     
-                    result = result..tabsCellData..'\tis_start = '..is_start..'\n'
+                    result = result..tabsCellData..'\tis_start = '..is_start..',\n'
+                    
                 end
                 
-                result = result..tabsCellData..'}\n'
+                result = result..tabsCellData..'\tflow_type = EFlowType.EFT_'..flowType..',\n'..
+                
+                tabsCellData..'}\n'
                 
                 elsePrefix = 'else'
                 

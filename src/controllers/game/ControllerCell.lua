@@ -83,7 +83,7 @@ function ControllerCell.touch(self, event)
                 
             end
             
-            if target == nil and  not self._view:isInsideEvent(event)then 
+            if target == nil and  not self._view:isInsideEvent(event) and self._isInsideFirstTime then 
                 
                 self:onOutsideGridOrEndedTouch()
                 
