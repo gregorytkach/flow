@@ -142,7 +142,10 @@ function ControllerPopupBonus.cleanup(self)
     self._timerUpdate = nil
     
     self._managerBonus    = nil 
-    self._playerCurrent    = nil 
+    self._playerCurrent    = nil
+    
+    self._view:cleanup()
+    self._view = nil
     
     ControllerPopup.cleanup(self)
 end

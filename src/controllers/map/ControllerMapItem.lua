@@ -30,9 +30,11 @@ function ControllerMapItem.onViewClicked(self, target, event)
                 {
                     currentLevel = self._entry
                 }
+                --todo change
+                GameInfoBase:instance():managerStates():setState(EStateTypeBase.EST_EMPTY)
                 
-                GameInfoBase:instance():onGameStart(ManagerGame:new(paramsGame))
-                GameInfoBase:instance():managerStates():setState(EStateType.EST_GAME)
+                --                GameInfoBase:instance():onGameStart(ManagerGame:new(paramsGame))
+                --                GameInfoBase:instance():managerStates():setState(EStateType.EST_GAME)
             else
                 
                 GameInfoBase:instance():managerStates():currentState():showPopup(EPopupType.EPT_NO_ENERGY)
@@ -68,9 +70,8 @@ function ControllerMapItem.init(self, params)
         view = ViewMapItemComplete:new(paramsView)
     else
         
-        local image = GameInfo:instance():managerResources():getAsImage(EResourceType.ERT_STATE_MAP_ITEM_CLOSE)
         view = ViewMapItemBase:new(paramsView)
-        view:createSprite(image)
+        view:createImageItem(EResourceType.ERT_STATE_MAP_ITEM_CLOSE)
     end
     
     local paramsController = 

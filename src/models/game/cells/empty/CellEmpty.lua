@@ -19,7 +19,6 @@ end
 
 function CellEmpty.init(self, params)
     CellBase.init(self, params)
-    
 end
 
 

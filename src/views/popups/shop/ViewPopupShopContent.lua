@@ -37,4 +37,9 @@ function ViewPopupShopContent.placeViews(self)
     ViewBase.placeViews(self)
 end
 
+function ViewPopupShopContent.cleanup(self)
+    
+    ViewBase.cleanup(self) 
+end
+
 

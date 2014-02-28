@@ -24,6 +24,10 @@ function ViewMapItemBase.createButtonItem(self, buttonType)
     self._button = self:createButton(GameInfo:instance():managerResources():getAsButton(buttonType))
 end
 
+function ViewMapItemBase.createImageItem(self, imageType)
+    self._image = self:createButton(GameInfo:instance():managerResources():getAsImage(imageType))
+end
+
 
 
 function ViewMapItemBase.placeViews(self)
@@ -82,6 +86,11 @@ function ViewMapItemBase.cleanup(self)
     if(self._button ~= nil)then
         self._button:cleanup()
         self._button = nil
+    end
+    
+    if(self._image ~= nil)then
+        self._image:cleanup()
+        self._image = nil
     end
     
     ViewBase.cleanup(self)

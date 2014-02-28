@@ -118,7 +118,9 @@ function LevelInfo.createGrid(self, dataGrid)
         
         for columnIndex, cellData in ipairs(rowData)do
             
-            local cell =  FactoryCells.getCell(cellData)
+            local cellDataClone = getClone(cellData)
+            
+            local cell =  FactoryCells.getCell(cellDataClone)
             
             table.insert(row, cell)
             

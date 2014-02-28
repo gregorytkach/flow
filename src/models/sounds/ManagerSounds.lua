@@ -4,6 +4,14 @@ require('game_flow.src.models.sounds.ESoundType')
 ManagerSounds = classWithSuper(ManagerSoundsBase, 'ManagerSounds')
 
 --
+-- Properties
+--
+
+function ManagerSounds.needManageMemory(self)
+    return false
+end
+
+--
 --Events
 --
 function ManagerSounds.onStateChanged(self, stateType)
