@@ -6,12 +6,12 @@ ViewCellBridge = classWithSuper(ViewCellWithView, 'ViewCellBridge')
 -- Methods
 --
 
-function ViewCell.setPathAbove(self, flowTypeAbove)
+function ViewCellBridge.setPathAbove(self, flowTypeAbove)
     
     for i = 0, #self._pathsViewsAbove - 1, 1 do
         
         local path = self._pathsViewsAbove[i + 1]
-        path:sourceView().isVisible = (i == flowTypeAbove)
+        path:sourceView().isVisible = (tostring(i) == tostring(flowTypeAbove))
         
     end
 end
