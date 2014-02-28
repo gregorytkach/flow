@@ -13,9 +13,7 @@ function ControllerUI.onViewClicked(self, target, event)
         
         GameInfo:instance():onGameEnd()
         
-                GameInfo:instance():managerStates():setState(EStateTypeBase.EST_EMPTY)
-
---        GameInfo:instance():managerStates():setState(EStateType.EST_MAP)
+        GameInfo:instance():managerStates():setState(EStateType.EST_MAP)
         
     elseif (self._view:buttonHelp() == target) then 
         

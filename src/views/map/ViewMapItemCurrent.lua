@@ -12,7 +12,7 @@ ViewMapItemCurrent = classWithSuper(ViewMapItemBase, 'ViewMapItemCurrent')
 function ViewMapItemCurrent.init(self, params)
     ViewMapItemBase.init(self, params)
     
-    self:createButtonItem(EResourceType.ERT_STATE_MAP_ITEM_CURRENT)
+   self:createButtonItem(EResourceType.ERT_STATE_MAP_ITEM_CURRENT)
     
 end
 
@@ -20,5 +20,9 @@ function ViewMapItemCurrent.placeViews(self)
     ViewMapItemBase.placeViews(self)
 end
 
+
+function ViewMapItemCurrent.cleanup(self)
+    ViewMapItemBase.cleanup(self)
+end
 
 

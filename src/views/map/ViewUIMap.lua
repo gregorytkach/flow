@@ -172,6 +172,51 @@ end
 
 function ViewUIMap.cleanup(self)
     
+    self._buttonSound:cleanup()
+    self._buttonSound = nil
+    
+    self._buttonSoundDisabled:cleanup()
+    self._buttonSoundDisabled = nil
+    
+    self._buttonHelp:cleanup()
+    self._buttonHelp = nil
+    
+    self._buttonBonus:cleanup()
+    self._buttonBonus = nil
+    
+    self._buttonBuyEnergy:cleanup() 
+    self._buttonBuyEnergy = nil
+    
+    self._buttonFreeCurrency:cleanup()
+    self._buttonFreeCurrency = nil
+    
+    self._buttonBuyCurrency:cleanup()
+    self._buttonBuyCurrency = nil
+    
+    self._labelCurrencySoft:cleanup()
+    self._labelCurrencySoft = nil
+    
+    self._labelTimeBonus:cleanup()       
+    self._labelTimeBonus = nil
+    
+    self._labelEnergy:cleanup()
+    self._labelEnergy = nil
+    
+    self._labelTimeEnergy:cleanup()
+    self._labelTimeEnergy = nil
+    
+    self._viewTimeEnergy:cleanup()
+    self._viewTimeEnergy = nil
+    
+    self._viewTimeBonus:cleanup()  
+    self._viewTimeBonus = nil
+    
+    self._viewCurrency:cleanup()
+    self._viewCurrency = nil
+    
+    self._viewEnergy:cleanup()
+    self._viewEnergy = nil
+    
     self._viewGrass:cleanup()
     self._viewGrass = nil
     
