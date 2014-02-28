@@ -146,6 +146,8 @@ end
 function ManagerGame.onPurchaseFlowType(self, flowType)
     assert(flowType ~= nil)
     
+    print(flowType)
+    
     --destroy all lines which not purchased
     for flowTypeToDestroy, _ in pairs(self._notPurchasedLines)do
         self:destroyLinesWithType(flowTypeToDestroy)
@@ -155,7 +157,10 @@ function ManagerGame.onPurchaseFlowType(self, flowType)
     
     assert(lineData ~= nil)
     
-    for i, cell in ipairs(lineData)do
+    for _, cell in ipairs(lineData)do
+        
+        print(cell:x()..":"..cell:y())
+        
         cell:onPurchased(flowType)
     end
     
