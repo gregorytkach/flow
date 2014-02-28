@@ -33,6 +33,18 @@ function ViewCellWithView.init(self, params)
     
 end
 
+function ViewCellWithView.placeViews(self)
+    
+    local entry = self._controller:entry()
+    
+    if( entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart())then
+        self._view:sourceView().x =  -self._view:realWidth()  / 2 + self:realWidth()   / 2
+        self._view:sourceView().y =  -self._view:realHeight() / 2 + self:realHeight()  / 2 
+    end
+    
+    ViewCell.placeViews(self) 
+end
+
 function ViewCellWithView.cleanup(self)
     
     self._view:cleanup()

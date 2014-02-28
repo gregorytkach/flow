@@ -17,8 +17,26 @@ function ControllerPurchases.onViewClicked(self, target, event)
         self._managerGame:onBuyPurchaseResolve()
         
     elseif (self._view:buttonShowTurn() == target) then
+        local applyPurchase = false
         
-        self._managerGame:onBuyPurchaseShowTurn()
+        if(self._playerCurrent:freePurchaseShowTurn() > 0)then
+            
+            self._playerCurrent:setFreePurchaseShowTurn(self._playerCurrent:freePurchaseShowTurn() - 1)
+            
+            applyPurchase = true
+            
+        elseif(self._playerCurrent:currencySoft() >= self._purchaseShowTurn:priceSoft())then
+            
+            self._playerCurrent:setCurrencySoft(self._playerCurrent:currencySoft() - self._purchaseShowTurn:priceSoft())
+            
+            applyPurchase = true
+            
+        end
+        
+        if(applyPurchase)then
+            self._managerGame:onBuyPurchaseShowTurn()
+        end
+        
         
     elseif (self._view:buttonAddTime() == target) then
         
@@ -86,6 +104,10 @@ function ControllerPurchases.init(self)
         end
         
     end
+    
+    assert(self._purchaseAddTime    ~= nil)
+    assert(self._purchaseResolve    ~= nil)
+    assert(self._purchaseShowTurn   ~= nil)
     
     self:updateButtonAddTime()
     self:updateButtonResolve()
