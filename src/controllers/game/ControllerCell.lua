@@ -83,10 +83,12 @@ function ControllerCell.touch(self, event)
                 
             end
             
-            if target == nil and  (event.x > self._view:x1() or event.x < self._view:x0() or event.y < self._view:y0() or event.y < self._view:y0())  then
+            if target == nil and  not self._view:isInsideEvent(event)then 
                 
-                self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+                self:onOutsideGridOrEndedTouch()
                 
+                self._isInside          = false
+                self._isInsideFirstTime = false
             end
             
             --если на мост переходим по горизонтали, то берём дополнительную (верхнюю) ячейку
@@ -113,7 +115,8 @@ function ControllerCell.touch(self, event)
             end
             
             --если c моста переходим по горизонтали, то берём дополнительную (верхнюю) ячейку
-            if(target ~= nil) and (entry:type() == ECellType.ECT_BRIDGE) 
+            if(target ~= nil) 
+                and (entry:type() == ECellType.ECT_BRIDGE) 
                 and (target == entry:neighborRight() or target == entry:neighborLeft()) 
                 then
                 
@@ -158,16 +161,20 @@ function ControllerCell.touch(self, event)
         self._isInside = false
         
         if self._isInsideFirstTime  then
-            self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
-            
-            self._managerGame:setCurrentLineFlowType(nil)
-            self._managerGame:destroyCache()
-            self._managerGame:setCurrentCell(nil)
+            self:onOutsideGridOrEndedTouch()
         end
         
         self._isInsideFirstTime = false
         
     end
+end
+
+function ControllerCell.onOutsideGridOrEndedTouch(self)
+    self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+    
+    self._managerGame:setCurrentLineFlowType(nil)
+    self._managerGame:destroyCache()
+    self._managerGame:setCurrentCell(nil)
 end
 
 function ControllerCell.onInsideFirstTime(self)
