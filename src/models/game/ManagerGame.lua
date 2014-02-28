@@ -146,7 +146,10 @@ end
 function ManagerGame.onPurchaseFlowType(self, flowType)
     assert(flowType ~= nil)
     
-    self:destroyLinesWithType(flowType)
+    --destroy all lines which not purchased
+    for flowTypeToDestroy, _ in pairs(self._notPurchasedLines)do
+        self:destroyLinesWithType(flowTypeToDestroy)
+    end
     
     local lineData = self._notPurchasedLines[flowType]
     

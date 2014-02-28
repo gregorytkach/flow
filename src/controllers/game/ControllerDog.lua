@@ -14,32 +14,44 @@ function ControllerDog.row(self)
 end
 
 function ControllerDog.setRow(self, row)
-    
     assert(row ~= nil)
     self._row = row
-    
 end
 
 function ControllerDog.flowType(self)
     return self._flowType
 end
+
 --
 --Events
 --
 
 
-
-
-
 --
 --Methods
 --
-function ControllerDog.tryCleanupTweenDogMoved(self)
-   
-    if self._tweenDogMoved ~= nil then
-        transition.cancel(self._tweenDogMoved)
-        self._tweenDogMoved = nil
-    end
+
+
+function ControllerDog.init(self, params)
+    
+    assert(params.flow_type ~= nil)
+    
+    self._flowType = params.flow_type
+    
+    local paramsView = 
+    {
+        controller  = self,
+        flow_type   = params.flow_type,
+    }
+    
+    local paramsController = 
+    {
+        view = ViewDog:new(paramsView),
+    }
+    
+    Controller.init(self, paramsController)
+    
+    self._managerGame = GameInfo:instance():managerGame()
     
 end
 
@@ -99,36 +111,19 @@ function ControllerDog.update(self, type)
         self._view:setCurrentAnimation(EDogAnimationType.EDAT_IDLE)
         
     else
-        
         assert(false)
-        
     end
         
 end
 
-function ControllerDog.init(self, params)
-    
-    assert(params.flow_type ~= nil)
-    
-    self._flowType = params.flow_type
-    
-    local paramsView = 
-    {
-        controller  = self,
-        flow_type   = params.flow_type,
-    }
-    
-    local paramsController = 
-    {
-        view = ViewDog:new(paramsView),
-    }
-    
-    Controller.init(self, paramsController)
-    
-    self._managerGame = GameInfo:instance():managerGame()
+function ControllerDog.tryCleanupTweenDogMoved(self)
+   
+    if self._tweenDogMoved ~= nil then
+        transition.cancel(self._tweenDogMoved)
+        self._tweenDogMoved = nil
+    end
     
 end
-
 
 function ControllerDog.cleanup(self)
     
