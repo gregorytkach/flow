@@ -236,8 +236,6 @@ function ManagerGame.getCellsByTypeAndFlow(self, type, flowType)
     
     for i, cell in ipairs(cellsWithType)do
         
-        print(cell:flowType())
-        
         if(cell:flowType() == flowType)then
             table.insert(result, cell)
         end
