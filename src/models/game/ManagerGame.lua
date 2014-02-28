@@ -80,11 +80,19 @@ end
 function ManagerGame.onPlayerWin(self)
     self._isPlayerWin = true
     
+    self:timerStop()
+    
+    local playerCurrent = GameInfo:instance():managerPlayers():playerCurrent()
+    
+    playerCurrent:setCurrencySoft(playerCurrent:currencySoft() + self._currentLevel:rewardCurrencySoft())
+    
     self:onGameEnd()
 end
 
 function ManagerGame.onPlayerLose(self)
     self._isPlayerWin = false
+    
+    self:timerStop()
     
     local playerCurrent = GameInfo:instance():managerPlayers():playerCurrent()
     
@@ -160,12 +168,14 @@ function ManagerGame.onPurchaseFlowType(self, flowType)
     local cellPurchasedPrev = nil
     
     for _, cell in ipairs(lineData)do
-            
+        
         cell:onPurchased(flowType)
         
     end
     
     self._notPurchasedLines[flowType] = nil
+    
+    self:tryValidate()
 end
 
 function ManagerGame.validate(self)
@@ -206,6 +216,31 @@ function ManagerGame.init(self, params)
             
             self._cellsBytTypes[cell:type()] = cells
         end
+    end
+end
+
+function ManagerGame.tryValidate(self)
+    local isPlayerWIn = true
+    
+    for _, row in ipairs(self._grid) do
+        for _, cell in ipairs(row)do
+            
+            if(cell:type() ~= ECellType.ECT_BARRIER)then
+                if(cell:flowType() == EFlowType.EFT_NONE)then
+                    isPlayerWIn = false
+                    
+                    break
+                end
+            end
+        end
+        
+        if(not isPlayerWIn)then
+            break
+        end
+    end
+    
+    if(isPlayerWIn)then
+        self:onPlayerWin()
     end
 end
 
