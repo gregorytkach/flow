@@ -42,6 +42,11 @@ function GameInfo.init(self)
     application.dir_assets  = 'game_flow/assets/'
     application.dir_data    = 'game_flow/sdata/'
     
+    GameInfoBase.init(self)
+end
+
+function GameInfo.initManagers(self)
+    
     self._managerCache          = ManagerCacheFlow:new()
     
     local paramsRemote = 
@@ -55,14 +60,8 @@ function GameInfo.init(self)
         paramsRemote.server_url          = application.server_url
     end
     
-    self._managerRemote     = ManagerRemoteFlow:new(paramsRemote)
+    self._managerRemote         = ManagerRemoteFlow:new(paramsRemote)
     
-    self:onManagerRemoteInitComplete()
-    
-    GameInfoBase.init(self)
-end
-
-function GameInfo.onManagerRemoteInitComplete(self)
     self._managerResources      = ManagerResources:new()
     self._managerFonts          = ManagerFontsBase:new()
     self._managerParticles      = ManagerParticles:new()
@@ -74,6 +73,43 @@ function GameInfo.onManagerRemoteInitComplete(self)
     self._managerBonusEnergy    = ManagerBonusEnergyBase:new(BonusInfoBase)
     self._managerPlayers        = ManagerPlayersBase:new(PlayerInfo)
     self._managerLevels         = ManagerLevelsBase:new(LevelInfo) 
+    
+    GameInfoBase.initManagers(self)
+end
+
+function GameInfo.onGameStartComplete(self, response)
+    if(response:status() == EResponseType.ERT_OK)then
+        local data = response:response()
+        
+        assert(data.players         ~= nil)
+        assert(data.purchases       ~= nil)
+        assert(data.bonus           ~= nil)
+        assert(data.bonus_energy    ~= nil)
+        assert(data.levels          ~= nil)
+        
+        local managerLevels = GameInfo:instance():managerLevels()
+        managerLevels:deserialize(data.levels)
+        
+        --todo: implement server side deserialization in manager proxy
+        self._managerString:setCurrentLanguage(ELanguageType.ELT_ENGLISH)
+        self._managerBonusEnergy:deserialize(data.bonus_energy)
+        self._managerPlayers:deserialize(data.players)
+        self._managerPurchases:deserialize(data.purchases)
+        self._managerBonus:deserialize(data.bonus)
+        
+        local paramsGame = 
+        {
+            currentLevel = managerLevels:firstIncompleteLevel()
+        }
+        
+        --        self:onGameStart(ManagerEditor:new(paramsGame))
+        --        self._managerStates:setState(EStateType.EST_EDITOR)
+        --        
+        self:onGameStart(ManagerGame:new(paramsGame))
+        self._managerStates:setState(EStateType.EST_GAME)
+        
+        --        self._managerStates:setState(EStateType.EST_MAP)
+    end
 end
 
 function GameInfo.registerStates(self)
@@ -100,3 +136,7 @@ function GameInfo.loadFonts(self)
     
     GameInfoBase.loadFonts(self)
 end
+
+
+
+
