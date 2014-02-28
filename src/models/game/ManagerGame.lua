@@ -157,35 +157,28 @@ function ManagerGame.onPurchaseFlowType(self, flowType)
     
     assert(lineData ~= nil)
     
-<<<<<<< HEAD
     local cellPurchasedPrev = nil
     
-    for i, cell in ipairs(lineData)do
+    for _, cell in ipairs(lineData)do
         
         if cell:type() == ECellType.ECT_BRIDGE then
-                
+            
             local isPrevHorizontal = cellPurchasedPrev:x() == cell:x() 
-
+            
             if(isPrevHorizontal)then
                 cell:onPurchased(flowType)
             else
                 cell:flowAdditional():onPurchased(flowType)
                 
             end
-        
+            
         else
             
             cell:onPurchased(flowType)
         end
         
         cellPurchasedPrev = cell
-=======
-    for _, cell in ipairs(lineData)do
         
-        print(cell:x()..":"..cell:y())
-        
-        cell:onPurchased(flowType)
->>>>>>> 676f50b2196acfebea86b921a3404067b9ed1090
     end
     
     self._notPurchasedLines[flowType] = nil
