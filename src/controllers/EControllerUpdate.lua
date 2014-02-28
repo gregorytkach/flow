@@ -19,5 +19,6 @@ EControllerUpdate =
     ["ECUT_FREE_PURCHASE_RESOLVE"]      = "ECUT_FREE_PURCHASE_RESOLVE";
     
     ["ECUT_EDIT"]                       = "ECUT_EDIT";
+    ["ECUT_SET_DOGS"]                   = "ECUT_SET_DOGS";
 }
 

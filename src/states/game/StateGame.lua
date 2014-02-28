@@ -80,6 +80,10 @@ function StateGame.update(self, updateType)
         
         self._controllerGrid:update(updateType)
         
+    elseif(updateType == EControllerUpdate.ECUT_SET_DOGS) then
+        
+        self._controllerGrid:update(updateType)
+        
     elseif(updateType ==  EControllerUpdate.ECUT_DOG_UP) or (updateType ==  EControllerUpdate.ECUT_DOG_DOWN) then
         
         self._controllerGrid:update(updateType)

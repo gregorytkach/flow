@@ -158,6 +158,21 @@ function ControllerGrid.update(self, type)
                 cell:update(type)
                 cell:view():establishBounds()
                 
+                
+            end
+        end
+        
+        self:update(EControllerUpdate.ECUT_SET_DOGS)
+        
+        for flowType, controllerDog in pairs(self._dogsMap)do
+            --            controllerDog:view():sourceView().isVisible = true
+            controllerDog:view():show()
+            
+        end
+    elseif(type == EControllerUpdate.ECUT_SET_DOGS)then
+        
+        for indexRow, row in ipairs(self._cells)do
+            for indexColumn, cell in ipairs(row)do
                 local entry = cell:entry()
                 
                 if entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() then
@@ -169,14 +184,7 @@ function ControllerGrid.update(self, type)
                     controllerDog:view():setDogPosition(sourceCell)
                     controllerDog:setCurrentCell(entry)
                 end
-                
             end
-        end
-        
-        for flowType, controllerDog in pairs(self._dogsMap)do
-            --            controllerDog:view():sourceView().isVisible = true
-            controllerDog:view():show()
-            
         end
         
     elseif(type == EControllerUpdate.ECUT_SET_CURRENT_CELL)then
