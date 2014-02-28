@@ -7,15 +7,13 @@ ControllerDog = classWithSuper(Controller, 'ControllerDog')
 --Properties
 --
 
-function ControllerDog.row(self)
-    
-    return self._row
-    
+function ControllerDog.currentCell(self)
+    return self._currentCell
 end
 
-function ControllerDog.setRow(self, row)
-    assert(row ~= nil)
-    self._row = row
+function ControllerDog.setCurrentCell(self, value)
+    assert(value ~= nil)
+    self._currentCell = value
 end
 
 function ControllerDog.flowType(self)

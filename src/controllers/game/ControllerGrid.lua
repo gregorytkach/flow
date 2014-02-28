@@ -30,7 +30,8 @@ function ControllerGrid.init(self)
     
     self._cells = {}
     
-    self._dogs    = {}
+    self._dogsMap       = {}
+    self._dogsList      = {}
     
     self._managerGame = GameInfo:instance():managerGame() 
     
@@ -142,7 +143,9 @@ function ControllerGrid.initControllersDogs(self, flowTypes)
         
         self._view:sourceView():insert(sourceDog)
         
-        self._dogs[flowType] = controllerDog
+        self._dogsMap[flowType] = controllerDog
+        
+        table.insert(self._dogsList, controllerDog)
     end
 end
 
@@ -161,16 +164,16 @@ function ControllerGrid.update(self, type)
                     
                     local sourceCell = cell:view():sourceView()
                     
-                    local controllerDog = self._dogs[entry:flowType()]
+                    local controllerDog = self._dogsMap[entry:flowType()]
                     
                     controllerDog:view():setDogPosition(sourceCell)
-                    controllerDog:setRow(entry:y())
+                    controllerDog:setCurrentCell(entry)
                 end
                 
             end
         end
         
-        for flowType, controllerDog in pairs(self._dogs)do
+        for flowType, controllerDog in pairs(self._dogsMap)do
             --            controllerDog:view():sourceView().isVisible = true
             controllerDog:view():show()
             
@@ -180,34 +183,14 @@ function ControllerGrid.update(self, type)
         
         local currentCell = self._managerGame:currentCell()
         
+        local controllerDog = self._dogsMap[currentCell:flowType()]
+        
+        controllerDog:setCurrentCell(currentCell)
+        
         local viewCell = currentCell:controller():view()
-        
-        local controllerDog = self._dogs[currentCell:flowType()]
-        
-        controllerDog:setRow(currentCell:y())
-        
         controllerDog:view():setDogPosition(viewCell:sourceView())
         
-        local dogsForSort = {}
-        
-        for i = 1, #self._dogs, 1 do
-            
-            local maxRowControllerDog = self._dogs[1]
-            for key, controllerDog in pairs(self._dogs) do
-                
-                if table.indexOf(self._dogs, controllerDog) == nil and controllerDog:row() > maxRowControllerDog:row() then
-                    
-                    maxRowControllerDog = controllerDog
-                end
-                
-                table.insert(dogsForSort, maxRowControllerDog)
-                
-            end
-        end
-        
-        for key, controllerDog in pairs(dogsForSort) do
-            controllerDog:view():sourceView():toFront()
-        end
+        self:sortDogs()
         
     elseif(type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN)  then
         
@@ -217,7 +200,7 @@ function ControllerGrid.update(self, type)
             
             local flowType = self._managerGame:currentLineFlowType()
             
-            controllerDog = self._dogs[flowType]
+            controllerDog = self._dogsMap[flowType]
             self._currentDog = controllerDog
             
         else
@@ -237,10 +220,36 @@ function ControllerGrid.update(self, type)
     
 end
 
+function ControllerGrid.sortDogs(self)
+    local dogsSorted = {}
+    
+    for i = 2, #self._dogsList, 1 do
+        local value = self._dogsList[i]
+        
+        local indexJ = i - 1
+        
+        local valueToCompare = self._dogsList[indexJ]
+        
+        while indexJ >= 1 and valueToCompare._currentCell._y > value._currentCell._y do
+            self._dogsList[indexJ + 1] = self._dogsList[indexJ]
+            
+            indexJ = indexJ - 1
+            
+            valueToCompare = self._dogsList[indexJ]
+        end
+        
+        self._dogsList[indexJ + 1] = value
+    end
+    
+    for _, controllerDog in ipairs(self._dogsList) do
+        controllerDog._view._sourceView:toFront()
+    end
+    
+end
 
 function ControllerGrid.cleanup(self)
     
-    for _, controllerDog in pairs(self._dogs)do
+    for _, controllerDog in ipairs(self._dogsList)do
         controllerDog:cleanup()
     end
     

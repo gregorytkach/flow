@@ -31,8 +31,8 @@ function ControllerGridEditor.update(self, type)
     
     if(type == EControllerUpdate.ECUT_EDIT)then
         
-        for indexRow, row in ipairs(self._cells)do
-            for indexColumn, cell in ipairs(row)do
+        for _, row in ipairs(self._cells)do
+            for _, cell in ipairs(row)do
                 cell:view():establishBounds()
                 cell:update(EControllerUpdate.ECUT_INCLUSION_IN_LINE)
             end
