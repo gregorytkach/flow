@@ -709,7 +709,9 @@ function GridCreator.createFunctionDataLines(self)
     local result = 'local function getDataLines_'..os.time()..'()\n'..
     
     '\tlocal result =\n'
-       for i = 0, EFlowType.EFT_COUNT - 1, 1 do
+    
+    local dataBaseCells = {}
+    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
         
         local cellsByType 
         
@@ -724,9 +726,9 @@ function GridCreator.createFunctionDataLines(self)
         end
         
         if point._prev ~= nil then
-           cellsByType = self:getCellsToStartFrom(point) 
+            cellsByType = self:getCellsToStartFrom(point) 
         else
-           cellsByType = self:getCellsToEndFrom(point) 
+            cellsByType = self:getCellsToEndFrom(point) 
         end
         
         for j = #cellsByType, 1, -1 do
@@ -738,7 +740,7 @@ function GridCreator.createFunctionDataLines(self)
                 
                 needCell = cell._prev.x ~= cell._next.x and cell._prev.y ~= cell._next.y 
             end
-                
+            
             if not needCell then
                 table.remove(cellsByType, j)
             end
@@ -749,7 +751,6 @@ function GridCreator.createFunctionDataLines(self)
             local cell = cellsByType[i]
             table.insert(dataBaseCells, cell)
         end
-        
         
     end
     
@@ -778,7 +779,7 @@ function GridCreator.createFunctionDataLines(self)
                 
                 if cell.flow_type ~= i then
                     result = result..'\n' 
-                
+                    
                 else
                     result = result..',\n' 
                 end
@@ -789,7 +790,7 @@ function GridCreator.createFunctionDataLines(self)
         end
         
         if i == EFlowType.EFT_COUNT - 1 then
-        
+            
             result = result..'\t\t}\n'
             
         else
