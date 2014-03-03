@@ -152,14 +152,16 @@ function ControllerCellBridge.update(self, updateType)
         
     elseif(updateType == EControllerUpdate.ECUT_CELL_PURCHASED) then
         
+        self._view:setIsEnabled(self._entry:flowType() == EFlowType.EFT_NONE)
+        self._view:setIsEnabledAbove(self._entry:flowAdditional():flowType() == EFlowType.EFT_NONE)
+        
         self:update(EControllerUpdate.ECUT_INCLUSION_IN_LINE)
-        self._view:setIsEnabled(false)
+        
         if self._entry:isPurchased() and self._entry:flowAdditional():isPurchased() then
             Runtime:removeEventListener(ERuntimeEvent.ERE_TOUCH, self)
         end
         
-        
-        
+         
     elseif(updateType == EControllerUpdate.ECUT_DOG_DOWN) or (updateType == EControllerUpdate.ECUT_DOG_UP)then
         
         ControllerCell.update(self, updateType)

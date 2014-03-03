@@ -164,6 +164,8 @@ function ManagerGame.onPurchaseFlowType(self, flowType)
         self:destroyLinesWithType(flowTypeToDestroy)
     end
     
+    self._currentState:update(EControllerUpdate.ECUT_SET_DOGS)
+    
     local lineData = self._notPurchasedLines[flowType]
     
     assert(lineData ~= nil)

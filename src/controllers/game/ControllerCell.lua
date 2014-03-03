@@ -265,8 +265,11 @@ function ControllerCell.update(self, updateType)
         
     elseif(updateType == EControllerUpdate.ECUT_CELL_PURCHASED)then
         
-        self._view:setPath(self._entry:flowType())
         self._view:setIsEnabled(false)
+        
+        self._view:setPath(self._entry:flowType())
+        
+        
         
         Runtime:removeEventListener(ERuntimeEvent.ERE_TOUCH, self)
         

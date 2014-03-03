@@ -43,6 +43,10 @@ function ViewCell.setPath(self, flowType)
         local isPathViewVisible = tostring(i) == tostring(flowType)
         path:sourceView().isVisible = isPathViewVisible
         
+        if isPathViewVisible and not self._isEnabled then
+            path:sourceView():setFillColor(0.5, 0.5, 0.5)
+        end
+        
     end
 end
 
@@ -79,6 +83,7 @@ function ViewCell.init(self, params)
     
     self._realWidthBg   = self:realWidth()
     self._realHeightBg  = self:realHeight()
+    
     
 end
 

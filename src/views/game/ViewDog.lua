@@ -5,7 +5,7 @@ ViewDog = classWithSuper(ViewBase, 'ViewDog')
 --
 
 function ViewDog.currentAnimation(self)
-    
+     
     return self._animations[self._currentAnimationType]
     
 end
