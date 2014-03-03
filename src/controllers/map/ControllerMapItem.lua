@@ -52,7 +52,7 @@ function ControllerMapItem.init(self, params)
     assert(params.entry     ~= nil)
     assert(params.isCurrent ~= nil)
     
-    self._isCurrent =params.isCurrent
+    self._isCurrent = params.isCurrent
     self._entry     = params.entry
     
     local paramsView = 

@@ -63,13 +63,13 @@ function GameInfo.onGameStartComplete(self, response)
             currentLevel = managerLevels:firstIncompleteLevel()
         }
         
-        --                self:onGameStart(ManagerEditor:new(paramsGame))
-        --                self._managerStates:setState(EStateType.EST_EDITOR)
+--        self:onGameStart(ManagerEditor:new(paramsGame))
+--        self._managerStates:setState(EStateType.EST_EDITOR)
         --        
-        self:onGameStart(ManagerGame:new(paramsGame))
-        self._managerStates:setState(EStateType.EST_GAME)
+--        self:onGameStart(ManagerGame:new(paramsGame))
+--        self._managerStates:setState(EStateType.EST_GAME)
         
-        --        self._managerStates:setState(EStateType.EST_MAP)
+                self._managerStates:setState(EStateType.EST_MAP)
     end
 end
 
@@ -79,7 +79,7 @@ end
 function GameInfo.init(self)
     
     application.dir_assets  = 'game_flow/assets/'
-    application.dir_data    = 'game_flow/sdata/'
+    application.dir_data    = 'game_flow/data/'
     
     GameInfoBase.init(self)
 end

@@ -99,13 +99,13 @@ function ViewStateMap.touch(self, event)
             end
             
             if(self._mapLeft ~= nil)then
-                self._mapLeft:sourceView().x    = self._distance - self._mapPartWidth - 5
+                self._mapLeft:sourceView().x    = self._distance - self._mapPartWidth
             end
             
             self._mapCenter:sourceView().x      = self._distance  
             
             if(self._mapRight ~= nil)then
-                self._mapRight:sourceView().x   = self._distance  + self._mapPartWidth + 5
+                self._mapRight:sourceView().x   = self._distance  + self._mapPartWidth
             end
             
             self._viewItems:sourceView().x    = -self._mapPartWidth * self._currentMapIndex + self._distance
@@ -171,7 +171,7 @@ function ViewStateMap.placeViews(self)
     local mapOffsetY = application.margin_top + self._mapCenter:realHeight() / 2
     
     if(self._mapLeft ~= nil)then
-        self._mapLeft:sourceView().x = self._distance - self._mapPartWidth - 5
+        self._mapLeft:sourceView().x = self._distance - self._mapPartWidth
         self._mapLeft:sourceView().y = mapOffsetY
     end
     
@@ -179,7 +179,7 @@ function ViewStateMap.placeViews(self)
     self._mapCenter:sourceView().y = mapOffsetY
     
     if(self._mapRight ~= nil) then
-        self._mapRight:sourceView().x = self._distance  + self._mapPartWidth + 5
+        self._mapRight:sourceView().x = self._distance  + self._mapPartWidth
         self._mapRight:sourceView().y = mapOffsetY
     end
     

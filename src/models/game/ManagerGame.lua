@@ -86,6 +86,9 @@ function ManagerGame.onPlayerWin(self)
     
     playerCurrent:setCurrencySoft(playerCurrent:currencySoft() + self._currentLevel:rewardCurrencySoft())
     
+    --todo: reimplement
+    self._currentLevel:progress()._isComplete = true
+    
     self:onGameEnd()
 end
 
