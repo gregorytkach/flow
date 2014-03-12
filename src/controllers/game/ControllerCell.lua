@@ -179,7 +179,11 @@ end
 
 function ControllerCell.onInsideFirstTime(self)
     
-    self._isInside          = true
+    if self._entry:flowType() ~= EFlowType.EFT_NONE and not self._isInside then
+        self._managerGame:destroyLine(self._entry)
+    end
+    
+    self:onInside()
     self._isInsideFirstTime = true
     
 end
@@ -194,7 +198,6 @@ end
 function ControllerCell.onOutside(self)
     
     self._isInside = false
-    
     
 end
 
@@ -270,7 +273,6 @@ function ControllerCell.update(self, updateType)
         self._view:setPath(self._entry:flowType())
         
         
-        
         Runtime:removeEventListener(ERuntimeEvent.ERE_TOUCH, self)
         
     else
@@ -329,6 +331,7 @@ function ControllerCell.canSelectTarget(self, target)
     return result
     
 end
+
 
 function ControllerCell.tryBuildLine(self, lineCell, newCell)
     

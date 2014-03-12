@@ -4,6 +4,17 @@ ViewDog = classWithSuper(ViewBase, 'ViewDog')
 --Properties
 --
 
+function ViewDog.inHouse(self)
+    return self._inHouse
+end
+
+function ViewDog.setInHouse(self, value)
+    
+    assert(value ~= nil)
+    self._inHouse = value
+    
+end
+
 function ViewDog.currentAnimation(self)
      
     return self._animations[self._currentAnimationType]
@@ -35,8 +46,16 @@ function ViewDog.setCurrentAnimation(self, type)
     for animationType, animation in pairs(self._animations) do
         if (animationType == self._currentAnimationType)then
             animation:play()
-            animation.isVisible = true
+            
+            if type == EDogAnimationType.EDAT_IDLE then
+                animation.isVisible = not self._inHouse
+            else
+                animation.isVisible = true
+            end
+            
         else
+            
+            
             animation.isVisible = false
             animation:pause()
         end
