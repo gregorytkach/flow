@@ -11,9 +11,9 @@ ManagerRemoteFlow = classWithSuper(ManagerRemoteBase, 'ManagerRemoteFlow')
 function ManagerRemoteFlow.init(self, params)
     ManagerRemoteBase.init(self, params)
     
-    assert(params.managerCache ~= nil, 'Please init manager cache first')
+    assert(params.manager_cache ~= nil, 'Please init manager cache first')
     
-    self._managerCache = params.managerCache
+    self._managerCache = params.manager_cache
     
 end
 
@@ -24,16 +24,22 @@ end
 function ManagerRemoteFlow.update(self, type, data, callback)
     
     --todo remove after debug
-    self._isConnectionEstablished = false
+    self._isConnectionEstablished = true
     
     if(self._isConnectionEstablished)then
         
         local callbackWrapper = function (response)
-            if(type == ERemoteUpdateTypeBase.ERUT_GAME_START)then
-                --todo: check version and if version is different - remove local data and resave
+            
+            if(response:status() == EResponseType.ERT_OK)then
+                if(type == ERemoteUpdateTypeBase.ERUT_GAME_START)then
+                    --todo: check version and if version is different - remove local data and resave
+                end
+                
+                self._managerCache:update(type, data, callback)
+            else
+                callback(response)
             end
             
-            self._managerCache:update(type, data, callback)
         end
         
         ManagerRemoteBase.update(self, type, data, callbackWrapper)

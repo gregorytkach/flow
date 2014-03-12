@@ -16,6 +16,7 @@ require('game_flow.src.models.game.ManagerGame')
 require('game_flow.src.models.editor.ManagerEditor')
 require('game_flow.src.models.cache.ManagerCacheFlow')
 require('game_flow.src.models.remote.ManagerRemoteFlow')
+require('game_flow.src.models.remote.RemoteConnectorFlow')
 
 require('game_flow.src.views.popups.base.ViewPopupFlowBase')
 
@@ -63,13 +64,13 @@ function GameInfo.onGameStartComplete(self, response)
             currentLevel = managerLevels:firstIncompleteLevel()
         }
         
---        self:onGameStart(ManagerEditor:new(paramsGame))
---        self._managerStates:setState(EStateType.EST_EDITOR)
+        --        self:onGameStart(ManagerEditor:new(paramsGame))
+        --        self._managerStates:setState(EStateType.EST_EDITOR)
         --        
---        self:onGameStart(ManagerGame:new(paramsGame))
---        self._managerStates:setState(EStateType.EST_GAME)
+        --        self:onGameStart(ManagerGame:new(paramsGame))
+        --        self._managerStates:setState(EStateType.EST_GAME)
         
-                self._managerStates:setState(EStateType.EST_MAP)
+        self._managerStates:setState(EStateType.EST_MAP)
     end
 end
 
@@ -80,6 +81,7 @@ function GameInfo.init(self)
     
     application.dir_assets  = 'game_flow/assets/'
     application.dir_data    = 'game_flow/data/'
+    application.server_url  = 'app1.greemlins.com'
     
     GameInfoBase.init(self)
 end
@@ -88,16 +90,16 @@ function GameInfo.initManagers(self)
     
     self._managerCache          = ManagerCacheFlow:new()
     
-    local paramsRemote = 
+    local paramsConnector =
     {
-        managerCache = self._managerCache 
+        protocol = EProtocolType.EPT_HTTP
     }
     
-    if(application.debug)then
-        paramsRemote.server_url          = application.server_url_dev
-    else
-        paramsRemote.server_url          = application.server_url
-    end
+    local paramsRemote = 
+    {
+        manager_cache       = self._managerCache,
+        remote_connector    = RemoteConnectorFlow:new(paramsConnector) 
+    }
     
     self._managerRemote         = ManagerRemoteFlow:new(paramsRemote)
     

@@ -25,7 +25,6 @@ end
 
 function LevelInfo.init(self)
     LevelInfoBase.init(self)
-    
 end
 
 function LevelInfo.createNotPurchasedLinesFor(self, grid)
