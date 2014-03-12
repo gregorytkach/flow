@@ -29,6 +29,13 @@ function ViewDog.setDogPosition(self, sourceCell)
     
     self._sourceView.x = sourceCell.x
     self._sourceView.y = sourceCell.y - 45
+    for animationType, animation in pairs(self._animations) do
+        if (animationType == self._currentAnimationType)then
+            
+            animation.isVisible = true
+            
+        end
+    end
     
 end
 

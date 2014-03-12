@@ -7,6 +7,9 @@ ControllerCellFlowPoint = classWithSuper(ControllerCell, 'ControllerCellFlowPoin
 --
 function ControllerCellFlowPoint.onInHouse(self, value)
     assert(value ~= nil)
+    if value and self._tweenHouse ~= nil then
+        return
+    end
     local houseFull = self._view:houseFull()
     local house     = self._view:house()
     
@@ -29,7 +32,10 @@ function ControllerCellFlowPoint.onInHouse(self, value)
         {
             yScale     = self._houseScale,
             time       = application.animation_duration * 4,
-            onComplete = function () self:onInHouse(true) end,
+            onComplete = function () 
+                            self._tweenHouse = nil
+                            self:onInHouse(true) 
+                        end,
         }
         
         self._tweenHouse = transition.to(houseFull, tweenHouseParams)

@@ -184,8 +184,13 @@ function ControllerGrid.update(self, type)
         for indexRow, row in ipairs(self._cells)do
             for indexColumn, cell in ipairs(row)do
                 local entry = cell:entry()
-                
-                if entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() then
+                if entry:type() == ECellType.ECT_FLOW_POINT and not entry:isStart() and entry:isPurchased() then
+                    
+                    cell:onInHouse(true)
+                    local controllerDog = self._dogsMap[entry:flowType()]
+                    controllerDog:view():sourceView().isVisible = false
+                    
+                elseif entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() and not entry:isPurchased() then
                     
                     local sourceCell = cell:view():sourceView()
                     
@@ -212,6 +217,7 @@ function ControllerGrid.update(self, type)
             
             controllerDog._cell:controller():onInHouse(false)
             controllerDog._cell = nil
+            
             
         end
         
