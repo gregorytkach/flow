@@ -31,11 +31,12 @@ end
 
 function ManagerGame.setCurrentCell(self, cell)
     
-    
+    self:tryInHouse(cell)
     self._currentCell = cell
     if cell ~= nil  then
         
         self._currentState:update(EControllerUpdate.ECUT_SET_CURRENT_CELL)
+        
         
     end
     
@@ -55,14 +56,14 @@ function ManagerGame.setCurrentLineFlowType(self, value)
     if value ~= EFlowType.EFT_NONE and value ~= nil   then
         
         self._currentLineFlowType = value:flowType()
-        
+       
     elseif (value == EFlowType.EFT_NONE or value == nil)  then
         
         self._currentLineFlowType = value
         
     end
     
-    
+     
     
 end
 
@@ -222,6 +223,8 @@ function ManagerGame.init(self, params)
             self._cellsBytTypes[cell:type()] = cells
         end
     end
+    
+    self._inHouse = false
 end
 
 function ManagerGame.tryValidate(self)
@@ -339,6 +342,14 @@ function ManagerGame.destroyLine(self, cellStart)
         cellCurrent:setCellNext(nil)
         
         cellCurrent = cellNext
+        
+        if cellCurrent ~= nil and cellCurrent:type() == ECellType.ECT_FLOW_POINT and not cellCurrent:isStart() then
+            
+            local controllerDog = self._currentState:controllerGrid():dogByType(cellCurrent:flowType())
+            controllerDog:view():setInHouse(false)
+            controllerDog._cell = nil
+            cellCurrent:controller():onInHouse(false)
+        end
     end
     
 end
@@ -413,6 +424,15 @@ function ManagerGame.destroyCache(self)
         end
     end
 end
+
+function ManagerGame.tryInHouse(self, cell)
+    
+    if cell ~= nil and cell:type() == ECellType.ECT_FLOW_POINT and not cell:isStart() then
+        self._currentState:controllerGrid():dogByType(cell:flowType()):view():setInHouse(true)
+    
+    end
+end
+
 
 function ManagerGame.cleanup(self)
     

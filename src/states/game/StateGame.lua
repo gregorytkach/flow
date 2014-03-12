@@ -10,6 +10,10 @@ function StateGame.getType(self)
     return  EStateType.EST_GAME
 end
 
+function StateGame.controllerGrid(self)
+    return self._controllerGrid
+end
+
 --
 --Events
 --
@@ -93,6 +97,10 @@ function StateGame.update(self, updateType)
         updateType == EControllerUpdate.ECUT_FREE_PURCHASE_RESOLVE)then
         
         self._controllerUI:update(updateType)
+        
+    elseif(updateType == EControllerUpdate.ECUT_CURRENT_DOG) then
+        
+       self._controllerGrid:update(updateType) 
         
     elseif(updateType == EControllerUpdateBase.ECUT_GAME_FINISHED)then
         

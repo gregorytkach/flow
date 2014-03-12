@@ -88,7 +88,11 @@ function ControllerDog.transitionDog(self, type)
         time        = application.animation_duration * 4 ,
         onComplete  = onComplete,
     }
-
+    
+    if type == EDogAnimationType.EDAT_DOWN then
+        tweenParams.transition = GameInfo:instance():managerStates():easingProvider().easeOutBounce
+    end
+    
     self._tweenDogMoved = transition.to(source, tweenParams) 
 
     

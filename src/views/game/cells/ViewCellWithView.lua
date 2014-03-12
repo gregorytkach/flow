@@ -2,6 +2,21 @@ require('game_flow.src.views.game.cells.ViewCell')
 
 ViewCellWithView = classWithSuper(ViewCell, 'ViewCellWithView')
 
+--
+--properties
+--
+
+function ViewCellWithView.houseFull(self)
+    return self._viewFull:sourceView()
+end
+
+function ViewCellWithView.house(self)
+    return self._view:sourceView()
+end
+
+--
+--methods
+--
 function ViewCellWithView.init(self, params)
     ViewCell.init(self, params)
     
@@ -31,6 +46,12 @@ function ViewCellWithView.init(self, params)
     
     self._view = self:createSprite(image)  
     
+    if(cellType == ECellType.ECT_FLOW_POINT) and not entry:isStart() then
+         image = managerResources:getAsImageWithParam(EResourceType.ERT_STATE_GAME_CELL_END_FULL, entry:flowType())
+         self._viewFull = self:createSprite(image)
+         self._viewFull:sourceView().isVisible = false
+    end
+    
 end
 
 function ViewCellWithView.placeViews(self)
@@ -40,6 +61,9 @@ function ViewCellWithView.placeViews(self)
     if( entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart())then
         self._view:sourceView().x =  -self._view:realWidth()  / 2 + self:realWidth()   / 2
         self._view:sourceView().y =  -self._view:realHeight() / 2 + self:realHeight()  / 2 
+    elseif( entry:type() == ECellType.ECT_FLOW_POINT and not entry:isStart())then
+        self._viewFull:sourceView().anchorY = 1
+        self._viewFull:sourceView().y = self._view:realHeight() / 2
     end
     
     ViewCell.placeViews(self) 

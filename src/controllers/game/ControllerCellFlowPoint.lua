@@ -5,15 +5,62 @@ ControllerCellFlowPoint = classWithSuper(ControllerCell, 'ControllerCellFlowPoin
 --
 --Events
 --
+function ControllerCellFlowPoint.onInHouse(self, value)
+    assert(value ~= nil)
+    local houseFull = self._view:houseFull()
+    local house     = self._view:house()
+    
+    if value then
+        
+        if self._houseScale == nil then
+            self._houseScaleStart = house.yScale
+            self._houseScale = house.yScale
+        elseif self._houseScale > self._houseScaleStart then 
+            self._houseScale = 0.9 * self._houseScaleStart
+            houseFull.isVisible = true
+            house.isVisible = false
+        else
+            self._houseScale = 1.1 * self._houseScaleStart
+            houseFull.isVisible = true
+            house.isVisible = false
+        end
+    
+        local tweenHouseParams =
+        {
+            yScale     = self._houseScale,
+            time       = application.animation_duration * 4,
+            onComplete = function () self:onInHouse(true) end,
+        }
+        
+        self._tweenHouse = transition.to(houseFull, tweenHouseParams)
+        
+    else
+            
+        house.yScale = self._houseScaleStart
+        houseFull.isVisible = false
+        house.isVisible = true
+        self._houseScale = nil
+        self:tryTweenHouseCleanup()
+    end
+end
+
+function ControllerCellFlowPoint.tryTweenHouseCleanup(self)
+    
+    if self._tweenHouse ~= nil then
+        transition.cancel(self._tweenHouse) 
+        self._tweenHouse = nil
+    end
+end
 
 function ControllerCellFlowPoint.onInsideFirstTime(self)
     
-    self._managerGame:setCurrentCell(self._entry)
+    
     self._managerGame:destroyLinesWithType(self._entry:flowType())
+    self._managerGame:setCurrentCell(self._entry)
     
     self:update(EControllerUpdate.ECUT_INCLUSION_IN_LINE)
-    
     ControllerCell.onInsideFirstTime(self)
+    
 end
 
 function ControllerCellFlowPoint.canSelectTarget(self, target)
@@ -123,5 +170,6 @@ function ControllerCellFlowPoint.isLineComplete(self)
 end
 
 function ControllerCellFlowPoint.cleanup(self)
+    self:tryTweenHouseCleanup()
     ControllerCell.cleanup(self)
 end

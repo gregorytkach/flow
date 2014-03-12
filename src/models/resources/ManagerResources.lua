@@ -57,6 +57,7 @@ function ManagerResources.init(self)
     --cells
     self._resources[EResourceType.ERT_STATE_GAME_CELL_START]        = '%sstate_game/dogs/%s/cell_start/cell_start%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_END]          = '%sstate_game/dogs/%s/cell_end/cell_end%s.png'
+    self._resources[EResourceType.ERT_STATE_GAME_CELL_END_FULL]     = '%sstate_game/dogs/%s/cell_end_full/cell_end_full%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_PATH]         = '%sstate_game/dogs/%s/cell_path/cell_path%s.png'
    
     self._resources[EResourceType.ERT_STATE_GAME_CELL_DEFAULT]      = '%sstate_game/cells/default/%s/cell_default%s.png'
