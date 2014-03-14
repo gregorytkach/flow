@@ -81,6 +81,7 @@ function ControllerDog.transitionDog(self, type)
     local onComplete = nil
     
     local offsetY = - 30
+    local timeInterval
     
     if type == EDogAnimationType.EDAT_DOWN then
         
@@ -91,11 +92,14 @@ function ControllerDog.transitionDog(self, type)
             self:update(EControllerUpdate.ECUT_DOG_IDLE)
         end
         
+        timeInterval = Constants.DOG_TIME_DOWN
+        
     else
         
         source.y = 0
         
         yTarget = offsetY 
+        timeInterval = Constants.DOG_TIME_UP
         
     end
     
@@ -103,7 +107,7 @@ function ControllerDog.transitionDog(self, type)
     local tweenParams =
     {
         y           = yTarget,
-        time        = Constants.DOG_MOVED_TIME ,
+        time        = timeInterval ,
         onComplete  = onComplete,
     }
     

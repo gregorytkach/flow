@@ -15,7 +15,7 @@ function ControllerCellFlowPoint.onInHouse(self, value)
     
     local houseFull    = self._view:houseFull()
     local house        = self._view:house()
-    local timeInterval = Constants.DOG_MOVED_TIME
+    local timeInterval = Constants.DOG_TIME_DOWN
     
     if value then
         
