@@ -21,6 +21,14 @@ end
 --
 --Methods
 --
+function CellFlowPoint.restoreState(self)
+    
+    local result = CellBase.restoreState(self)
+    if not self._isStart then
+        GameInfo:instance():managerStates():currentState():controllerGrid():dogByType(self._flowType):view():setInHouse(false)
+    end
+    return result
+end
 
 function CellFlowPoint.init(self, params)
     assert(params.is_start ~= nil)

@@ -6,18 +6,28 @@ ControllerCellFlowPoint = classWithSuper(ControllerCell, 'ControllerCellFlowPoin
 --Events
 --
 function ControllerCellFlowPoint.onInHouse(self, value)
+    
     assert(value ~= nil)
-    if value and self._tweenHouse ~= nil then
+    
+    if (value and self._tweenHouse ~= nil) or (not value and self._tweenHouse == nil)  then
         return
     end
+    
     local houseFull = self._view:houseFull()
     local house     = self._view:house()
+    local timeInterval = application.animation_duration * 4
     
     if value then
         
         if self._houseScale == nil then
-            self._houseScaleStart = house.yScale
-            self._houseScale = house.yScale
+            self._houseScaleStart = houseFull.yScale
+            self._houseScale      = houseFull.yScale
+            
+            
+            if self._currentState:controllerGrid():updateType() ~= EControllerUpdate.ECUT_DOG_DOWN then
+                timeInterval = 1
+            end
+            
         elseif self._houseScale > self._houseScaleStart then 
             self._houseScale = 0.9 * self._houseScaleStart
             houseFull.isVisible = true
@@ -31,8 +41,9 @@ function ControllerCellFlowPoint.onInHouse(self, value)
         local tweenHouseParams =
         {
             yScale     = self._houseScale,
-            time       = application.animation_duration * 4,
+            time       = timeInterval,
             onComplete = function () 
+                            self._currentState:controllerGrid():dogByType(self._entry:flowType()):update(EControllerUpdate.ECUT_DOG_IDLE)
                             self._tweenHouse = nil
                             self:onInHouse(true) 
                         end,
@@ -42,7 +53,7 @@ function ControllerCellFlowPoint.onInHouse(self, value)
         
     else
             
-        house.yScale = self._houseScaleStart
+        houseFull.yScale = self._houseScaleStart
         houseFull.isVisible = false
         house.isVisible = true
         self._houseScale = nil
@@ -110,7 +121,6 @@ function ControllerCellFlowPoint.onTrySelect(self, target)
         
         self._managerGame:destroyLine(self._entry)
         
-        
     end
     
     local isNext = target:cellNext() == self._entry
@@ -119,7 +129,10 @@ function ControllerCellFlowPoint.onTrySelect(self, target)
     
     if(cellPrev ~= nil) then
         
+        
         self._managerGame:destroyLine(cellPrev)
+
+        self:tryOutHouse(cellPrev)
         
     end
     

@@ -29,13 +29,15 @@ function ViewDog.setDogPosition(self, sourceCell)
     
     self._sourceView.x = sourceCell.x
     self._sourceView.y = sourceCell.y - 45
-    for animationType, animation in pairs(self._animations) do
-        if (animationType == self._currentAnimationType)then
-            
-            animation.isVisible = true
-            
-        end
+    
+    
+    if  (self._currentAnimationType == EDogAnimationType.EDAT_IDLE) then
+        local animation = self._animations[self._currentAnimationType]
+
+        animation.isVisible = not self._inHouse
+
     end
+    
     
 end
 
@@ -98,6 +100,8 @@ function ViewDog.init(self, params)
     self._animations[EDogAnimationType.EDAT_UP] = animationUp
     
     self:setCurrentAnimation(EDogAnimationType.EDAT_IDLE)
+    
+    self._inHouse = false
 end
 
 

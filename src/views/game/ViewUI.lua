@@ -100,7 +100,7 @@ function ViewUI.placeViews(self)
     
     self._viewPurchases:placeViews()
     self._viewPurchases:sourceView().x = display.contentCenterX - self._viewPurchases:realWidth() / 2
-    self._viewPurchases:sourceView().y = application.margin_bottom - self._viewPurchases:realHeight() / 2 - 10
+    self._viewPurchases:sourceView().y = application.margin_bottom - self._viewPurchases:realHeight() * 0.45 
 end
 
 

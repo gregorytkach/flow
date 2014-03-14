@@ -81,8 +81,8 @@ function ControllerCellBridge.onTrySelect(self, target)
         
     end
     
-    
-    if(target:cellPrev() ~= nil)then
+    local cellPrev = target:cellPrev()
+    if(cellPrev ~= nil)then
         
         if(target:flowType() == entry:flowType())then
             
@@ -90,7 +90,11 @@ function ControllerCellBridge.onTrySelect(self, target)
             
         else
             
-            self._managerGame:destroyLine(target:cellPrev())
+            
+            self._managerGame:destroyLine(cellPrev)
+
+            self:tryOutHouse(cellPrev)
+            
             self:tryBuildLine(entry, target)
             
         end

@@ -12,8 +12,26 @@ function ControllerDog.currentCell(self)
 end
 
 function ControllerDog.setCurrentCell(self, value)
+    
+    if value == self._currentCell then
+        return
+    end
+    
     assert(value ~= nil)
+    
+    if self._currentCell ~= nil and (self._currentCell:type() == ECellType.ECT_FLOW_POINT and not self._currentCell:isStart())  then
+        self._currentCell:controller():onInHouse(false)
+        self:view():setInHouse(false)
+        self._cell = nil
+    end
+    
     self._currentCell = value
+    
+    local viewCell = value:controller():view()
+    self:view():setDogPosition(viewCell:sourceView())
+    
+    
+    
 end
 
 function ControllerDog.flowType(self)

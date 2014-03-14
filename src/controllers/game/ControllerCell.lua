@@ -36,12 +36,15 @@ function ControllerCell.touch(self, event)
                 
                 self._managerGame:cacheStates()
                 
-                if not isInsideFirstTime then
+                if not isInsideFirstTime and self._entry:flowType() ~= EFlowType.EFT_NONE then
                     
-                    self._currentState:update(EControllerUpdate.ECUT_DOG_UP)
+                    self._currentState:controllerGrid():update(EControllerUpdate.ECUT_DOG_UP, self._entry:flowType())
                     
                 end
                 
+                if self._entry:type() == ECellType.ECT_FLOW_POINT then
+                    self._managerGame:setCurrentCell(self._entry)
+                end
                 
             end
             
@@ -50,7 +53,6 @@ function ControllerCell.touch(self, event)
     elseif(event.phase == ETouchEvent.ETE_MOVED)  then
         
         if(self._view:isInsideEvent(event))then
-            
             
             if not self._isInside then
                 self:onInside()
@@ -170,7 +172,7 @@ function ControllerCell.touch(self, event)
 end
 
 function ControllerCell.onOutsideGridOrEndedTouch(self)
-    self._currentState:update(EControllerUpdate.ECUT_DOG_DOWN)
+    self._currentState:controllerGrid():update(EControllerUpdate.ECUT_DOG_DOWN, self._entry:flowType())
     
     self._managerGame:setCurrentLineFlowType(nil)
     self._managerGame:destroyCache()
@@ -182,6 +184,7 @@ function ControllerCell.onInsideFirstTime(self)
     if self._entry:flowType() ~= EFlowType.EFT_NONE and not self._isInside then
         self._managerGame:destroyLine(self._entry)
     end
+
     
     self:onInside()
     self._isInsideFirstTime = true
@@ -191,6 +194,7 @@ end
 function ControllerCell.onInside(self)
     
     self._isInside = true
+    
     
     
 end
@@ -335,14 +339,30 @@ end
 
 function ControllerCell.tryBuildLine(self, lineCell, newCell)
     
+    if newCell:type() == ECellType.ECT_FLOW_POINT and newCell:flowType() ~= lineCell:flowType() then
+        return
+    end
+    
     if self._managerGame:currentCell() == lineCell then -- проверка на совпадение с текущей ячейкой 
         lineCell:setCellNext(newCell)
         
         self._managerGame:setCurrentLineFlowType(newCell)
         self._managerGame:setCurrentCell(newCell)
-        
+        --self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
     end
     
+end
+
+function ControllerCell.tryOutHouse(self, cellPrev)
+    if cellPrev:type() == ECellType.ECT_FLOW_POINT and not cellPrev:isStart() then
+                
+        cellPrev:controller():onInHouse(true)
+        local controllerDog = self._currentState:controllerGrid():dogByType(cellPrev:flowType())
+        controllerDog:view():setInHouse(true)
+        controllerDog:setCurrentCell(cellPrev)
+            
+                
+    end
 end
 
 

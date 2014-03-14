@@ -31,15 +31,12 @@ end
 
 function ManagerGame.setCurrentCell(self, cell)
     
-    self:tryInHouse(cell)
-    self._currentCell = cell
-    if cell ~= nil and not cell:isPurchased() then
-        
-        self._currentState:update(EControllerUpdate.ECUT_SET_CURRENT_CELL)
-        
-        
-    end
     
+    self._currentCell = cell
+    
+    if cell ~= nil and not cell:isPurchased() then
+        self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
+    end
 end
 
 
@@ -170,8 +167,6 @@ function ManagerGame.onPurchaseFlowType(self, flowType)
     local lineData = self._notPurchasedLines[flowType]
     
     assert(lineData ~= nil)
-    
-    local cellPurchasedPrev = nil
     
     for _, cell in ipairs(lineData)do
         
@@ -337,6 +332,8 @@ function ManagerGame.destroyLine(self, cellStart)
         
     end
     
+ 
+    
     while(cellCurrent ~= nil) do
         local cellNext = cellCurrent:cellNext()
         
@@ -344,20 +341,16 @@ function ManagerGame.destroyLine(self, cellStart)
         
         cellCurrent = cellNext
         
-        if cellCurrent ~= nil and cellCurrent:type() == ECellType.ECT_FLOW_POINT and not cellCurrent:isStart() then
-            
-            local controllerDog = self._currentState:controllerGrid():dogByType(cellCurrent:flowType())
-            controllerDog:view():setInHouse(false)
-            controllerDog._cell = nil
-            cellCurrent:controller():onInHouse(false)
-        end
     end
+    
+    self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
     
 end
 
 function ManagerGame.restoreLine(self, cellStart)
     local cellCurrent = cellStart
     local cellNext = cellCurrent
+    
     
     while(cellNext ~= nil)  do
         
@@ -374,9 +367,10 @@ function ManagerGame.restoreLine(self, cellStart)
     if cellCurrent ~= nil then
         
         self:setCurrentCellCache(cellCurrent)
+   
         
     end
-    
+    self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
 end
 
 function ManagerGame.cacheStates(self)
@@ -423,14 +417,6 @@ function ManagerGame.destroyCache(self)
             end
             
         end
-    end
-end
-
-function ManagerGame.tryInHouse(self, cell)
-    
-    if cell ~= nil and cell:type() == ECellType.ECT_FLOW_POINT and not cell:isStart() then
-        self._currentState:controllerGrid():dogByType(cell:flowType()):view():setInHouse(true)
-    
     end
 end
 

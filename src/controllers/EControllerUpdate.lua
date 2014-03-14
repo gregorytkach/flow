@@ -21,6 +21,7 @@ EControllerUpdate =
     ["ECUT_EDIT"]                       = "ECUT_EDIT";
     ["ECUT_SET_DOGS"]                   = "ECUT_SET_DOGS";
     
-    ["ECUT_CURRENT_DOG"]                = "ECUT_CURRENT_DOG";
+    ["ECUT_GRID"]                       = "ECUT_GRID";
+    
 }
 

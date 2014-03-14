@@ -14,6 +14,10 @@ ControllerGrid = classWithSuper(Controller, 'ControllerGrid')
 --Properties
 --
 
+function ControllerGrid.updateType(self)
+    return self._updateType
+end
+
 function ControllerGrid.dogByType(self, flowType)
     assert(flowType ~= nil)
     
@@ -159,7 +163,7 @@ function ControllerGrid.initControllersDogs(self, flowTypes)
     end
 end
 
-function ControllerGrid.update(self, type)
+function ControllerGrid.update(self, type, flowType)
     
     if(type == EControllerUpdateBase.ECUT_SCENE_ENTER)then
         
@@ -192,64 +196,123 @@ function ControllerGrid.update(self, type)
                     
                 elseif entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() and not entry:isPurchased() then
                     
-                    local sourceCell = cell:view():sourceView()
-                    
                     local controllerDog = self._dogsMap[entry:flowType()]
                     
-                    controllerDog:view():setDogPosition(sourceCell)
                     controllerDog:setCurrentCell(entry)
+                    
+                end
+            end
+        end
+    elseif(type == EControllerUpdate.ECUT_GRID)then
+        local currentCell = self._managerGame:currentCell()
+        
+        
+        for indexRow, row in ipairs(self._cells)do
+            for indexColumn, cell in ipairs(row)do
+                local entry = cell:entry()
+                
+                
+                local controllerDog = self._dogsMap[entry:flowType()]
+                
+                
+                if entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() and not entry:isPurchased() and entry:cellNext() == nil and controllerDog:currentCell():cellPrevCached() == entry  then
+                    controllerDog:setCurrentCell(entry)
+               
+                    
+                elseif (entry:type() == ECellType.ECT_EMPTY or entry:type() == ECellType.ECT_BRIDGE)  and entry:cellPrev() ~= nil and entry:cellNext() == nil   then
+                    
+                    controllerDog:setCurrentCell(entry)
+                
+  
+                
+                elseif entry:type() == ECellType.ECT_FLOW_POINT and (entry:cellPrev() ~= nil or entry == currentCell )then
+                    
+                    controllerDog:setCurrentCell(entry)
+                end
+                
+                if entry:type() == ECellType.ECT_BRIDGE and (currentCell == entry:flowAdditional() or (entry:flowAdditional():cellPrev() ~= nil and entry:flowAdditional():cellNext() == nil)) then
+                    
+                    controllerDog = self._dogsMap[entry:flowAdditional():flowType()]
+                    controllerDog:setCurrentCell(entry:flowAdditional()) 
                 end
             end
         end
         
-    elseif(type == EControllerUpdate.ECUT_SET_CURRENT_CELL)then
-        
-        local currentCell = self._managerGame:currentCell()
-        
-        local controllerDog = self._dogsMap[currentCell:flowType()]
-        
-        controllerDog:setCurrentCell(currentCell)
-        
-        local viewCell = currentCell:controller():view()
-        controllerDog:view():setDogPosition(viewCell:sourceView())
-        
-        if currentCell:type() == ECellType.ECT_FLOW_POINT and currentCell:isStart() and controllerDog._cell ~= nil then
-            
-            controllerDog._cell:controller():onInHouse(false)
-            controllerDog._cell = nil
-            
-            
-        end
-        
         self:sortDogs()
-    
         
-    elseif((type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN))  then
         
-        local controllerDog 
-        local currentCell = self._managerGame:currentCell()
+    elseif((type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN)) 
+        and flowType ~= nil and flowType ~= EFlowType.EFT_NONE
+        then
+        
+        
+        local controllerDog = nil
+        local currentCell          = self._managerGame:currentCell()
+        local currentDogByFlowType = self._dogsMap[flowType]
+        local currentCellByDog     = currentDogByFlowType:currentCell()
+        
+        local currentUpdateType = self._updateType
+        self._updateType        = type
         
         if (type ==  EControllerUpdate.ECUT_DOG_UP) then
-           
-            controllerDog = self._dogsMap[self._managerGame:currentLineFlowType()]
-            self._currentDog = controllerDog
             
-            if currentCell ~= nil and currentCell:type() == ECellType.ECT_FLOW_POINT and not currentCell:isStart() then
-                currentCell:controller():onInHouse(false)
-                self._currentDog._cell = currentCell
+            local currentLineFlowType = self._managerGame:currentLineFlowType()
+            
+            if flowType == currentLineFlowType or currentLineFlowType == EFlowType.EFT_NONE or currentLineFlowType == nil then
+                controllerDog = self._dogsMap[flowType]
+                self._currentDog = controllerDog
+            end
+            
+            
+            if currentCellByDog ~= nil and currentCellByDog:type() == ECellType.ECT_FLOW_POINT and not currentCellByDog:isStart() then
+                currentDogByFlowType:view():setInHouse(false)
+                currentCellByDog:controller():onInHouse(false)
+                currentDogByFlowType._cell = nil
+                
             end
             
         else
             
-            controllerDog = self._currentDog
+            local currentLineFlowType = self._managerGame:currentLineFlowType()
+            
+            if flowType == currentLineFlowType or currentLineFlowType == EFlowType.EFT_NONE or currentLineFlowType == nil then
+                controllerDog = self._currentDog
+            end
                 
-            if currentCell ~= nil and currentCell:type() == ECellType.ECT_FLOW_POINT and not currentCell:isStart() then
-                currentCell:controller():onInHouse(true)
-            elseif controllerDog ~= nil then
-                controllerDog:view():setInHouse(false)
-                controllerDog._cell = nil
+            if currentCellByDog ~= nil and currentCellByDog:type() == ECellType.ECT_FLOW_POINT and not currentCellByDog:isStart() then
+                
+                currentDogByFlowType:view():setInHouse(true)
+                currentCellByDog:controller():onInHouse(true)
+                
+                currentDogByFlowType._cell = currentCellByDog
+                
+            else
+                
+                currentDogByFlowType:view():setInHouse(false)
+                
+                if  currentDogByFlowType._cell ~= nil then
+                     currentDogByFlowType._cell:controller():onInHouse(false)
+                     currentDogByFlowType._cell = nil
+                end
+                
             end
           
+        end
+        
+        if type ~= currentUpdateType then
+            currentDogByFlowType:update(type)
+        end
+        
+    elseif (type ==  EControllerUpdate.ECUT_DOG_DOWN) then
+        local controllerDog = self._currentDog
+        
+        local currentCellByDog = self._currentDog:currentCell()
+        if currentCellByDog ~= nil and currentCellByDog:type() == ECellType.ECT_FLOW_POINT and not currentCellByDog:isStart() then
+                
+                controllerDog:view():setInHouse(true)
+                currentCellByDog:controller():onInHouse(true)
+                
+                controllerDog._cell = currentCellByDog
         end
         
         if controllerDog ~= nil and type ~= self._updateType then
@@ -258,7 +321,9 @@ function ControllerGrid.update(self, type)
         end
         
     else
+        
         assert(false)
+        
     end
     
 end

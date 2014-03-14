@@ -26,13 +26,17 @@ function ControllerCellEmpty.onTrySelect(self, target)
         self._managerGame:destroyLine(self._entry)
     end
     
-    
-    if(target:cellPrev() ~= nil)then
+    local cellPrev = target:cellPrev()
+    if(cellPrev ~= nil)then
         
         if(target:flowType() == self._entry:flowType())then
             self._managerGame:destroyLine(target)
         else
-            self._managerGame:destroyLine(target:cellPrev())
+            
+            
+            self._managerGame:destroyLine(cellPrev)
+            
+            self:tryOutHouse(cellPrev)
             
             self:tryBuildLine(self._entry, target)
         end
