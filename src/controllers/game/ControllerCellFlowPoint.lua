@@ -13,9 +13,9 @@ function ControllerCellFlowPoint.onInHouse(self, value)
         return
     end
     
-    local houseFull = self._view:houseFull()
-    local house     = self._view:house()
-    local timeInterval = application.animation_duration * 4
+    local houseFull    = self._view:houseFull()
+    local house        = self._view:house()
+    local timeInterval = Constants.DOG_MOVED_TIME
     
     if value then
         
@@ -24,7 +24,7 @@ function ControllerCellFlowPoint.onInHouse(self, value)
             self._houseScale      = houseFull.yScale
             
             
-            if self._currentState:controllerGrid():updateType() ~= EControllerUpdate.ECUT_DOG_DOWN then
+            if self._currentState:controllerGrid():updateType() ~= EControllerUpdate.ECUT_DOG_DOWN or self._entry:isPurchased() then
                 timeInterval = 1
             end
             

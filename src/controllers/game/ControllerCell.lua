@@ -348,7 +348,7 @@ function ControllerCell.tryBuildLine(self, lineCell, newCell)
         
         self._managerGame:setCurrentLineFlowType(newCell)
         self._managerGame:setCurrentCell(newCell)
-        --self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
+        
     end
     
 end

@@ -103,7 +103,7 @@ function ControllerDog.transitionDog(self, type)
     local tweenParams =
     {
         y           = yTarget,
-        time        = application.animation_duration * 4 ,
+        time        = Constants.DOG_MOVED_TIME ,
         onComplete  = onComplete,
     }
     
