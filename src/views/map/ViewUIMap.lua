@@ -72,10 +72,11 @@ function ViewUIMap.init(self, params)
     
     ViewBase.init(self, params)
     
-    self._sourceView = display.newGroup()
+    self._sourceView        = display.newGroup()
     
     local managerResources = GameInfo:instance():managerResources()
     local managerString    = GameInfo:instance():managerString()
+    
     self._viewGrass = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_MAP_VIEW_GRASS))
     
     self._buttonSound           = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_MAP_BUTTON_SOUND))
@@ -84,6 +85,7 @@ function ViewUIMap.init(self, params)
     self._buttonBonus           = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_MAP_BUTTON_BONUS))
     
     self._viewTimeBonus         = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_MAP_VIEW_TIME_BONUS))
+    
     self._labelTimeBonus        = self:createLabel("0", EFontType.EFT_0)
     
     self._labelTimeBonus:sourceView().xScale = self._labelTimeBonus:sourceView().xScale * 0.5
@@ -121,9 +123,69 @@ function ViewUIMap.placeViews(self)
     self._viewGrass:sourceView().x = display.contentCenterX
     self._viewGrass:sourceView().y = application.margin_bottom -  self._viewGrass:realHeight() / 2
     
+    self:placeBottomButtons()
+    
+    self._viewCurrency:sourceView().x = application.margin_left + self._viewCurrency:realWidth() / 2 + 10
+    self._viewCurrency:sourceView().y = application.margin_top +  self._viewCurrency:realHeight() / 2 + 0
+    
+    self._buttonBuyCurrency:sourceView().x = self._viewCurrency:sourceView().x + self._viewCurrency:realWidth() / 2 - self._buttonBuyCurrency:realWidth() / 2 - 5
+    self._buttonBuyCurrency:sourceView().y = self._viewCurrency:sourceView().y
+    
+    self._labelCurrencySoft:sourceView().x = self._buttonBuyCurrency:sourceView().x - self._buttonBuyCurrency:realWidth() / 2 - 5
+    self._labelCurrencySoft:sourceView().y = self._buttonBuyCurrency:sourceView().y
+    
+    self._viewEnergy:sourceView().x = application.margin_right - self._viewCurrency:realWidth() / 2 - 10
+    self._viewEnergy:sourceView().y = application.margin_top +  self._viewCurrency:realHeight() / 2 + 4
+    
+    self._buttonBuyEnergy:sourceView().x = self._viewEnergy:sourceView().x + self._viewEnergy:realWidth() / 2 - self._buttonBuyEnergy:realWidth() / 2 - 5
+    self._buttonBuyEnergy:sourceView().y = self._viewEnergy:sourceView().y - 5
+    
+    self._labelEnergy:sourceView().x = self._buttonBuyEnergy:sourceView().x - self._buttonBuyEnergy:realWidth() / 2 - 5
+    self._labelEnergy:sourceView().y = self._buttonBuyEnergy:sourceView().y
+    
+    self._viewTimeEnergy:sourceView().x = self._buttonBuyEnergy:sourceView().x
+    self._viewTimeEnergy:sourceView().y = self._buttonBuyEnergy:sourceView().y + self._buttonBuyEnergy:realHeight() / 2 +  self._viewTimeEnergy:realHeight() / 2
+    
+    self._labelTimeEnergy:sourceView().x = self._viewTimeEnergy:sourceView().x
+    self._labelTimeEnergy:sourceView().y = self._viewTimeEnergy:sourceView().y
+    
+    
+    local borderLeft    = self._buttonSound:sourceView().x - self._buttonSound:realWidth() / 2
+    local borderRight   = self._buttonFreeCurrency:sourceView().x + self._buttonFreeCurrency:realWidth() / 2
+    
+    local borderRightMax = (application.content.width - display.screenOriginX) - 10 
+    
+    local widthMax      = (application.content.width - display.screenOriginX * 2) - 10
+    local widthCurrent  = borderRight - borderLeft
+    
+    if(borderRight > borderRightMax)then
+        local targetScale =  widthMax / widthCurrent 
+        
+--        targetScale = 0.8
+        
+        self:scaleItem(self._buttonSound, targetScale)
+        self:scaleItem(self._buttonSoundDisabled, targetScale)
+        self:scaleItem(self._buttonHelp, targetScale)
+        self:scaleItem(self._buttonBonus, targetScale)
+        self:scaleItem(self._viewTimeBonus, targetScale)
+        self:scaleItem(self._labelTimeBonus, targetScale)
+        self:scaleItem(self._buttonFreeCurrency, targetScale)
+        
+        self:placeBottomButtons()
+        
+    end
+end
+
+function ViewUIMap.scaleItem(self, item, value)
+    item:sourceView().xScale = item:sourceView().xScale * value
+    item:sourceView().yScale = item:sourceView().xScale
+end
+
+function ViewUIMap.placeBottomButtons(self)
     local buttonsOffsetY = application.margin_bottom - self._buttonSound:realHeight() / 2 - 5
     
-    self._buttonSound:sourceView().x = application.margin_left + self._buttonSound:realWidth() / 2 + 20
+--    local buttonSoundRealWidth = self._buttonSound:realWidth()
+    self._buttonSound:sourceView().x = application.margin_left + self._buttonSound:realWidth() / 2 + 5 / application.scaleFillWidth
     self._buttonSound:sourceView().y = buttonsOffsetY
     
     self._buttonSoundDisabled:sourceView().x = self._buttonSound:sourceView().x
@@ -143,31 +205,6 @@ function ViewUIMap.placeViews(self)
     
     self._buttonFreeCurrency:sourceView().x = self._buttonBonus:sourceView().x + self._buttonBonus:realWidth() / 2 + self._buttonFreeCurrency:realWidth() / 2 + 5
     self._buttonFreeCurrency:sourceView().y = self._buttonSound:sourceView().y
-    
-    self._viewCurrency:sourceView().x = application.margin_left + self._viewCurrency:realWidth() / 2 + 10
-    self._viewCurrency:sourceView().y = application.margin_top +  self._viewCurrency:realHeight() / 2 + 0
-    
-    self._buttonBuyCurrency:sourceView().x = self._viewCurrency:sourceView().x + self._viewCurrency:realWidth() / 2 - self._buttonBuyCurrency:realWidth() / 2 - 5
-    self._buttonBuyCurrency:sourceView().y = self._viewCurrency:sourceView().y
-    
-    self._labelCurrencySoft:sourceView().x = self._buttonBuyCurrency:sourceView().x - self._buttonBuyCurrency:realWidth() / 2 - 5
-    self._labelCurrencySoft:sourceView().y = self._buttonBuyCurrency:sourceView().y
-    
-    self._viewEnergy:sourceView().x = application.margin_right - self._viewCurrency:realWidth() / 2 - 10
-    self._viewEnergy:sourceView().y = application.margin_top +  self._viewCurrency:realHeight() / 2 + 4
-    
-    self._buttonBuyEnergy:sourceView().x = self._viewEnergy:sourceView().x + self._viewEnergy:realWidth() / 2 - self._buttonBuyEnergy:realWidth() / 2 - 5
-    self._buttonBuyEnergy:sourceView().y = self._viewEnergy:sourceView().y - 5
-    
-    
-    self._labelEnergy:sourceView().x = self._buttonBuyEnergy:sourceView().x - self._buttonBuyEnergy:realWidth() / 2 - 5
-    self._labelEnergy:sourceView().y = self._buttonBuyEnergy:sourceView().y
-    
-    self._viewTimeEnergy:sourceView().x = self._buttonBuyEnergy:sourceView().x
-    self._viewTimeEnergy:sourceView().y = self._buttonBuyEnergy:sourceView().y + self._buttonBuyEnergy:realHeight() / 2 +  self._viewTimeEnergy:realHeight() / 2
-    
-    self._labelTimeEnergy:sourceView().x = self._viewTimeEnergy:sourceView().x
-    self._labelTimeEnergy:sourceView().y = self._viewTimeEnergy:sourceView().y
 end
 
 function ViewUIMap.cleanup(self)

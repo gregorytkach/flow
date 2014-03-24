@@ -92,7 +92,7 @@ function ViewItems.placeViews(self)
         local viewCoords = viewsPositions[i]
         
         view:placeViews()
-        view:sourceView().x = viewCoords.x
+        view:sourceView().x = viewCoords.x  + application.margin_left
         view:sourceView().y = viewCoords.y
         
         view:hide(0)
