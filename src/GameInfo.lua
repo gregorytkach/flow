@@ -49,8 +49,7 @@ function GameInfo.onGameStartComplete(self, response)
         assert(data.bonus_energy    ~= nil)
         assert(data.levels          ~= nil)
         
-        local managerLevels = GameInfo:instance():managerLevels()
-        managerLevels:deserialize(data.levels)
+        self._managerLevels:deserialize(data.levels)
         
         --todo: implement server side deserialization in manager proxy
         self._managerString:setCurrentLanguage(ELanguageType.ELT_ENGLISH)
@@ -61,7 +60,7 @@ function GameInfo.onGameStartComplete(self, response)
         
         local paramsGame = 
         {
-            currentLevel = managerLevels:firstIncompleteLevel()
+            currentLevel = self._managerLevels:firstIncompleteLevel()
         }
         
         --        self:onGameStart(ManagerEditor:new(paramsGame))

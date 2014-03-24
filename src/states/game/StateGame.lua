@@ -68,6 +68,7 @@ end
 function StateGame.update(self, updateType)
     
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
+        
         self._controllerGrid:update(updateType)
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         
@@ -96,7 +97,7 @@ function StateGame.update(self, updateType)
         
     elseif(updateType == EControllerUpdate.ECUT_CURRENT_DOG) then
         
-       self._controllerGrid:update(updateType) 
+        self._controllerGrid:update(updateType) 
         
     elseif(updateType == EControllerUpdateBase.ECUT_GAME_FINISHED)then
         
@@ -153,8 +154,9 @@ function StateGame.placeViews(self)
     
     self._controllerUI:view():placeViews()
     
-    --todo: remove
-    --        self:showPopup(EPopupType.EPT_NO_CURRENCY)
+    local popupWidthMax = (application.content.width - display.screenOriginX * 2) - 10
+    
+    self:setMaxPopupWidth(popupWidthMax)
 end
 
 function StateGame.cleanup(self)
