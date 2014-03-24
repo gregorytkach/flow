@@ -52,7 +52,7 @@ function ManagerString.initLanguageEnglish(self)
     --win
     language[EStringType.EST_POPUP_WIN_TITLE]               = 'CONGRATULATIONS!'
     language[EStringType.EST_POPUP_WIN_BUTTON_CLOSE]        = 'OK'
-    language[EStringType.EST_POPUP_WIN_TEXT]                = 'YOU ARE %i LEVELS!'
+    language[EStringType.EST_POPUP_WIN_TEXT]                = 'YOU ARE %i| LEVELS!'
     language[EStringType.EST_POPUP_WIN_REWARD]              = 'REWARD:'
     
     
