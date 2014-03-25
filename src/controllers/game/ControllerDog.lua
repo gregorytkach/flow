@@ -27,6 +27,14 @@ function ControllerDog.setCurrentCell(self, value)
     
     self._currentCell = value
     
+    if self._currentCell:type() == ECellType.ECT_FLOW_POINT and not self._currentCell:isStart() and ((self._currentCell:cellNext() == nil and self._currentCell:cellNextCached() ~= nil) or (not self:view():inHouse() and self:view():currentAnimationType() == EDogAnimationType.EDAT_IDLE) ) then
+                
+        self._currentCell:controller():onInHouse(true)
+        
+        self:view():setInHouse(true)
+                
+    end
+    
     local viewCell = value:controller():view()
     self:view():setDogPosition(viewCell:sourceView())
     
@@ -152,6 +160,8 @@ function ControllerDog.tryCleanupTweenDogMoved(self)
     end
     
 end
+
+
 
 function ControllerDog.cleanup(self)
     

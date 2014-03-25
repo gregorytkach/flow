@@ -32,10 +32,13 @@ function ManagerRemoteFlow.update(self, type, data, callback)
             
             if(response:status() == EResponseType.ERT_OK)then
                 if(type == ERemoteUpdateTypeBase.ERUT_GAME_START)then
-                    --todo: check version and if version is different - remove local data and resave
+                    self._managerCache:update(type, response:response(), callback)
+                    
+                else
+                    self._managerCache:update(type, data, callback)
+                    
                 end
                 
-                self._managerCache:update(type, data, callback)
             else
                 callback(response)
             end

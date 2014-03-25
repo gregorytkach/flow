@@ -52,6 +52,8 @@ function ControllerCell.touch(self, event)
         
     elseif(event.phase == ETouchEvent.ETE_MOVED)  then
         
+        
+        
         if(self._view:isInsideEvent(event))then
             
             if not self._isInside then
@@ -67,19 +69,19 @@ function ControllerCell.touch(self, event)
             
             local entry = self._entry
             
-            if(event.x > self._view:x1())then
+            if(event.x > self._view:x1() )then
                 
                 target = entry:neighborRight()
                 
-            elseif( event.x < self._view:x0())then
+            elseif( event.x < self._view:x0() )then
                 
                 target = entry:neighborLeft() 
                 
-            elseif(event.y > self._view:y1())then
+            elseif(event.y > self._view:y1() )then
                 
                 target = entry:neighborDown() 
                 
-            elseif(event.y < self._view:y0())then
+            elseif(event.y < self._view:y0() )then
                 
                 target = entry:neighborUp()
                 
@@ -348,22 +350,22 @@ function ControllerCell.tryBuildLine(self, lineCell, newCell)
         
         self._managerGame:setCurrentLineFlowType(newCell)
         self._managerGame:setCurrentCell(newCell)
-        
+        self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
     end
     
 end
 
-function ControllerCell.tryOutHouse(self, cellPrev)
-    if cellPrev:type() == ECellType.ECT_FLOW_POINT and not cellPrev:isStart() then
-                
-        cellPrev:controller():onInHouse(true)
-        local controllerDog = self._currentState:controllerGrid():dogByType(cellPrev:flowType())
-        controllerDog:view():setInHouse(true)
-        controllerDog:setCurrentCell(cellPrev)
-            
-                
-    end
-end
+--function ControllerCell.tryOutHouse(self, cellPrev)
+--    if cellPrev:type() == ECellType.ECT_FLOW_POINT and not cellPrev:isStart() then
+--                
+--        cellPrev:controller():onInHouse(true)
+--        local controllerDog = self._currentState:controllerGrid():dogByType(cellPrev:flowType())
+--        controllerDog:view():setInHouse(true)
+--        controllerDog:setCurrentCell(cellPrev)
+--            
+--                
+--    end
+--end
 
 
 function ControllerCell.cleanup(self)

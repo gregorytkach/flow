@@ -210,10 +210,8 @@ function ControllerGrid.update(self, type, flowType)
         for indexRow, row in ipairs(self._cells)do
             for indexColumn, cell in ipairs(row)do
                 local entry = cell:entry()
-                
-                
+              
                 local controllerDog = self._dogsMap[entry:flowType()]
-                
                 
                 if entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() and not entry:isPurchased() and entry:cellNext() == nil and controllerDog:currentCell():cellPrevCached() == entry  then
                     controllerDog:setCurrentCell(entry)
@@ -223,9 +221,7 @@ function ControllerGrid.update(self, type, flowType)
                     
                     controllerDog:setCurrentCell(entry)
                 
-  
-                
-                elseif entry:type() == ECellType.ECT_FLOW_POINT and (entry:cellPrev() ~= nil or entry == currentCell )then
+                elseif entry:type() == ECellType.ECT_FLOW_POINT and (entry:cellPrev() ~= nil or (entry:cellNext() == nil and entry:cellNextCached() ~=  nil) or entry == currentCell )then
                     
                     controllerDog:setCurrentCell(entry)
                 end
@@ -306,7 +302,12 @@ function ControllerGrid.update(self, type, flowType)
     elseif (type ==  EControllerUpdate.ECUT_DOG_DOWN) then
         local controllerDog = self._currentDog
         
-        local currentCellByDog = self._currentDog:currentCell()
+        local currentCellByDog = nil
+        
+        if controllerDog ~= nil then  
+            currentCellByDog = self._currentDog:currentCell()
+        end
+        
         if currentCellByDog ~= nil and currentCellByDog:type() == ECellType.ECT_FLOW_POINT and not currentCellByDog:isStart() then
                 
                 controllerDog:view():setInHouse(true)

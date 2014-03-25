@@ -93,7 +93,7 @@ function ControllerCellBridge.onTrySelect(self, target)
             
             self._managerGame:destroyLine(cellPrev)
 
-            self:tryOutHouse(cellPrev)
+            --self:tryOutHouse(cellPrev)
             
             self:tryBuildLine(entry, target)
             

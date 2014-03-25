@@ -14,6 +14,12 @@ function StateGame.controllerGrid(self)
     return self._controllerGrid
 end
 
+function StateGame.scaleWidth(self)
+    
+    return self._scaleWidth
+    
+end
+
 --
 --Events
 --
@@ -160,20 +166,33 @@ end
 function StateGame.placeViews(self)
     StateBase.placeViews(self)
     
-    
+    local widthMax = (application.content.width - display.screenOriginX * 2) - 10
     
     self._background:sourceView().x = display.contentCenterX
     self._background:sourceView().y = display.contentCenterY
     
     self._controllerGrid:view():placeViews()
+    
+    
+    self._scaleWidth = 1
+    
+    if self._controllerGrid:view():realWidth() > widthMax then
+        self._scaleWidth = widthMax / self._controllerGrid:view():realWidth()
+        self._controllerGrid:view():sourceView().xScale = self._controllerGrid:view():sourceView().xScale * self._scaleWidth
+        self._controllerGrid:view():sourceView().yScale = self._controllerGrid:view():sourceView().xScale 
+    end
+    
     self._controllerGrid:view():sourceView().x = display.contentCenterX
     self._controllerGrid:view():sourceView().y = display.contentCenterY
+    
+    
     
     self._controllerUI:view():placeViews()
     
     local popupWidthMax = (application.content.width - display.screenOriginX * 2) - 10
     
     self:setMaxPopupWidth(popupWidthMax)
+    
 end
 
 function StateGame.cleanup(self)

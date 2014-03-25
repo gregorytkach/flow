@@ -34,9 +34,7 @@ function ManagerGame.setCurrentCell(self, cell)
     
     self._currentCell = cell
     
-    if cell ~= nil and not cell:isPurchased() then
-        self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
-    end
+
 end
 
 
@@ -249,6 +247,7 @@ function ManagerGame.tryValidate(self)
 end
 
 function ManagerGame.timerStart(self)
+    print('timer started')
     self._timerGame = timer.performWithDelay(application.animation_duration * 4, 
     function() 
         self:onTimerTick()
