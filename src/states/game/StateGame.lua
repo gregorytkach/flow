@@ -101,17 +101,33 @@ function StateGame.update(self, updateType)
         
     elseif(updateType == EControllerUpdateBase.ECUT_GAME_FINISHED)then
         
+        --need for prevent bug with timer
+        self._managerGame:timerStop()
+        
         self._blockerScene.alpha = 0.01
+        
+        local managerAd = GameInfo:instance():managerAd()
         
         timer.performWithDelay(application.animation_duration * 4 * 2, 
         function() 
             if(self._managerGame:isPlayerWin()) then
                 self:showPopup(EPopupType.EPT_WIN)
             else
-                self:showPopup(EPopupType.EPT_GAME_OVER)
+                
+                local callbackAd =
+                function()
+                    self:showPopup(EPopupType.EPT_GAME_OVER)
+                    
+                    managerAd:setCallbackAd(nil)
+                end
+                
+                managerAd:setCallbackAd(callbackAd)
+                
+                GameInfo:instance():managerAd():showAd()
+                
             end
+            
         end,1)
-        
     else
         assert(false, updateType)
     end
@@ -119,6 +135,7 @@ function StateGame.update(self, updateType)
 end
 
 function StateGame.showPopup(self, popupType, callback)
+    
     self._managerGame:timerStop()
     
     StateBase.showPopup(self, popupType, callback)

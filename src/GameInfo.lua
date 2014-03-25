@@ -115,6 +115,12 @@ function GameInfo.initManagers(self)
     self._managerPlayers        = ManagerPlayersBase:new(PlayerInfo)
     self._managerLevels         = ManagerLevelsBase:new(LevelInfo) 
     
+    local paramsAd = 
+    {
+    }
+    
+    self._managerAd             = ManagerAdBase:new(paramsAd)
+    
     GameInfoBase.initManagers(self)
 end
 
