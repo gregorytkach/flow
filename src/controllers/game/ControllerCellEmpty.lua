@@ -36,7 +36,7 @@ function ControllerCellEmpty.onTrySelect(self, target)
             
             self._managerGame:destroyLine(cellPrev)
             
-            self:tryOutHouse(cellPrev)
+            --self:tryOutHouse(cellPrev)
             
             self:tryBuildLine(self._entry, target)
         end

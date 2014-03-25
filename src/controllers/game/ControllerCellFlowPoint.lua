@@ -32,10 +32,12 @@ function ControllerCellFlowPoint.onInHouse(self, value)
             self._houseScale = 0.9 * self._houseScaleStart
             houseFull.isVisible = true
             house.isVisible = false
+            timeInterval = 2.5 * Constants.DOG_TIME_DOWN
         else
             self._houseScale = 1.1 * self._houseScaleStart
             houseFull.isVisible = true
             house.isVisible = false
+            timeInterval = 2.5 * Constants.DOG_TIME_DOWN
         end
     
         local tweenHouseParams =
@@ -132,7 +134,7 @@ function ControllerCellFlowPoint.onTrySelect(self, target)
         
         self._managerGame:destroyLine(cellPrev)
 
-        self:tryOutHouse(cellPrev)
+        --self:tryOutHouse(cellPrev)
         
     end
     

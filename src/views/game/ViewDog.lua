@@ -15,6 +15,12 @@ function ViewDog.setInHouse(self, value)
     
 end
 
+function ViewDog.currentAnimationType(self)
+     
+    return self._currentAnimationType
+    
+end
+
 function ViewDog.currentAnimation(self)
      
     return self._animations[self._currentAnimationType]

@@ -40,7 +40,7 @@ function ViewUI.setTime(self, value)
 end
 
 function ViewUI.labelTime(self)
-    return 
+    return self._labelTime
 end
 
 --
@@ -72,33 +72,62 @@ function ViewUI.placeViews(self)
     
     ViewBase.placeViews(self)
     
+    
+    
     local offsetX = 5
     local offsetY = 5
     
+    local widthMax = (application.content.width - display.screenOriginX * 2) - 10
+    
+    local scaleWidth = 1
+    
+    local realWidth = self._buttonHome:realWidth() + self._viewCurrency:realWidth() + self._buttonShop:realWidth() + self._viewTime:realWidth() + 25
+    
+    if realWidth > widthMax  then
+        scaleWidth =  widthMax / realWidth
+    end
+    
+    local function scaleView(object) 
+        assert(object ~= nil)
+        object:sourceView().xScale = object:sourceView().xScale * scaleWidth
+        object:sourceView().yScale = object:sourceView().xScale
+        
+    end
     
     
+    scaleView(self._buttonHome)
     self._buttonHome:sourceView().x =  application.margin_left + self._buttonHome:realWidth() / 2 + offsetX 
     self._buttonHome:sourceView().y =  application.margin_top + self._buttonHome:realHeight() / 2 + offsetY 
     
+    scaleView(self._buttonHelp)
     self._buttonHelp:sourceView().x = application.margin_right - self._buttonHelp:realHeight() / 2 - offsetX
     self._buttonHelp:sourceView().y = application.margin_top + self._buttonHome:realHeight() / 2 + offsetY
     
+    scaleView(self._viewCurrency)
     self._viewCurrency:sourceView().x = self._buttonHome:sourceView().x + self._buttonHome:realWidth() / 2 + self._viewCurrency:realWidth() / 2
     self._viewCurrency:sourceView().y = application.margin_top + self._viewCurrency:realHeight() / 2 + offsetY
     
+    scaleView(self._labelCurrencySoft)
     self._labelCurrencySoft:sourceView().x  = self._viewCurrency:sourceView().x + 5
     self._labelCurrencySoft:sourceView().y  = self._viewCurrency:sourceView().y
     
+    scaleView(self._buttonShop)
     self._buttonShop:sourceView().x = self._viewCurrency:sourceView().x + self._viewCurrency:realWidth() / 2 - self._buttonShop:realWidth() / 2 - 5
     self._buttonShop:sourceView().y = self._viewCurrency:sourceView().y 
     
-    self._viewTime:sourceView().x = application.margin_left + self._viewCurrency:sourceView().x + self._viewCurrency:realWidth() / 2 + self._viewTime:realWidth() / 2 + offsetX
+    scaleView(self._viewTime)
+    self._viewTime:sourceView().x = self._viewCurrency:sourceView().x + self._viewCurrency:realWidth() / 2 + self._viewTime:realWidth() / 2 + offsetX
     self._viewTime:sourceView().y = application.margin_top + self._viewTime:realHeight() / 2 + offsetY
     
+    scaleView(self._labelTime)
     self._labelTime:sourceView().x  = self._viewTime:sourceView().x + 15
     self._labelTime:sourceView().y  = self._viewTime:sourceView().y
     
+    
+    scaleWidth = GameInfo:instance():managerStates():currentState():scaleWidth()
     self._viewPurchases:placeViews()
+    scaleView(self._viewPurchases)
+    
     self._viewPurchases:sourceView().x = display.contentCenterX - self._viewPurchases:realWidth() / 2
     self._viewPurchases:sourceView().y = application.margin_bottom - self._viewPurchases:realHeight() * 0.45 
 end

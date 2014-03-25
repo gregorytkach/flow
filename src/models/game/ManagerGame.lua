@@ -34,9 +34,7 @@ function ManagerGame.setCurrentCell(self, cell)
     
     self._currentCell = cell
     
-    if cell ~= nil and not cell:isPurchased() then
-        self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
-    end
+
 end
 
 
