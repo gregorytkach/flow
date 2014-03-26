@@ -248,11 +248,15 @@ end
 
 function ManagerGame.timerStart(self)
     print('timer started')
+    
     self._timerGame = timer.performWithDelay(application.animation_duration * 4, 
     function() 
+        
         self:onTimerTick()
+        
     end, 
     self._timeLeft)
+    
 end
 
 function ManagerGame.timerStop(self)
