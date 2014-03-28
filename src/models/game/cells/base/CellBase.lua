@@ -64,10 +64,6 @@ function CellBase.setCellNext(self, value)
     
     if(self._cellNext ~= nil)then
         
-        if(self._cellNext._cellPrev ~= nil)then
-            print(1)
-        end
-        
         assert(self._cellNext._cellPrev == nil)
         
         self._cellNext._cellPrev = self
@@ -154,10 +150,6 @@ end
 --
 
 function CellBase.init(self, params)
-    if(params.flow_type == nil)then
-        print(1)
-    end
-    
     assert(params               ~= nil)
     assert(params.flow_type     ~= nil)
     assert(params.x             ~= nil)

@@ -186,7 +186,7 @@ function ControllerCell.onInsideFirstTime(self)
     if self._entry:flowType() ~= EFlowType.EFT_NONE and not self._isInside then
         self._managerGame:destroyLine(self._entry)
     end
-
+    
     
     self:onInside()
     self._isInsideFirstTime = true
@@ -351,6 +351,10 @@ function ControllerCell.tryBuildLine(self, lineCell, newCell)
         self._managerGame:setCurrentLineFlowType(newCell)
         self._managerGame:setCurrentCell(newCell)
         self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
+    end
+    
+    if(newCell:type() == ECellType.ECT_FLOW_POINT)then
+        self._managerGame:tryValidate()
     end
     
 end

@@ -50,7 +50,6 @@ function ControllerCellEmpty.onTrySelect(self, target)
                     self._managerGame:destroyLine(target)
                 else
                     self:tryBuildLine(self._entry, target)
-                    self._managerGame:tryValidate()
                 end
                 
             end

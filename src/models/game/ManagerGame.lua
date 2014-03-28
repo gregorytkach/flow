@@ -178,16 +178,6 @@ function ManagerGame.onPurchaseFlowType(self, flowType)
     self._currentState:update(EControllerUpdate.ECUT_SET_DOGS)
 end
 
-function ManagerGame.validate(self)
-    
-    local emptyCells    = {}
-    
-    
-    local bridgeCells   = {}
-    
-end
-
-
 --
 --Methods
 --

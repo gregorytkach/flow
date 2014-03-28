@@ -24,7 +24,7 @@ end
 function ManagerRemoteFlow.update(self, type, data, callback)
     
     --todo remove after debug
-    self._isConnectionEstablished = false
+    self._isConnectionEstablished = true
     
     if(self._isConnectionEstablished)then
         
@@ -40,7 +40,10 @@ function ManagerRemoteFlow.update(self, type, data, callback)
                 end
                 
             else
-                callback(response)
+                
+                self._managerCache:update(type, data, callback)
+                
+                --                callback(response)
             end
             
         end
