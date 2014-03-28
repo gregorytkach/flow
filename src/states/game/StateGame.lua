@@ -72,8 +72,12 @@ function StateGame.initLayerPopups(self)
 end
 
 function StateGame.update(self, updateType)
+    if(not self._sceneEntered and updateType ~= EControllerUpdateBase.ECUT_SCENE_ENTER)then
+        return
+    end
     
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
+        self._sceneEntered = true
         
         self._controllerGrid:update(updateType)
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then

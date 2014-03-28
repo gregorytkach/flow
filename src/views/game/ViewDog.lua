@@ -34,7 +34,7 @@ end
 function ViewDog.setDogPosition(self, sourceCell)
     
     self._sourceView.x = sourceCell.x
-    self._sourceView.y = sourceCell.y - 45
+    self._sourceView.y = sourceCell.y - 25
     
     
     if  (self._currentAnimationType == EDogAnimationType.EDAT_IDLE) then
