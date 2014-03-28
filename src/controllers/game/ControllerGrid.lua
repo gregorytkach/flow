@@ -226,24 +226,23 @@ function ControllerGrid.update(self, type, flowType)
         end
         
     elseif (type ==  EControllerUpdate.ECUT_DOG_DOWN) then
-        local controllerDog = self._currentDog
         
-        local currentCellByDog = nil
+        local currentCell = nil
         
-        if controllerDog ~= nil then  
-            currentCellByDog = self._currentDog:currentCell()
+        if self._currentDog ~= nil then  
+            currentCell = self._currentDog:currentCell()
         end
         
-        if currentCellByDog ~= nil and currentCellByDog:type() == ECellType.ECT_FLOW_POINT and not currentCellByDog:isStart() then
+        if currentCell ~= nil and currentCell:type() == ECellType.ECT_FLOW_POINT and not currentCell:isStart() then
                 
-                controllerDog:view():setInHouse(true)
-                currentCellByDog:controller():onInHouse(true)
+                self._currentDog:view():setInHouse(true)
+                currentCell:controller():onInHouse(true)
                 
-                controllerDog._cell = currentCellByDog
+                self._currentDog._cell = currentCell
         end
         
-        if controllerDog ~= nil and type ~= self._updateType then
-            controllerDog:update(type)
+        if self._currentDog ~= nil and type ~= self._updateType then
+            self._currentDog:update(type)
             self._updateType = type
         end
         

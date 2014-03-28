@@ -16,15 +16,19 @@ function ViewDog.setInHouse(self, value)
 end
 
 function ViewDog.currentAnimationType(self)
-     
+    
     return self._currentAnimationType
     
 end
 
 function ViewDog.currentAnimation(self)
-     
+    
     return self._animations[self._currentAnimationType]
     
+end
+
+function ViewDog.effect(self)
+    return self._effect
 end
 
 --
@@ -34,14 +38,14 @@ end
 function ViewDog.setDogPosition(self, sourceCell)
     
     self._sourceView.x = sourceCell.x
-    self._sourceView.y = sourceCell.y - 45
+    self._sourceView.y = sourceCell.y - 25
     
     
     if  (self._currentAnimationType == EDogAnimationType.EDAT_IDLE) then
         local animation = self._animations[self._currentAnimationType]
-
+        
         animation.isVisible = not self._inHouse
-
+        
     end
     
     
@@ -50,13 +54,11 @@ end
 function ViewDog.setCurrentAnimation(self, type)
     
     if(self._currentAnimationType == type)then
---        assert(false, 'Review this assert')
+        --        assert(false, 'Review this assert')
         return
     end
     
     self._currentAnimationType = type
-    
-    print(type)
     
     for animationType, animation in pairs(self._animations) do
         if (animationType == self._currentAnimationType)then
@@ -88,6 +90,8 @@ function ViewDog.init(self, params)
     
     local managerResources = GameInfo:instance():managerResources()
     
+    self._effect = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_GAME_DOG_SELECTION))
+    
     self._animations = {}
     
     local animationIdle =  managerResources:getAsAnimationWithParam(EResourceType.ERT_STATE_GAME_ANIMATION_DOG_IDLE, params.flow_type)
@@ -108,10 +112,54 @@ function ViewDog.init(self, params)
     self:setCurrentAnimation(EDogAnimationType.EDAT_IDLE)
     
     self._inHouse = false
+    
+    self:effectStart()
+end
+
+function ViewDog.effectStart(self)
+    assert(self._tweenEffect == nil, "Effect already started")
+    
+    local target = self._effect:sourceView()
+    
+    local animationCount = 1000000
+    
+    local angle = 360 * animationCount
+    
+    if(math.random(0, 1) == 1)then
+        angle = -angle
+    end
+    
+    local time = application.animation_duration * 10 * animationCount
+    
+    local paramsTween = 
+    {
+        time        = time,
+        rotation    = angle,
+        onComplete  =
+        function()
+            self._tweenEffect = nil
+            self:effectStart()
+        end
+    }
+    
+    transition.to(target, paramsTween)
+    
+end
+
+
+function ViewDog.effectStop(self)
+    if(self._tweenEffect == nil)then
+       return 
+    end
+    
+    transition.cancel(self._tweenEffect)
+    
+    self._tweenEffect = nil
 end
 
 
 function ViewDog.cleanup(self)
+    self:effectStop()
     
     self._animations[EDogAnimationType.EDAT_IDLE]:removeSelf()
     self._animations[EDogAnimationType.EDAT_UP]:removeSelf()

@@ -67,8 +67,8 @@ function GameInfo.onGameStartComplete(self, response)
                 self._managerStates:setState(EStateType.EST_EDITOR)
         --        
         
---        self:onGameStart(ManagerGame:new(paramsGame))
---        self._managerStates:setState(EStateType.EST_GAME)
+        self:onGameStart(ManagerGame:new(paramsGame))
+        self._managerStates:setState(EStateType.EST_GAME)
         
 --        self._managerStates:setState(EStateType.EST_MAP)
     end

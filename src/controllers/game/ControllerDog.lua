@@ -28,11 +28,11 @@ function ControllerDog.setCurrentCell(self, value)
     self._currentCell = value
     
     if self._currentCell:type() == ECellType.ECT_FLOW_POINT and not self._currentCell:isStart() and ((self._currentCell:cellNext() == nil and self._currentCell:cellNextCached() ~= nil) or (not self:view():inHouse() and self:view():currentAnimationType() == EDogAnimationType.EDAT_IDLE) ) then
-                
+        
         self._currentCell:controller():onInHouse(true)
         
         self:view():setInHouse(true)
-                
+        
     end
     
     local viewCell = value:controller():view()
@@ -88,7 +88,7 @@ function ControllerDog.transitionDog(self, type)
     local yTarget = 0
     local onComplete = nil
     
-    local offsetY = - 30
+    local offsetY = - 20
     local timeInterval
     
     if type == EDogAnimationType.EDAT_DOWN then
@@ -106,12 +106,12 @@ function ControllerDog.transitionDog(self, type)
         
         source.y = 0
         
-        yTarget = offsetY 
+        yTarget      = offsetY 
         timeInterval = Constants.DOG_TIME_UP
         
     end
     
-        
+    
     local tweenParams =
     {
         y           = yTarget,
@@ -124,8 +124,6 @@ function ControllerDog.transitionDog(self, type)
     end
     
     self._tweenDogMoved = transition.to(source, tweenParams) 
-
-    
 end
 
 function ControllerDog.update(self, type)
@@ -147,17 +145,17 @@ function ControllerDog.update(self, type)
     else
         assert(false)
     end
-        
+    
 end
 
 function ControllerDog.tryCleanupTweenDogMoved(self)
-   
-   print('cleanup tween dog')
-   
-    if self._tweenDogMoved ~= nil then
-        transition.cancel(self._tweenDogMoved)
-        self._tweenDogMoved = nil
+    
+    if self._tweenDogMoved == nil then
+        return
     end
+    
+    transition.cancel(self._tweenDogMoved)
+    self._tweenDogMoved = nil
     
 end
 

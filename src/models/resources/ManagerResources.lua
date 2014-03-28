@@ -54,12 +54,14 @@ function ManagerResources.init(self)
     self._resources[EResourceType.ERT_STATE_GAME_BUTTON_SHOW_TURN]  = '%sstate_game/ui/view_purchases/button_show_turn/%s%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_BUTTON_ADD_TIME]   = '%sstate_game/ui/view_purchases/button_add_time/%s%s.png'
     
+    self._resources[EResourceType.ERT_STATE_GAME_DOG_SELECTION]     = '%sstate_game/sfx/dog_selection%s.png'
+    
     --cells
     self._resources[EResourceType.ERT_STATE_GAME_CELL_START]        = '%sstate_game/dogs/%s/cell_start/cell_start%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_END]          = '%sstate_game/dogs/%s/cell_end/cell_end%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_END_FULL]     = '%sstate_game/dogs/%s/cell_end_full/cell_end_full%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_PATH]         = '%sstate_game/dogs/%s/cell_path/cell_path%s.png'
-   
+    
     self._resources[EResourceType.ERT_STATE_GAME_CELL_DEFAULT]      = '%sstate_game/cells/default/%s/cell_default%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_BARRIER]      = '%sstate_game/cells/barrier/cell_barrier%s.png'
     self._resources[EResourceType.ERT_STATE_GAME_CELL_BRIDGE]       = '%sstate_game/cells/bridge/cell_bridge%s.png'
