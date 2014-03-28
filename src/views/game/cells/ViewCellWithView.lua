@@ -1,3 +1,4 @@
+require('game_flow.src.views.game.ViewEffect')
 require('game_flow.src.views.game.cells.ViewCell')
 
 ViewCellWithView = classWithSuper(ViewCell, 'ViewCellWithView')
@@ -13,6 +14,11 @@ end
 function ViewCellWithView.house(self)
     return self._view:sourceView()
 end
+
+function ViewCellWithView.effect(self)
+    return self._effect
+end
+
 
 --
 --methods
@@ -35,6 +41,15 @@ function ViewCellWithView.init(self, params)
         else
             image = managerResources:getAsImageWithParam(EResourceType.ERT_STATE_GAME_CELL_END, entry:flowType())
         end
+        
+        local paramsEffect =
+        {
+            controller  = self._controller,
+            image       = managerResources:getAsImage(EResourceType.ERT_STATE_GAME_DOG_SELECTION)
+        }
+        
+        self._effect = ViewEffect:new(paramsEffect)
+        self._sourceView:insert(self._effect:sourceView())
         
     elseif(cellType == ECellType.ECT_BRIDGE)then
         image = managerResources:getAsImage(EResourceType.ERT_STATE_GAME_CELL_BRIDGE)
@@ -70,6 +85,11 @@ function ViewCellWithView.placeViews(self)
 end
 
 function ViewCellWithView.cleanup(self)
+    
+    if(self._effect ~= nil)then
+        self._effect:cleanup()
+        self._effect = nil
+    end
     
     self._view:cleanup()
     self._view = nil
