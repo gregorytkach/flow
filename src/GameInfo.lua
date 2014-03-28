@@ -63,8 +63,8 @@ function GameInfo.onGameStartComplete(self, response)
             currentLevel = self._managerLevels:firstIncompleteLevel()
         }
         
-                self:onGameStart(ManagerEditor:new(paramsGame))
-                self._managerStates:setState(EStateType.EST_EDITOR)
+--                self:onGameStart(ManagerEditor:new(paramsGame))
+--                self._managerStates:setState(EStateType.EST_EDITOR)
         --        
         
         self:onGameStart(ManagerGame:new(paramsGame))

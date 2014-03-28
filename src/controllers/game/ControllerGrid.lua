@@ -183,6 +183,14 @@ function ControllerGrid.update(self, type, flowType)
             if flowType == currentLineFlowType or currentLineFlowType == EFlowType.EFT_NONE or currentLineFlowType == nil then
                 controllerDog = self._dogsMap[flowType]
                 self._currentDog = controllerDog
+                
+                for _, _controllerDog in ipairs(self._dogsList)do
+                                        
+                    local isCurrentDog = _controllerDog == controllerDog
+                    controllerDog:view():setEffectEnabled(isCurrentDog)
+                    
+                end
+                
             end
             
             

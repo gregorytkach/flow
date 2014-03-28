@@ -13,7 +13,30 @@ function ViewDog.setInHouse(self, value)
     assert(value ~= nil)
     self._inHouse = value
     
+    self:setEffectEnabled(not value)
+    
+    
 end
+
+function ViewDog.setEffectEnabled(self, value)
+    assert(value ~= nil)
+    
+    
+    
+    self._isEffectEnabled = value
+    if value then
+        
+        self._effect:show()
+        
+    else
+        
+        self._effect:hide()
+        
+    end
+    
+end
+
+
 
 function ViewDog.currentAnimationType(self)
     
@@ -89,6 +112,7 @@ function ViewDog.init(self, params)
     self._sourceView = display.newGroup()
     
     local managerResources = GameInfo:instance():managerResources()
+    self._isEffectEnabled = false
     
     self._effect = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_GAME_DOG_SELECTION))
     
