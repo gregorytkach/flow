@@ -72,8 +72,6 @@ function ViewUI.placeViews(self)
     
     ViewBase.placeViews(self)
     
-    
-    
     local offsetX = 5
     local offsetY = 5
     

@@ -24,7 +24,7 @@ end
 function ManagerRemoteFlow.update(self, type, data, callback)
     
     --todo remove after debug
-    self._isConnectionEstablished = true
+    self._isConnectionEstablished = false
     
     if(self._isConnectionEstablished)then
         

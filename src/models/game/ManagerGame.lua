@@ -68,8 +68,7 @@ end
 --
 
 function ManagerGame.onGameEnd(self)
-    
-    
+    self._currentState:controllerGrid():update(EControllerUpdate.ECUT_DOG_DOWN)
     ManagerGameBase.onGameEnd(self)
 end
 
@@ -247,8 +246,10 @@ function ManagerGame.tryValidate(self)
 end
 
 function ManagerGame.timerStart(self)
+
     print('timer started')
     
+
     self._timerGame = timer.performWithDelay(application.animation_duration * 4, 
     function() 
         

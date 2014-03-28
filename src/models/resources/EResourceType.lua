@@ -91,9 +91,11 @@ EResourceType =
     --popup shop
     ["ERT_POPUP_SHOP_VIEW_ITEM"]                = "ERT_POPUP_SHOP_VIEW_ITEM";
     
-    --popup editor
+    --state editor
     
-    ["ERT_STATE_EDITOR_BUTTON_SHUFFLE"]         = "ERT_STATE_EDITOR_BUTTON_SHUFFLE";
+    ["ERT_STATE_EDITOR_BUTTON_SHUFFLE"]    = "ERT_STATE_EDITOR_BUTTON_SHUFFLE";
+    ["ERT_STATE_EDITOR_BUTTON_ADD"]        = "ERT_STATE_EDITOR_BUTTON_ADD";
+    ["ERT_STATE_EDITOR_BUTTON_REMOVE"]     = "ERT_STATE_EDITOR_BUTTON_REMOVE";
     
 }
 

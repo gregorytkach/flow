@@ -6,12 +6,86 @@ ManagerEditor = classWithSuper(ManagerGame, 'ManagerEditor')
 -- properties
 -- 
 
-function ManagerEditor.grid(self)
+function ManagerEditor.gridCreator(self)
     
-    return self._grid
+    return self._gridCreator
     
 end
 
+function ManagerEditor.grid(self)
+    
+    return self._gridEditor
+    
+end
+
+--
+-- events
+--
+
+function ManagerEditor.onAddFlow(self, value)
+        
+    assert(value ~= nil)
+    
+    local result = false
+    
+    local flowCountNew = self._gridCreator:flowCount() + value
+    
+    if flowCountNew <= tonumber(EFlowType.EFT_COUNT) and flowCountNew > 0  then
+        self._gridCreator:addFlow(value)
+        result = true
+        
+    end
+    
+    return result
+end
+
+function ManagerEditor.onAddSize(self, value)
+        
+    assert(value ~= nil)
+    
+    local result = false
+    
+    local rowsCountNew = self._gridCreator:rowsCount() + value
+    
+    if rowsCountNew <= Constants.MAX_GRID_SIZE and rowsCountNew >= Constants.MIN_GRID_SIZE then
+        self._gridCreator:addSize(value)
+        result = true
+    end
+    
+    return result
+end
+
+function ManagerEditor.onAddBridge(self, value)
+        
+    assert(value ~= nil)
+    
+    local result = false
+    
+    local bridgesCountNew = self._gridCreator:bridgesCount() + value
+    
+    if bridgesCountNew <= Constants.MAX_COUNT_BRIDGES and bridgesCountNew >= 0 then
+        self._gridCreator:addBridge(value)
+        result = true
+    end
+    
+    return result
+end
+
+function ManagerEditor.onAddBarrier(self, value)
+        
+    assert(value ~= nil)
+    
+    local result = false
+    
+    local barriersCountNew = self._gridCreator:bridgesCount() + value
+    
+    if barriersCountNew <= Constants.MAX_COUNT_BARRIERS and barriersCountNew >= 0 then
+        self._gridCreator:addBarrier(value)
+        result = true
+    end
+    
+    return result
+end
 --
 -- methods
 --
@@ -32,16 +106,25 @@ function ManagerEditor.init(self, params)
         rows            = 5,
         columns         = 5,
         bridgesCount    = 2,
-        barriersCount   = 3
-        
+        barriersCount   = 3,
+        flowCount       = 2,
     }
     
     self._gridCreator = GridCreator:new(paramsCreator)
     
+    self:createGrid()
     
+    
+
+    ManagerGame.init(self, params)
+    
+end
+
+
+function ManagerEditor.createGrid(self)
     local gridData = self._gridCreator:gridData()
     
-    self._grid = {}
+    self._gridEditor = {}
     
     for rowIndex, rowData in ipairs(gridData)do
         
@@ -57,20 +140,15 @@ function ManagerEditor.init(self, params)
                 
                 cell._flowAdditional = FactoryCells.getCell(cellData.flowAdditional)
                 
-                
             end
             
             table.insert(row, cell)
             
         end
         
-        table.insert(self._grid, row)
+        table.insert(self._gridEditor, row)
         
     end
-    
-
-    ManagerGame.init(self, params)
-    
 end
 
 function ManagerEditor.registerCurrentState(self, currentState)

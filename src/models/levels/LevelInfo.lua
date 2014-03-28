@@ -116,7 +116,7 @@ function LevelInfo.deserialize(self, data)
     assert(data.data_lines ~= nil)
     assert(data.time_left ~= nil)
     
-    self._timeLeft  = data.time_left
+    self._timeLeft  = tonumber(data.time_left)
     self._dataGrid  = data.data_grid 
     self._dataLines = data.data_lines
     

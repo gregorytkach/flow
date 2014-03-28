@@ -166,14 +166,14 @@ end
 function StateGame.placeViews(self)
     StateBase.placeViews(self)
     
-    local widthMax = (application.content.width - display.screenOriginX * 2) - 10
+    
     
     self._background:sourceView().x = display.contentCenterX
     self._background:sourceView().y = display.contentCenterY
     
     self._controllerGrid:view():placeViews()
     
-    
+    local widthMax = (application.content.width - display.screenOriginX * 2) - 10
     self._scaleWidth = 1
     
     if self._controllerGrid:view():realWidth() > widthMax then

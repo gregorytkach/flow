@@ -31,87 +31,16 @@ end
 
 function ControllerGrid.init(self)
     
-    local paramsView =
-    {
-        controller = self
-    }
     
-    local paramsController =
-    {
-        view = ViewGrid:new(paramsView)
-    }
     
-    Controller.init(self, paramsController)
     
-    self._cells = {}
     
     self._dogsMap       = {}
     self._dogsList      = {}
     
     self._managerGame = GameInfo:instance():managerGame() 
     
-    local gridCells = self._managerGame:grid()
-    
-    local gridCellsViews = {}
-    
-    local isPair = true
-    
-    for indexRow, row in ipairs(gridCells)do
-        
-        local controllersRow    = {}
-        local viewsRow          = {}
-        
-        for indexColumn, cell in ipairs(row)do
-            
-            if indexColumn > 1 then
-                isPair = not isPair
-            elseif (indexRow / 2) == math.floor(indexRow / 2) then
-                isPair = false
-            else
-                isPair = true
-            end
-            
-            local paramsController =
-            {
-                entry  = cell,
-                isPair = isPair
-            }
-            
-            local controllerCell 
-            
-            if(cell:type() == ECellType.ECT_EMPTY)then
-                
-                controllerCell = ControllerCellEmpty:new(paramsController)
-                
-            elseif(cell:type() == ECellType.ECT_FLOW_POINT)then
-                
-                controllerCell = ControllerCellFlowPoint:new(paramsController)
-                
-            elseif(cell:type() == ECellType.ECT_BARRIER)then
-                
-                controllerCell = ControllerCellBarrier:new(paramsController)
-                
-            elseif(cell:type() == ECellType.ECT_BRIDGE)then
-                
-                controllerCell = ControllerCellBridge:new(paramsController)
-                
-            else
-                
-                assert(false)
-                
-            end
-            
-            table.insert(controllersRow, controllerCell)
-            table.insert(viewsRow, controllerCell:view())
-            
-        end
-        
-        table.insert(self._cells, controllersRow)
-        table.insert(gridCellsViews, viewsRow)
-        
-    end
-    
-    self:view():setCellsViews(gridCellsViews)
+    self:createCells()
     
     local flowTypes = {}
     for i, row in ipairs(self._cells)do
@@ -133,12 +62,9 @@ function ControllerGrid.init(self)
         end
     end
     
-    
     self:initControllersDogs(flowTypes)
     
-    local firstCellView = gridCellsViews[1][1] 
     
-    self._offsetYDog = -0.3 * firstCellView:realHeight()
 end
 
 function ControllerGrid.initControllersDogs(self, flowTypes)
@@ -356,14 +282,92 @@ function ControllerGrid.sortDogs(self)
     
 end
 
-function ControllerGrid.cleanup(self)
+function ControllerGrid.createCells(self)
     
-    for _, controllerDog in ipairs(self._dogsList)do
-        controllerDog:cleanup()
+    local paramsView =
+    {
+        controller = self
+    }
+    
+    local paramsController =
+    {
+        view = ViewGrid:new(paramsView)
+    }
+    
+    Controller.init(self, paramsController)
+    
+    self._cells = {}
+    
+    local gridCells = self._managerGame:grid()
+    
+    local gridCellsViews = {}
+    
+    local isPair = true
+    
+    for indexRow, row in ipairs(gridCells)do
+        
+        local controllersRow    = {}
+        local viewsRow          = {}
+        
+        for indexColumn, cell in ipairs(row)do
+            
+            if indexColumn > 1 then
+                isPair = not isPair
+            elseif (indexRow / 2) == math.floor(indexRow / 2) then
+                isPair = false
+            else
+                isPair = true
+            end
+            
+            local paramsController =
+            {
+                entry  = cell,
+                isPair = isPair
+            }
+            
+            local controllerCell 
+            
+            if(cell:type() == ECellType.ECT_EMPTY)then
+                
+                controllerCell = ControllerCellEmpty:new(paramsController)
+                
+            elseif(cell:type() == ECellType.ECT_FLOW_POINT)then
+                
+                controllerCell = ControllerCellFlowPoint:new(paramsController)
+                
+            elseif(cell:type() == ECellType.ECT_BARRIER)then
+                
+                controllerCell = ControllerCellBarrier:new(paramsController)
+                
+            elseif(cell:type() == ECellType.ECT_BRIDGE)then
+                
+                controllerCell = ControllerCellBridge:new(paramsController)
+                
+            else
+                
+                assert(false)
+                
+            end
+            
+            table.insert(controllersRow, controllerCell)
+            table.insert(viewsRow, controllerCell:view())
+            
+        end
+        
+        table.insert(self._cells, controllersRow)
+        table.insert(gridCellsViews, viewsRow)
+        
     end
     
-    self._currentDog = nil
+    self:view():setCellsViews(gridCellsViews)
     
+    local firstCellView = gridCellsViews[1][1] 
+    
+    self._offsetYDog = -0.3 * firstCellView:realHeight()
+    
+end
+
+function ControllerGrid.removeCells(self)
     for indexRow, row in ipairs(self._cells)do
         for indexColumn, controllerCell in ipairs(row)do
             controllerCell:cleanup()
@@ -374,6 +378,17 @@ function ControllerGrid.cleanup(self)
     
     self._view:cleanup()
     self._view = nil
+end
+
+function ControllerGrid.cleanup(self)
+    
+    for _, controllerDog in ipairs(self._dogsList)do
+        controllerDog:cleanup()
+    end
+    
+    self._currentDog = nil
+    
+    self:removeCells()
     
     self._managerGame = nil
     

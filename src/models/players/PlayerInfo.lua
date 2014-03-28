@@ -86,7 +86,7 @@ end
 function PlayerInfo.serialize(self)
     local result = PlayerInfoBase.serialize(self)
     
-    result.free_purchase_count_add_time     = self._freePurchaseAddTime 
+    result.free_purchase_count_add_time     = self._freePurchaseAddTime
     result.free_purchase_count_resolve      = self._freePurchaseResolve
     result.free_purchase_count_show_turn    = self._freePurchaseShowTurn
     
@@ -101,8 +101,8 @@ function PlayerInfo.deserialize(self, data)
     assert(data.free_purchase_count_resolve     ~= nil)
     assert(data.free_purchase_count_show_turn   ~= nil)
     
-    self._freePurchaseAddTime   = data.free_purchase_count_add_time
-    self._freePurchaseResolve   = data.free_purchase_count_resolve
-    self._freePurchaseShowTurn  = data.free_purchase_count_show_turn
+    self._freePurchaseAddTime   = tonumber(data.free_purchase_count_add_time)
+    self._freePurchaseResolve   = tonumber(data.free_purchase_count_resolve)
+    self._freePurchaseShowTurn  = tonumber(data.free_purchase_count_show_turn)
     
 end

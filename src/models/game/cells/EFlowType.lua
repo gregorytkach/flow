@@ -5,6 +5,8 @@ EFlowType =
     ["EFT_1"]     = "1";
     ["EFT_2"]     = "2";
     ["EFT_3"]     = "3";
+    ["EFT_4"]     = "4";
     
-    ["EFT_COUNT"] = "4";
+    
+    ["EFT_COUNT"] = "5";
 }

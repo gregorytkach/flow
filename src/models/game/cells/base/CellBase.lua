@@ -139,7 +139,8 @@ end
 
 function CellBase.setController(self, value)
     assert(value            ~= nil)
-    assert(self._controller == nil)
+    --todo: review
+    --assert(self._controller == nil)
     
     self._controller = value
     

@@ -88,8 +88,9 @@ function ManagerResources.init(self)
     
     --editor
     
-    self._resources[EResourceType.ERT_STATE_EDITOR_BUTTON_SHUFFLE]  = '%scommon/button_blue_0/%s%s.png'
-    
+    self._resources[EResourceType.ERT_STATE_EDITOR_BUTTON_SHUFFLE] = '%scommon/button_blue_0/%s%s.png'
+    self._resources[EResourceType.ERT_STATE_EDITOR_BUTTON_ADD]     = '%scommon/button_shop/%s%s.png'
+    self._resources[EResourceType.ERT_STATE_EDITOR_BUTTON_REMOVE]  = '%scommon/button_blue_1/%s%s.png'
     
 end
 
