@@ -1,3 +1,5 @@
+require('game_flow.src.views.game.ViewEffect')
+
 ViewDog = classWithSuper(ViewBase, 'ViewDog')
 
 --
@@ -90,7 +92,14 @@ function ViewDog.init(self, params)
     
     local managerResources = GameInfo:instance():managerResources()
     
-    self._effect = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_GAME_DOG_SELECTION))
+    local effectParams = 
+    {
+        image       = managerResources:getAsImage(EResourceType.ERT_STATE_GAME_DOG_SELECTION),
+        controller  = self._controller
+    }
+    self._effect = ViewEffect:new(effectParams)
+    
+    self._sourceView:insert(self._effect:sourceView())
     
     self._animations = {}
     
@@ -112,60 +121,21 @@ function ViewDog.init(self, params)
     self:setCurrentAnimation(EDogAnimationType.EDAT_IDLE)
     
     self._inHouse = false
-    
-    self:effectStart()
 end
 
-function ViewDog.effectStart(self)
-    assert(self._tweenEffect == nil, "Effect already started")
-    
-    local target = self._effect:sourceView()
-    
-    local animationCount = 1000000
-    
-    local angle = 360 * animationCount
-    
-    if(math.random(0, 1) == 1)then
-        angle = -angle
-    end
-    
-    local time = application.animation_duration * 10 * animationCount
-    
-    local paramsTween = 
-    {
-        time        = time,
-        rotation    = angle,
-        onComplete  =
-        function()
-            self._tweenEffect = nil
-            self:effectStart()
-        end
-    }
-    
-    transition.to(target, paramsTween)
-    
-end
-
-
-function ViewDog.effectStop(self)
-    if(self._tweenEffect == nil)then
-       return 
-    end
-    
-    transition.cancel(self._tweenEffect)
-    
-    self._tweenEffect = nil
-end
 
 
 function ViewDog.cleanup(self)
-    self:effectStop()
+    
     
     self._animations[EDogAnimationType.EDAT_IDLE]:removeSelf()
     self._animations[EDogAnimationType.EDAT_UP]:removeSelf()
     self._animations[EDogAnimationType.EDAT_DOWN]:removeSelf()
     
     self._animations = nil
+    
+    self._effect:cleanup()
+    self._effect = nil
     
     self._sourceView:removeSelf()
     self._sourceView = nil
