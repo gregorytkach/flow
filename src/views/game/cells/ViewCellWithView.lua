@@ -59,8 +59,8 @@ function ViewCellWithView.placeViews(self)
     local entry = self._controller:entry()
     
     if( entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart())then
-        self._view:sourceView().x =  -self._view:realWidth()  / 2 + self:realWidth()   / 2
-        self._view:sourceView().y =  -self._view:realHeight() / 2 + self:realHeight()  / 2 
+        self._view:sourceView().x =   self._view:realWidth()  / 2 - self:realWidth()   / 2
+        self._view:sourceView().y =   self._view:realHeight() / 2 - self:realHeight()  / 2
     elseif( entry:type() == ECellType.ECT_FLOW_POINT and not entry:isStart())then
         self._viewFull:sourceView().anchorY = 1
         self._viewFull:sourceView().y = self._view:realHeight() / 2
