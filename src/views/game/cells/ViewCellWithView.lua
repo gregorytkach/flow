@@ -50,6 +50,7 @@ function ViewCellWithView.init(self, params)
         
         self._effect = ViewEffect:new(paramsEffect)
         self._sourceView:insert(self._effect:sourceView())
+        self._effect:sourceView().isVisible = false
         
     elseif(cellType == ECellType.ECT_BRIDGE)then
         image = managerResources:getAsImage(EResourceType.ERT_STATE_GAME_CELL_BRIDGE)

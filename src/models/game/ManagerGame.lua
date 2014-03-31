@@ -34,7 +34,8 @@ function ManagerGame.setCurrentCell(self, cell)
     
     self._currentCell = cell
     
-
+    --self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
+    
 end
 
 
@@ -51,6 +52,7 @@ function ManagerGame.setCurrentLineFlowType(self, value)
     if value ~= EFlowType.EFT_NONE and value ~= nil   then
         
         self._currentLineFlowType = value:flowType()
+        
        
     elseif (value == EFlowType.EFT_NONE or value == nil)  then
         
@@ -68,7 +70,7 @@ end
 --
 
 function ManagerGame.onGameEnd(self)
-    self._currentState:controllerGrid():update(EControllerUpdate.ECUT_DOG_DOWN)
+    
     ManagerGameBase.onGameEnd(self)
 end
 
@@ -326,7 +328,7 @@ function ManagerGame.destroyLine(self, cellStart)
         
     end
     
- 
+   
     
     while(cellCurrent ~= nil) do
         local cellNext = cellCurrent:cellNext()

@@ -15,28 +15,8 @@ function ViewDog.setInHouse(self, value)
     assert(value ~= nil)
     self._inHouse = value
     
-    self:setEffectEnabled(not value)
-    
-    
 end
 
-function ViewDog.setEffectEnabled(self, value)
-    assert(value ~= nil)
-    
-    
-    
-    self._isEffectEnabled = value
-    if value then
-        
-        self._effect:show()
-        
-    else
-        
-        self._effect:hide()
-        
-    end
-    
-end
 
 
 
@@ -65,14 +45,12 @@ function ViewDog.setDogPosition(self, sourceCell)
     self._sourceView.x = sourceCell.x
     self._sourceView.y = sourceCell.y - 25
     
-    
     if  (self._currentAnimationType == EDogAnimationType.EDAT_IDLE) then
         local animation = self._animations[self._currentAnimationType]
-        
+
         animation.isVisible = not self._inHouse
-        
+
     end
-    
     
 end
 
@@ -122,6 +100,8 @@ function ViewDog.init(self, params)
         controller  = self._controller
     }
     self._effect = ViewEffect:new(effectParams)
+
+    self._effect:sourceView().isVisible = false
     
     self._sourceView:insert(self._effect:sourceView())
     

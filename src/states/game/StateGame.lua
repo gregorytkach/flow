@@ -138,6 +138,8 @@ function StateGame.update(self, updateType)
             end
             
         end,1)
+        
+        self._controllerGrid:update(EControllerUpdate.ECUT_DOG_DOWN)
     else
         assert(false, updateType)
     end

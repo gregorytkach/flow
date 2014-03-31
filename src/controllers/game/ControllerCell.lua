@@ -30,8 +30,9 @@ function ControllerCell.touch(self, event)
                 
                 local currentLineFlowType = self._managerGame:currentLineFlowType()
                 
-                if currentLineFlowType == EFlowType.EFT_NONE or currentLineFlowType == nil then
+                if currentLineFlowType ~= self._entry:flowType() then
                     self._managerGame:setCurrentLineFlowType(self._entry)
+                    --self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
                 end
                 
                 self._managerGame:cacheStates()
@@ -40,10 +41,12 @@ function ControllerCell.touch(self, event)
                     
                     self._currentState:controllerGrid():update(EControllerUpdate.ECUT_DOG_UP, self._entry:flowType())
                     
+                    
                 end
                 
                 if self._entry:type() == ECellType.ECT_FLOW_POINT then
                     self._managerGame:setCurrentCell(self._entry)
+                    --
                 end
                 
             end
@@ -51,8 +54,6 @@ function ControllerCell.touch(self, event)
         end
         
     elseif(event.phase == ETouchEvent.ETE_MOVED)  then
-        
-        
         
         if(self._view:isInsideEvent(event))then
             
@@ -179,6 +180,7 @@ function ControllerCell.onOutsideGridOrEndedTouch(self)
     self._managerGame:setCurrentLineFlowType(nil)
     self._managerGame:destroyCache()
     self._managerGame:setCurrentCell(nil)
+    
 end
 
 function ControllerCell.onInsideFirstTime(self)
