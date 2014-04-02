@@ -19,10 +19,6 @@ end
 --Properties
 --
 
-function ManagerGame.isPlayerWin(self)
-    return self._isPlayerWin
-end
-
 function ManagerGame.currentCell(self)
     
     return self._currentCell
@@ -34,7 +30,7 @@ function ManagerGame.setCurrentCell(self, cell)
     
     self._currentCell = cell
     
-
+    
 end
 
 
@@ -51,14 +47,14 @@ function ManagerGame.setCurrentLineFlowType(self, value)
     if value ~= EFlowType.EFT_NONE and value ~= nil   then
         
         self._currentLineFlowType = value:flowType()
-       
+        
     elseif (value == EFlowType.EFT_NONE or value == nil)  then
         
         self._currentLineFlowType = value
         
     end
     
-     
+    
     
 end
 
@@ -74,22 +70,13 @@ function ManagerGame.onGameEnd(self)
 end
 
 function ManagerGame.onPlayerWin(self)
-    self._isPlayerWin = true
     
     self:timerStop()
     
-    local playerCurrent = GameInfo:instance():managerPlayers():playerCurrent()
-    
-    playerCurrent:setCurrencySoft(playerCurrent:currencySoft() + self._currentLevel:rewardCurrencySoft())
-    
-    --todo: reimplement
-    self._currentLevel:progress()._isComplete = true
-    
-    self:onGameEnd()
+    ManagerGameBase.onPlayerWin(self)
 end
 
 function ManagerGame.onPlayerLose(self)
-    self._isPlayerWin = false
     
     self:timerStop()
     
@@ -97,7 +84,7 @@ function ManagerGame.onPlayerLose(self)
     
     playerCurrent:setEnergy(playerCurrent:energy() - 1)
     
-    self:onGameEnd()
+    ManagerGameBase.onPlayerLose(self)
 end
 
 
@@ -320,7 +307,7 @@ function ManagerGame.destroyLine(self, cellStart)
         
     end
     
- 
+    
     
     while(cellCurrent ~= nil) do
         local cellNext = cellCurrent:cellNext()
@@ -355,7 +342,7 @@ function ManagerGame.restoreLine(self, cellStart)
     if cellCurrent ~= nil then
         
         self:setCurrentCellCache(cellCurrent)
-   
+        
         
     end
     self._currentState:controllerGrid():update(EControllerUpdate.ECUT_GRID)
