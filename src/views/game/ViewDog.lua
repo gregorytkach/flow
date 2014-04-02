@@ -17,6 +17,9 @@ function ViewDog.setInHouse(self, value)
     
 end
 
+
+
+
 function ViewDog.currentAnimationType(self)
     
     return self._currentAnimationType
@@ -42,14 +45,12 @@ function ViewDog.setDogPosition(self, sourceCell)
     self._sourceView.x = sourceCell.x
     self._sourceView.y = sourceCell.y - 25
     
-    
     if  (self._currentAnimationType == EDogAnimationType.EDAT_IDLE) then
         local animation = self._animations[self._currentAnimationType]
-        
+
         animation.isVisible = not self._inHouse
-        
+
     end
-    
     
 end
 
@@ -91,6 +92,7 @@ function ViewDog.init(self, params)
     self._sourceView = display.newGroup()
     
     local managerResources = GameInfo:instance():managerResources()
+    self._isEffectEnabled = false
     
     local effectParams = 
     {
@@ -98,6 +100,8 @@ function ViewDog.init(self, params)
         controller  = self._controller
     }
     self._effect = ViewEffect:new(effectParams)
+
+    self._effect:sourceView().isVisible = false
     
     self._sourceView:insert(self._effect:sourceView())
     
@@ -126,7 +130,6 @@ end
 
 
 function ViewDog.cleanup(self)
-    
     
     self._animations[EDogAnimationType.EDAT_IDLE]:removeSelf()
     self._animations[EDogAnimationType.EDAT_UP]:removeSelf()

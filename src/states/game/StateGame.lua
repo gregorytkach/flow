@@ -138,6 +138,8 @@ function StateGame.update(self, updateType)
             end
             
         end,1)
+        
+        self._controllerGrid:update(EControllerUpdate.ECUT_DOG_DOWN)
     else
         assert(false, updateType)
     end
@@ -170,14 +172,14 @@ end
 function StateGame.placeViews(self)
     StateBase.placeViews(self)
     
-    local widthMax = (application.content.width - display.screenOriginX * 2) - 10
+    
     
     self._background:sourceView().x = display.contentCenterX
     self._background:sourceView().y = display.contentCenterY
     
     self._controllerGrid:view():placeViews()
     
-    
+    local widthMax = (application.content.width - display.screenOriginX * 2) - 10
     self._scaleWidth = 1
     
     if self._controllerGrid:view():realWidth() > widthMax then

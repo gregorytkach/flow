@@ -27,9 +27,7 @@ end
 
 function ManagerGame.setCurrentCell(self, cell)
     
-    
     self._currentCell = cell
-    
     
 end
 
@@ -64,7 +62,6 @@ end
 --
 
 function ManagerGame.onGameEnd(self)
-    
     
     ManagerGameBase.onGameEnd(self)
 end
@@ -224,11 +221,18 @@ function ManagerGame.tryValidate(self)
 end
 
 function ManagerGame.timerStart(self)
+    
+    print('timer started')
+    
+    
     self._timerGame = timer.performWithDelay(application.animation_duration * 4, 
     function() 
+        
         self:onTimerTick()
+        
     end, 
     self._timeLeft)
+    
 end
 
 function ManagerGame.timerStop(self)
@@ -306,8 +310,6 @@ function ManagerGame.destroyLine(self, cellStart)
         self:setCurrentCellCache(cellStart)
         
     end
-    
-    
     
     while(cellCurrent ~= nil) do
         local cellNext = cellCurrent:cellNext()

@@ -15,6 +15,22 @@ function GridCreator.gridData(self)
     return self._gridData
 end
 
+function GridCreator.flowCount(self)
+    return self._flowCount
+end
+
+function GridCreator.rowsCount(self)
+    return self._rowsCount
+end
+
+function GridCreator.bridgesCount(self)
+    return self._bridgesCount
+end
+
+function GridCreator.barriersCount(self)
+    return self._barriersCount
+end
+
 --
 --Methods
 --
@@ -25,13 +41,16 @@ function GridCreator.init(self, params)
     
     assert(params.columns       ~= nil)
     assert(params.rows          ~= nil)
+    assert(params.flowCount     ~= nil)
     
     assert(params.bridgesCount  ~= nil)
     assert(params.barriersCount ~= nil)
     
     
     self._counts        = {}
-    self._points        = {}
+    
+    
+    self._flowCount = params.flowCount
     
     self._rowsCount             = params.rows
     self._columnsCount          = params.columns
@@ -39,93 +58,113 @@ function GridCreator.init(self, params)
     self._bridgesCountLeft      = params.bridgesCount
     self._barriersCountLeft     = params.barriersCount
     
-    self._gridData  = {}
+    self._bridgesCount          = params.bridgesCount
+    self._barriersCount         = params.barriersCount
     
-    self:createEmptyGrid()
-    
-    self:initFlowLines()
-    
-    self._counts[4] = self._counts[4] * 2
-    
-    --todo: rewrite
-    for rowIndex = 1, self._rowsCount, 1 do
-        local cellData          = self._gridData[rowIndex][self._columnsCount]
-        cellData.flow_type      = EFlowType.EFT_COUNT - 1
-    end
-    
-    for columnIndex = 1, self._columnsCount - 1, 1 do
-        
-        for rowIndex = 1, self._rowsCount - 1, 1 do
-            
-            local cellData = self._gridData[rowIndex][columnIndex] 
-            cellData._next = self._gridData[rowIndex + 1][columnIndex]
-            
-        end
-        
-    end
-    
-    for columnIndex = 1, self._columnsCount - 1, 1 do
-        
-        for rowIndex = 2, self._rowsCount, 1 do
-            
-            local cellData = self._gridData[rowIndex][columnIndex] 
-            cellData._prev = self._gridData[rowIndex - 1][columnIndex]
-            
-        end
-        
-    end
-    
-    local cellData = self._gridData[self._rowsCount][self._columnsCount - 1] 
-    cellData._next = self._gridData[self._rowsCount][self._columnsCount]
-    
-    cellData        = self._gridData[self._rowsCount][self._columnsCount]
-    cellData._prev  = self._gridData[self._rowsCount][self._columnsCount - 1]
-    
-    for rowIndex = self._rowsCount - 1, 1, -1 do
-        
-        local cellData = self._gridData[rowIndex + 1][self._columnsCount] 
-        cellData._next = self._gridData[rowIndex][self._columnsCount]
-        
-    end
-    
-    for rowIndex = self._rowsCount, 2, -1 do
-        
-        local cellData = self._gridData[rowIndex - 1][self._columnsCount] 
-        cellData._prev = self._gridData[rowIndex][self._columnsCount]
-        
-    end
+    self:createGrid()
     
 end
 
-function GridCreator.initFlowLines(self)
-    for columnIndex = 1, self._columnsCount - 1, 1 do
-        
-        local cellData      = self._gridData[1][columnIndex]
-        cellData.type       = ECellType.ECT_FLOW_POINT
-        
-        self:addPoint(cellData)
-        
-        local flow_type = columnIndex - 1
-        
-        for rowIndex = 1, self._rowsCount, 1 do
-            
-            cellData = self._gridData[rowIndex][columnIndex]
-            cellData.flow_type   = flow_type
-            
-        end
-        
-        if columnIndex == self._columnsCount - 1 then
-            cellData      = self._gridData[1][self._columnsCount]
-        else
-            cellData      = self._gridData[self._rowsCount][columnIndex]
-        end
-        
-        cellData.type       = ECellType.ECT_FLOW_POINT
-        self:addPoint(cellData)
-        
-        self._counts[flow_type + 1] = self._rowsCount
-        
+function GridCreator.addFlow(self, value)
+    
+    self._flowCount = self._flowCount + value
+    self:createGrid()
+    
+end
+
+function GridCreator.addSize(self, value)
+    
+    self._rowsCount = self._rowsCount + value
+    self._columnsCount = self._rowsCount
+    
+    self:createGrid()
+    
+end
+
+function GridCreator.addBridge(self, value)
+    
+    self._bridgesCount = self._bridgesCount + value
+    self._bridgesCountLeft = self._bridgesCount
+    self:createGrid()
+    
+end
+
+function GridCreator.addBarrier(self, value)
+    
+    self._barriersCount = self._barriersCount + value
+    self._barriersCountLeft = self._barriersCount
+    self:createGrid()
+    
+end
+
+function GridCreator.createGrid(self)
+    self._gridData  = {}
+    self._points    = {}
+    
+    self:createEmptyGrid()
+    
+    local row    = 1
+    local column = 1
+    
+    local count = math.floor(self._rowsCount * self._columnsCount / self._flowCount)
+    
+    for i = 1, self._flowCount - 1, 1 do
+        self._counts[i] = count
     end
+    
+    self._counts[self._flowCount] = self._rowsCount * self._columnsCount - (self._flowCount - 1) * count
+    
+    local row    = 1
+    local column = 1
+    local step   = 1
+    
+    local flow_type = 0
+    count = 1
+    
+    local cellDataPrev = nil
+    
+    for i = 1, self._rowsCount * self._columnsCount, 1 do
+       local cellData  = self._gridData[row][column] 
+       cellData._prev = cellDataPrev
+       
+       if cellData._prev ~= nil then
+           cellData._prev._next = cellData
+       end
+       
+       cellData.flow_type = flow_type
+       
+       if count == self._counts[flow_type + 1] then
+           count = 1
+           cellData.type       = ECellType.ECT_FLOW_POINT
+           self:addPoint(cellData)
+           
+           cellData  = nil
+           flow_type = flow_type + 1
+           
+       elseif count == 1 then
+           
+           cellData.type       = ECellType.ECT_FLOW_POINT
+           self:addPoint(cellData)
+           count = count + 1
+       else
+           count = count + 1
+       end
+       
+       if row == self._rowsCount and step == 1 then
+           column = column + 1
+           step = - 1
+       elseif row == 1 and step == -1 then 
+           column = column + 1
+           step = 1
+           
+       else
+           row = row + step
+       end
+           
+       cellDataPrev = cellData
+       
+    end
+    
 end
 
 function GridCreator.createEmptyGrid(self)

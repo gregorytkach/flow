@@ -48,12 +48,12 @@ end
 function ManagerSounds._loadSounds(self, stateType)
     --todo:implement
     
-    if(stateType == EStateType.EST_GAME)then
-        self:_loadSounds(EStateType.EST_MAIN)
-        
-    else
-        self:_loadSoundsButtons()
-    end
+--    if(stateType == EStateType.EST_GAME)then
+--        self:_loadSounds(EStateType.EST_MAIN)
+--        
+--    else
+--        self:_loadSoundsButtons()
+--    end
 end
 
 function ManagerSounds._loadSoundsGame(self)
