@@ -124,45 +124,45 @@ function GridCreator.createGrid(self)
     local cellDataPrev = nil
     
     for i = 1, self._rowsCount * self._columnsCount, 1 do
-       local cellData  = self._gridData[row][column] 
-       cellData._prev = cellDataPrev
-       
-       if cellData._prev ~= nil then
-           cellData._prev._next = cellData
-       end
-       
-       cellData.flow_type = flow_type
-       
-       if count == self._counts[flow_type + 1] then
-           count = 1
-           cellData.type       = ECellType.ECT_FLOW_POINT
-           self:addPoint(cellData)
-           
-           cellData  = nil
-           flow_type = flow_type + 1
-           
-       elseif count == 1 then
-           
-           cellData.type       = ECellType.ECT_FLOW_POINT
-           self:addPoint(cellData)
-           count = count + 1
-       else
-           count = count + 1
-       end
-       
-       if row == self._rowsCount and step == 1 then
-           column = column + 1
-           step = - 1
-       elseif row == 1 and step == -1 then 
-           column = column + 1
-           step = 1
-           
-       else
-           row = row + step
-       end
-           
-       cellDataPrev = cellData
-       
+        local cellData  = self._gridData[row][column] 
+        cellData._prev = cellDataPrev
+        
+        if cellData._prev ~= nil then
+            cellData._prev._next = cellData
+        end
+        
+        cellData.flow_type = flow_type
+        
+        if count == self._counts[flow_type + 1] then
+            count = 1
+            cellData.type       = ECellType.ECT_FLOW_POINT
+            self:addPoint(cellData)
+            
+            cellData  = nil
+            flow_type = flow_type + 1
+            
+        elseif count == 1 then
+            
+            cellData.type       = ECellType.ECT_FLOW_POINT
+            self:addPoint(cellData)
+            count = count + 1
+        else
+            count = count + 1
+        end
+        
+        if row == self._rowsCount and step == 1 then
+            column = column + 1
+            step = - 1
+        elseif row == 1 and step == -1 then 
+            column = column + 1
+            step = 1
+            
+        else
+            row = row + step
+        end
+        
+        cellDataPrev = cellData
+        
     end
     
 end
@@ -798,44 +798,57 @@ function GridCreator.createFunctionDataLines(self)
     local j = 1
     for i = 0, EFlowType.EFT_COUNT - 1, 1 do
         
-        result = result..'\t\t[EFlowType.EFT_'..i..'] =\n'
-        result = result..'\t\t{\n'
+        local needAddInfoAboutFlowType = false
+        local infoAboutFlowType = ""
+        
+        
+        local flowTypeStr = EFlowType['EFT_'..i]
+        
+        infoAboutFlowType = infoAboutFlowType..'\t\t'..'['..flowTypeStr..'] =\n'
+        infoAboutFlowType = infoAboutFlowType..'\t\t{\n'
         
         local cell = dataBaseCells[j]
         
         
         while cell.flow_type == i do
             
-            result = result..'\t\t\t{\n'
+            needAddInfoAboutFlowType = true
             
-            result = result..'\t\t\t\tx = '..cell.x..',\n'
-            result = result..'\t\t\t\ty = '..cell.y..',\n'
-            result = result..'\t\t\t}'
+            infoAboutFlowType = infoAboutFlowType..'\t\t\t{\n'
+            
+            infoAboutFlowType = infoAboutFlowType..'\t\t\t\tx = '..cell.x..',\n'
+            infoAboutFlowType = infoAboutFlowType..'\t\t\t\ty = '..cell.y..',\n'
+            infoAboutFlowType = infoAboutFlowType..'\t\t\t}'
             
             if j < #dataBaseCells then
                 j = j + 1
                 cell = dataBaseCells[j]
                 
                 if cell.flow_type ~= i then
-                    result = result..'\n' 
+                    infoAboutFlowType = infoAboutFlowType..'\n' 
                     
                 else
-                    result = result..',\n' 
+                    infoAboutFlowType = infoAboutFlowType..',\n' 
                 end
             else
-                result = result..'\n' 
+                infoAboutFlowType = infoAboutFlowType..'\n' 
                 break
             end
         end
         
+        
         if i == EFlowType.EFT_COUNT - 1 then
             
-            result = result..'\t\t}\n'
+            infoAboutFlowType = infoAboutFlowType..'\t\t}\n'
             
         else
             
-            result = result..'\t\t},\n'
+            infoAboutFlowType = infoAboutFlowType..'\t\t},\n'
             
+        end
+        
+        if(needAddInfoAboutFlowType)then
+            result = result..infoAboutFlowType
         end
         
     end

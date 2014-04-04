@@ -118,7 +118,10 @@ function LevelInfo.deserialize(self, data)
     
     self._timeLeft  = tonumber(data.time_left)
     self._dataGrid  = data.data_grid 
-    self._dataLines = data.data_lines
+    
+    local json = require('json')
+    
+    self._dataLines = json.decode(data.data_lines)
     
 end
 

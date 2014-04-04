@@ -145,8 +145,6 @@ function ManagerGame.onPurchaseFlowType(self, flowType, ignoreValidate)
         self:destroyLinesWithType(flowTypeToDestroy)
     end
     
-    
-    
     local lineData = self._notPurchasedLines[flowType]
     
     assert(lineData ~= nil)
