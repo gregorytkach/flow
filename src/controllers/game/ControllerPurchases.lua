@@ -11,10 +11,26 @@ ControllerPurchases = classWithSuper(Controller, 'ControllerPurchases')
 function ControllerPurchases.onViewClicked(self, target, event)
     local needShowPopupNoCurrency = false
     
-    
     if (self._view:buttonResolve() == target) then
+        local applyPurchase = false
         
-        self._managerGame:onBuyPurchaseResolve()
+        if(self._playerCurrent:freePurchaseResolve() > 0)then
+            
+            self._playerCurrent:setFreePurchaseResolve(self._playerCurrent:freePurchaseResolve() - 1)
+            
+            applyPurchase = true
+            
+        elseif(self._playerCurrent:currencySoft() >= self._purchaseResolve:priceSoft())then
+            
+            self._playerCurrent:setCurrencySoft(self._playerCurrent:currencySoft() - self._purchaseResolve:priceSoft())
+            
+            applyPurchase = true
+            
+        end
+        
+        if(applyPurchase)then
+            self._managerGame:onBuyPurchaseResolve()
+        end
         
     elseif (self._view:buttonShowTurn() == target) then
         local applyPurchase = false

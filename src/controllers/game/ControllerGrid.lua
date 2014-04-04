@@ -114,13 +114,17 @@ function ControllerGrid.update(self, type, flowType)
         for indexRow, row in ipairs(self._cells)do
             for indexColumn, cell in ipairs(row)do
                 local entry = cell:entry()
-                if entry:type() == ECellType.ECT_FLOW_POINT and not entry:isStart() and entry:isPurchased() then
+                if  entry:type() == ECellType.ECT_FLOW_POINT    and 
+                    not entry:isStart()                         and 
+                    entry:isPurchased()                         then
                     
                     cell:onInHouse(true)
                     local controllerDog = self._dogsMap[entry:flowType()]
                     controllerDog:view():sourceView().isVisible = false
                     
-                elseif entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() and not entry:isPurchased() then
+                elseif  entry:type() == ECellType.ECT_FLOW_POINT    and 
+                        entry:isStart()                             and 
+                        not entry:isPurchased()                     then
                     
                     local controllerDog = self._dogsMap[entry:flowType()]
                     
@@ -153,15 +157,23 @@ function ControllerGrid.update(self, type, flowType)
               
                 local controllerDog = self._dogsMap[entry:flowType()]
                 
-                if entry:type() == ECellType.ECT_FLOW_POINT and entry:isStart() and not entry:isPurchased() and entry:cellNext() == nil and controllerDog:currentCell():cellPrevCached() == entry  then
+                if  entry:type() == ECellType.ECT_FLOW_POINT    and 
+                    entry:isStart()                             and 
+                    not entry:isPurchased()                     and 
+                    entry:cellNext() == nil                     and 
+                    controllerDog:currentCell():cellPrevCached() == entry  then
+                    
                     controllerDog:setCurrentCell(entry)
                
                     
-                elseif (entry:type() == ECellType.ECT_EMPTY or entry:type() == ECellType.ECT_BRIDGE)  and entry:cellPrev() ~= nil and entry:cellNext() == nil   then
+                elseif (entry:type() == ECellType.ECT_EMPTY or entry:type() == ECellType.ECT_BRIDGE)  and 
+                        entry:cellPrev() ~= nil and 
+                        entry:cellNext() == nil then
                     
                     controllerDog:setCurrentCell(entry)
                 
-                elseif entry:type() == ECellType.ECT_FLOW_POINT and (entry:cellPrev() ~= nil or (entry:cellNext() == nil and entry:cellNextCached() ~=  nil) or entry == currentCell )then
+                elseif  entry:type() == ECellType.ECT_FLOW_POINT and 
+                        (entry:cellPrev() ~= nil or (entry:cellNext() == nil and entry:cellNextCached() ~=  nil) or entry == currentCell )then
                     
                     controllerDog:setCurrentCell(entry)
                 end

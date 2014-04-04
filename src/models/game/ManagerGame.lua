@@ -130,11 +130,14 @@ end
 
 function ManagerGame.onBuyPurchaseResolve(self)
     for flowType, lineData in pairs(self._notPurchasedLines)do
-        self:onPurchaseFlowType(flowType)
+        self:onPurchaseFlowType(flowType, true)
     end
+    
+    self:tryValidate()
+    self._currentState:update(EControllerUpdate.ECUT_SET_DOGS)
 end
 
-function ManagerGame.onPurchaseFlowType(self, flowType)
+function ManagerGame.onPurchaseFlowType(self, flowType, ignoreValidate)
     assert(flowType ~= nil)
     
     --destroy all lines which not purchased
@@ -156,8 +159,10 @@ function ManagerGame.onPurchaseFlowType(self, flowType)
     
     self._notPurchasedLines[flowType] = nil
     
-    self:tryValidate()
-    self._currentState:update(EControllerUpdate.ECUT_SET_DOGS)
+    if(not ignoreValidate)then
+        self:tryValidate()
+        self._currentState:update(EControllerUpdate.ECUT_SET_DOGS)
+    end
 end
 
 --
