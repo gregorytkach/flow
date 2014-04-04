@@ -14,6 +14,10 @@ function ControllerUIEditor.onViewClicked(self, target, event)
         self._managerGame:shuffle(self._managerGame:gridCreator():rowsCount() * 100)
         self._currentState:update(EControllerUpdate.ECUT_EDIT)
         
+    elseif(self._view:buttonSend() == target)then
+        
+        GameInfo:instance():managerRemote():update()
+        
     elseif (self._view:buttonFlowTypeAdd() == target) then
         
         if self._managerGame:onAddFlow(1) then

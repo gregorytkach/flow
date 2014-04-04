@@ -1,3 +1,5 @@
+require('game_flow.src.models.remote.ERemoteUpdateType')
+
 ManagerRemoteFlow = classWithSuper(ManagerRemoteBase, 'ManagerRemoteFlow')
 
 --
@@ -34,6 +36,10 @@ function ManagerRemoteFlow.update(self, type, data, callback)
                 if(type == ERemoteUpdateTypeBase.ERUT_GAME_START)then
                     self._managerCache:update(type, response:response(), callback)
                     
+                elseif(type == ERemoteUpdateType.ERUT_SAVE_GENERATED_LEVEL)then
+                    
+                    self:onGeneratedLevelSave(data, callback)
+                    
                 else
                     self._managerCache:update(type, data, callback)
                     
@@ -56,5 +62,10 @@ function ManagerRemoteFlow.update(self, type, data, callback)
         self._managerCache:update(type, data, callback)
         
     end
+    
+end
+
+
+function ManagerRemoteFlow.onGeneratedLevelSave(self, data, callback)
     
 end
