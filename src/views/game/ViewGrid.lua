@@ -63,7 +63,5 @@ function ViewGrid.placeViews(self)
         
     end
     
-    print('ViewGrid.placeViews')
-    
 end
 

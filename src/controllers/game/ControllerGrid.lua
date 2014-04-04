@@ -186,7 +186,6 @@ function ControllerGrid.update(self, type, flowType)
     elseif((type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN)) 
         and flowType ~= nil and flowType ~= EFlowType.EFT_NONE
         then
-        print(type)
         
         local controllerDog = nil
         local currentCell          = self._managerGame:currentCell()

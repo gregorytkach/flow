@@ -124,16 +124,9 @@ function StateGame.update(self, updateType)
                 self:showPopup(EPopupType.EPT_WIN)
             else
                 
-                local callbackAd =
-                function()
-                    self:showPopup(EPopupType.EPT_GAME_OVER)
-                    
-                    managerAd:setCallbackAd(nil)
-                end
-                
-                managerAd:setCallbackAd(callbackAd)
-                
                 managerAd:showAd()
+                
+                self:showPopup(EPopupType.EPT_GAME_OVER)
                 
             end
             

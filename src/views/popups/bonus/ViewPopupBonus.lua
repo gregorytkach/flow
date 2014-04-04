@@ -15,10 +15,17 @@ function ViewPopupBonus.buttonSpin(self)
     return self._buttonSpin
 end
 
-function ViewPopupBonus.setReward(self, value)
+function ViewPopupBonus.setReward(self, value, type)
     assert(value ~= nil)
     
+    self:showIconReward(type)
+    
+    --place icon
+    self._labelRewardCount:sourceView():setText(value)
+    self:placeIconReward()
     self._labelRewardCount:setValue(0)
+    
+    
     self._labelRewardCount:setValue(value)
 end
 
@@ -91,11 +98,28 @@ function ViewPopupBonus.init(self, params)
     self._labelTime:sourceView().xScale = self._labelTime:sourceView().xScale * 0.85
     self._labelTime:sourceView().yScale = self._labelTime:sourceView().xScale 
     
+    self._iconsReward = 
+    {
+        [EBonusType.EBT_CURRENCY]           = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_BONUS_ICON_CURRENCY)),
+        [EBonusType.EBT_ENERGY]             = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_BONUS_ICON_ENERGY)),
+        [EBonusType.EBT_PURCHASE_ADD_TIME]  = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_BONUS_ICON_PURCHASE_ADD_TIME)),
+        [EBonusType.EBT_PURCHASE_SHOW_TURN] = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_BONUS_ICON_PURCHASE_SHOW_TURN)),
+        [EBonusType.EBT_PURCHASE_RESOLVE]   = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_BONUS_ICON_PURCHASE_RESOLVE))
+    }
+    
     local bonuses = GameInfo:instance():managerBonus():bonuses()
     
     self._bonusAngleDelta = 360 / #bonuses
+end
+
+function ViewPopupBonus.showIconReward(self, iconType)
+    
+    for bonusType, iconView in pairs(self._iconsReward) do
+        iconView:sourceView().isVisible = bonusType == iconType
+    end
     
 end
+
 
 function ViewPopupBonus.placeViews(self)
     ViewPopupFlowBase.placeViews(self)
@@ -139,6 +163,18 @@ function ViewPopupBonus.placeViews(self)
     self._labelRewardCount:sourceView().x = self._labelReward:sourceView().x + self._labelReward:realWidth() / 2 + 10
     self._labelRewardCount:sourceView().y = self._labelReward:sourceView().y 
     
+    self:placeIconReward()
+    
+    self:showIconReward(nil)
+end
+
+function ViewPopupBonus.placeIconReward(self)
+    local labelRewardSource = self._labelRewardCount:sourceView()
+    
+    for _, iconBonus in pairs( self._iconsReward )do
+        iconBonus:sourceView().x = labelRewardSource.x + self._labelRewardCount:realWidth() + iconBonus:realWidth() / 2
+        iconBonus:sourceView().y = labelRewardSource.y
+    end
 end
 
 function ViewPopupBonus.cleanup(self)
@@ -147,6 +183,12 @@ function ViewPopupBonus.cleanup(self)
         transition.cancel(self._tweenDrum)
         self._tweenDrum = nil
     end
+    
+    for _, iconBonus in pairs( self._iconsReward )do
+        iconBonus:cleanup()
+    end
+    
+    self._iconsReward = nil
     
     self._buttonSpin:cleanup() 
     self._buttonSpin = nil

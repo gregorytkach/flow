@@ -33,7 +33,7 @@ function ControllerPopupBonus.onViewClicked(self, target, event)
                 
                 local bonus = bonuses[bonusIndex]
                 
-                self._view:setReward(bonus:contentCount())
+                self._view:setReward(bonus:contentCount(), bonus:type())
                 
                 self:applyBonus(bonus)
                 
@@ -128,9 +128,9 @@ function ControllerPopupBonus.applyBonus(self, value)
         
         self._playerCurrent:setFreePurchaseShowTurn(self._playerCurrent:freePurchaseShowTurn() + 1)
         
-    elseif(value:type() == EBonusType.EBT_PURCHASE_TIME)then
+    elseif(value:type() == EBonusType.EBT_PURCHASE_ADD_TIME)then
         
-        self._playerCurrent:setFreePurchaseTime(self._playerCurrent:freePurchaseTime() + 1)
+        self._playerCurrent:setFreePurchaseAddTime(self._playerCurrent:freePurchaseAddTime() + 1)
         
     else
         assert(false)

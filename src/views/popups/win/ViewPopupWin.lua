@@ -12,6 +12,14 @@ function ViewPopupWin.setRewardCurrency(self, value)
     self._labelRewardCount:setValue(value)
 end
 
+function ViewPopupWin.setLevel(self, value)
+    assert(value ~= nil)
+    
+    local text = string.format(self._labelTextFormat, value)
+    
+    self._labelText:sourceView():setText(text)
+end
+
 --
 -- Methods
 --
@@ -30,14 +38,14 @@ function ViewPopupWin.init(self, params)
     local buttonClose = self:createButton(managerResources:getAsButton(EResourceType.ERT_POPUP_BUTTON_BLUE0), nil, managerString:getString(EStringType.EST_POPUP_WIN_BUTTON_CLOSE), EFontType.EFT_1)
     self:setButtonClose(buttonClose)
     
+    self._labelTextFormat = managerString:getString(EStringType.EST_POPUP_WIN_TEXT)
     
-    local text = string.format(managerString:getString(EStringType.EST_POPUP_WIN_TEXT), 100)
+    local text = string.format(self._labelTextFormat, 0)
     self._viewText = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_WIN_VIEW_TEXT))
     self._labelText = self:createLabel(text,        --text
     EFontType.EFT_1,                                --fontType
     nil,                                            --align
     self._viewText:sourceView().width)              --wrapWidth
-    
     
     self._viewReward = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_WIN_VIEW_REWARD))
     self._labelReward = self:createLabel(managerString:getString(EStringType.EST_POPUP_WIN_REWARD), 

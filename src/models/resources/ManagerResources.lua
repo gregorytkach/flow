@@ -29,6 +29,12 @@ function ManagerResources.init(self)
     self._resources[EResourceType.ERT_POPUP_BONUS_DRUM]             = '%spopup_bonus/drum/drum%s.png'
     self._resources[EResourceType.ERT_POPUP_BONUS_VIEW_DRUM]        = '%spopup_bonus/view_drum/view_drum%s.png'
     
+    self._resources[EResourceType.ERT_POPUP_BONUS_ICON_CURRENCY]    = '%spopup_bonus/icons/icon_currency%s.png'
+    self._resources[EResourceType.ERT_POPUP_BONUS_ICON_ENERGY]      = '%spopup_bonus/icons/icon_energy%s.png'
+    self._resources[EResourceType.ERT_POPUP_BONUS_ICON_PURCHASE_ADD_TIME]      = '%spopup_bonus/icons/icon_purchase_add_time%s.png'
+    self._resources[EResourceType.ERT_POPUP_BONUS_ICON_PURCHASE_RESOLVE]       = '%spopup_bonus/icons/icon_purchase_resolve%s.png'
+    self._resources[EResourceType.ERT_POPUP_BONUS_ICON_PURCHASE_SHOW_TURN]     = '%spopup_bonus/icons/icon_purchase_show_turn%s.png'
+    
     
     --popup game over
     self._resources[EResourceType.ERT_POPUP_GAME_OVER_VIEW_PENALTY] = '%spopup_game_over/view_penalty/view_penalty%s.png'

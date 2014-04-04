@@ -39,14 +39,15 @@ function ControllerPopupWin.init(self)
     
     ControllerPopup.init(self, paramsController)
     
-    
-    self._view:setRewardCurrency(100)
-    
     local managerGame = GameInfo:instance():managerGame()
     
     assert(managerGame ~= nil)
     
     self._view:setRewardCurrency(managerGame:currentLevel():rewardCurrencySoft())
+    
+    local completeLevelsCount = GameInfo:instance():managerLevels():completeLevelsCount() + 1
+    
+    self._view:setLevel(completeLevelsCount)
     
 end
 

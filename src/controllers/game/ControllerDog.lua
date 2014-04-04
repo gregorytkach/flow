@@ -156,8 +156,6 @@ end
 
 function ControllerDog.tryCleanupTweenDogMoved(self)
    
-   print('cleanup tween dog')
-   
     if self._tweenDogMoved ~= nil then
         transition.cancel(self._tweenDogMoved)
         self._tweenDogMoved = nil

@@ -18,8 +18,6 @@ function ControllerPurchases.onViewClicked(self, target, event)
         
     elseif (self._view:buttonShowTurn() == target) then
         local applyPurchase = false
-        self._i = self._i + 1
-        
         
         if(self._playerCurrent:freePurchaseShowTurn() > 0)then
             
@@ -33,9 +31,6 @@ function ControllerPurchases.onViewClicked(self, target, event)
             
             applyPurchase = true
             
-        end
-        if self._i == 2 then
-            print('')
         end
         
         if(applyPurchase)then
@@ -117,7 +112,6 @@ function ControllerPurchases.init(self)
     self:updateButtonAddTime()
     self:updateButtonResolve()
     self:updateButtonShowTurn()
-    self._i = 0
     
 end
 
