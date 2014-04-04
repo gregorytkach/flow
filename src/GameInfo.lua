@@ -35,6 +35,28 @@ require('game_flow.src.controllers.popups.bonus.ControllerPopupBonus')
 
 GameInfo = classWithSuper(GameInfoBase, 'GameInfo')
 
+
+--
+-- Static 
+--
+
+function GameInfo.initSystemInfo()
+    
+    --    if system.getInfo("platformName") == "iPhone OS" then
+    -- iPhone Sample App ID
+    --         application.chartboost_id = "4f21c409cd1cb2fb7000001b"
+    --        application.chartboost_signature = "92e2de2fd7070327bdeb54c15a5295309c6fcd2d"
+    --    else
+    
+    application.chartboost_id           = "4f7b433509b6025804000002"
+    application.chartboost_signature    = "dd2d41b69ac01b80f443f5b6cf06096d457f82bd"
+    application.chartboost_bundle       = "com.chartboost.cbtest"
+    
+    application.vungle_id               = '533bbbf81940378c3a000025'
+    
+    GameInfoBase.initSystemInfo()
+end
+
 --
 -- Events
 --
@@ -63,14 +85,14 @@ function GameInfo.onGameStartComplete(self, response)
             currentLevel = self._managerLevels:firstIncompleteLevel()
         }
         
---                self:onGameStart(ManagerEditor:new(paramsGame))
---                self._managerStates:setState(EStateType.EST_EDITOR)
+        --                self:onGameStart(ManagerEditor:new(paramsGame))
+        --                self._managerStates:setState(EStateType.EST_EDITOR)
         --        
         
         self:onGameStart(ManagerGame:new(paramsGame))
         self._managerStates:setState(EStateType.EST_GAME)
         
---        self._managerStates:setState(EStateType.EST_MAP)
+        --        self._managerStates:setState(EStateType.EST_MAP)
     end
 end
 
@@ -85,6 +107,7 @@ function GameInfo.init(self)
     
     GameInfoBase.init(self)
 end
+
 
 function GameInfo.initManagers(self)
     
@@ -115,11 +138,9 @@ function GameInfo.initManagers(self)
     self._managerPlayers        = ManagerPlayersBase:new(PlayerInfo)
     self._managerLevels         = ManagerLevelsBase:new(LevelInfo) 
     
-    local paramsAd = 
-    {
-    }
+    self._managerAdChartboost   = ManagerAdChartboost:new()
+    self._managerAdVungle       = ManagerAdVungle:new()
     
-    self._managerAd             = ManagerAdBase:new(paramsAd)
     
     GameInfoBase.initManagers(self)
 end

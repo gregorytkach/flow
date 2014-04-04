@@ -13,7 +13,9 @@ function ControllerUIMap.onViewClicked(self, target, event)
         --        GameInfo:instance():managerSounds()
         
     elseif(target == self._view:buttonBonus())then
+        
         self._currentState:showPopup(EPopupType.EPT_BONUS)
+        
     elseif(target == self._view:buttonHelp())then
         --todo: implement
         
@@ -31,7 +33,15 @@ function ControllerUIMap.onViewClicked(self, target, event)
         self._currentState:showPopup(EPopupType.EPT_SHOP)
         
     elseif(target == self._view:buttonFreeCurrency())then
-        print('implement it')
+        
+        GameInfo:instance():managerAdVungle():showAd(
+        function()
+            local player = GameInfo:instance():managerPlayers():playerCurrent()
+            
+            player:setCurrencySoft(player:currencySoft() + Constants.REWARD_VUNGLE_CURRENCY_SOFT)
+            
+        end)
+        
     else
         
         assert(false)

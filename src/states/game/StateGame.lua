@@ -116,7 +116,7 @@ function StateGame.update(self, updateType)
         
         self._blockerScene.alpha = 0.01
         
-        local managerAd = GameInfo:instance():managerAd()
+        local managerAd = GameInfo:instance():managerAdChartboost()
         
         timer.performWithDelay(application.animation_duration * 4 * 2, 
         function() 
@@ -133,7 +133,7 @@ function StateGame.update(self, updateType)
                 
                 managerAd:setCallbackAd(callbackAd)
                 
-                GameInfo:instance():managerAd():showAd()
+                managerAd:showAd()
                 
             end
             
