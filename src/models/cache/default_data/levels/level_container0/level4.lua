@@ -212,7 +212,8 @@ local function getDataLevel0_4()
         progress                =
         {
             is_complete         = false,
-        }
+        },
+        number                  = 5
     }
     
     return result

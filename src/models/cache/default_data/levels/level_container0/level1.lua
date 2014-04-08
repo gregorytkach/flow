@@ -208,7 +208,8 @@ local function getDataLevel0_1()
         progress                =
         {
             is_complete         = false,
-        }
+        },
+        number                  = 2
     }
     
     return result

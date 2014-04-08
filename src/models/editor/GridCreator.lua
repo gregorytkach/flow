@@ -31,6 +31,81 @@ function GridCreator.barriersCount(self)
     return self._barriersCount
 end
 
+function GridCreator.getDataLines(self)
+    local result = {}
+    
+    local dataLines = self:createDataLines()
+    
+    local j = 1
+    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
+        
+        local needAddInfoAboutFlowType = false
+        
+        local cells = {}
+        
+        local cell = dataLines[j]
+        
+        
+        while cell.flow_type == i do
+            
+            needAddInfoAboutFlowType = true
+            
+            --insert data about cell
+            table.insert(cells, 
+            {
+                x = cell.x,
+                y = cell.y
+            })
+            
+            if j < #dataLines then
+                j = j + 1
+                cell = dataLines[j]
+            else
+                break
+            end
+        end
+        
+        if(needAddInfoAboutFlowType)then
+            result[tostring(cell.flow_type)] = cells
+        end
+        
+    end
+    
+    return result
+end
+
+function GridCreator.getDataGrid(self)
+    local result = {}
+    
+    for _, row in ipairs(self._gridData)do 
+        
+        local rowData = {}
+        
+        for _, cell in ipairs(row)do
+            local cellData = 
+            {
+                x           = cell.x,
+                y           = cell.y,
+                type        = cell.type
+            }
+            
+            if(cell.type == ECellType.ECT_FLOW_POINT)then
+                cellData.is_start       = cell.is_start
+                cellData.flow_type      = tostring(cell.flow_type)
+            else
+                cellData.flow_type      = EFlowType.EFT_NONE 
+            end
+            
+            table.insert(rowData, cellData)
+        end
+        
+        table.insert(result, rowData)
+        
+    end
+    
+    return result
+end
+
 --
 --Methods
 --
@@ -743,18 +818,12 @@ function GridCreator.shuffle(self)
     
 end
 
-function GridCreator.createFunctionDataLines(self)
+function GridCreator.createDataLines(self)
+    local result = {}
     
-    local result = 'local function getDataLines_'..os.time()..'()\n'..
-    
-    '\tlocal result =\n'
-    
-    local dataBaseCells = {}
     for i = 0, EFlowType.EFT_COUNT - 1, 1 do
         
-        local cellsByType 
-        
-        local point
+        local point = nil
         for j = 1, #self._points, 1 do
             
             point = self._points[j]
@@ -763,6 +832,8 @@ function GridCreator.createFunctionDataLines(self)
             end
             
         end
+        
+        local cellsByType = nil
         
         if point._prev ~= nil then
             cellsByType = self:getCellsToStartFrom(point) 
@@ -788,10 +859,21 @@ function GridCreator.createFunctionDataLines(self)
         
         for i = 1, #cellsByType, 1 do
             local cell = cellsByType[i]
-            table.insert(dataBaseCells, cell)
+            table.insert(result, cell)
         end
         
     end
+    
+    return result
+end
+
+function GridCreator.createFunctionDataLines(self)
+    
+    local result = 'local function getDataLines_'..os.time()..'()\n'..
+    
+    '\tlocal result =\n'
+    
+    local dataBaseCells = self:createDataLines()
     
     result = result..'\t{\n'
     

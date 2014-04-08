@@ -17,6 +17,20 @@ function RemoteConnectorFlow.init(self, params)
     
 end
 
+function RemoteConnectorFlow.getController(self, type)
+    local result = ''
+    
+    if(type == ERemoteUpdateType.ERUT_SAVE_GENERATED_LEVEL)then
+        result = "level/save"
+        
+    else
+        result = RemoteConnector.getController(self, type)
+    end
+    
+    return result
+    
+end
+
 function RemoteConnectorFlow.cleanup(self)
     RemoteConnector.cleanup(self)
 end

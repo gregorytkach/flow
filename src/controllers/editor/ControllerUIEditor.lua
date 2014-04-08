@@ -10,13 +10,35 @@ ControllerUIEditor = classWithSuper(Controller, 'ControllerUIEditor')
 function ControllerUIEditor.onViewClicked(self, target, event)
     
     if (self._view:buttonShuffle() == target) then
-                    
+        
         self._managerGame:shuffle(self._managerGame:gridCreator():rowsCount() * 100)
         self._currentState:update(EControllerUpdate.ECUT_EDIT)
         
     elseif(self._view:buttonSend() == target)then
         
-        GameInfo:instance():managerRemote():update()
+        local json = require('json')
+        
+        local gridCreator = self._managerGame:gridCreator()
+        
+        local dataLines = gridCreator:getDataLines()
+        
+        local dataLinesStr =  json.encode(dataLines)
+        print(dataLinesStr)
+        
+        local dataGrid    = gridCreator:getDataGrid()
+        local dataGridStr = json.encode(dataGrid)
+        print(dataGridStr)
+        
+        local data = 
+        {
+            data_grid               = dataGrid,
+            data_lines              = dataLines,
+            reward_currency_soft    = 50,
+            reward_scores           = 50,
+            time_left               = 120
+        }
+        
+        GameInfo:instance():managerRemote():update(ERemoteUpdateType.ERUT_SAVE_GENERATED_LEVEL, data)
         
     elseif (self._view:buttonFlowTypeAdd() == target) then
         
@@ -33,7 +55,7 @@ function ControllerUIEditor.onViewClicked(self, target, event)
             self._currentState:update(EControllerUpdate.ECUT_EDIT)
             self._view:buttonFlowTypeRemove():setIsEnabled(self._managerGame:gridCreator():flowCount() ~= 1)
         end
-    
+        
     elseif (self._view:buttonSizeAdd() == target) then
         
         if self._managerGame:onAddSize(1) then
@@ -49,7 +71,7 @@ function ControllerUIEditor.onViewClicked(self, target, event)
             self._currentState:update(EControllerUpdate.ECUT_EDIT)
             self._view:buttonSizeRemove():setIsEnabled(self._managerGame:gridCreator():rowsCount() ~= Constants.MIN_GRID_SIZE)
         end
-    
+        
     elseif (self._view:buttonBridgeAdd() == target) then
         
         if self._managerGame:onAddBridge(1) then

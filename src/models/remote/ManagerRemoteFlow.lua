@@ -54,7 +54,21 @@ function ManagerRemoteFlow.update(self, type, data, callback)
             
         end
         
-        ManagerRemoteBase.update(self, type, data, callbackWrapper)
+        if(type == ERemoteUpdateType.ERUT_SAVE_GENERATED_LEVEL)then
+            
+            --            level/save
+--            if(type == ERemoteUpdateTypeBase.ERUT_GAME_START)then
+--                params = self:getParamsGameStart(data)
+--            else
+--                assert(false, 'Not implemented '..type)
+--            end
+            
+            self._remoteConnector:update(type, data, callback)
+            
+        else
+            ManagerRemoteBase.update(self, type, data, callbackWrapper)
+        end
+        
         
     else
         
