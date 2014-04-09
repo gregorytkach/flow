@@ -18,14 +18,12 @@ function ControllerUIEditor.onViewClicked(self, target, event)
         
         local json = require('json')
         
-        local gridCreator = self._managerGame:gridCreator()
-        
-        local dataLines = gridCreator:getDataLines()
+        local dataLines = self._managerGame:getDataLines()
         
         local dataLinesStr =  json.encode(dataLines)
         print(dataLinesStr)
         
-        local dataGrid    = gridCreator:getDataGrid()
+        local dataGrid    = self._managerGame:getDataGrid()
         local dataGridStr = json.encode(dataGrid)
         print(dataGridStr)
         

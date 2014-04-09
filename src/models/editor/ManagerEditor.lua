@@ -18,12 +18,20 @@ function ManagerEditor.grid(self)
     
 end
 
+function ManagerEditor.getDataGrid(self)
+    return self._dataGrid
+end
+
+function ManagerEditor.getDataLines(self)
+    return self._dataLines
+end
+
 --
 -- events
 --
 
 function ManagerEditor.onAddFlow(self, value)
-        
+    
     assert(value ~= nil)
     
     local result = false
@@ -40,7 +48,7 @@ function ManagerEditor.onAddFlow(self, value)
 end
 
 function ManagerEditor.onAddSize(self, value)
-        
+    
     assert(value ~= nil)
     
     local result = false
@@ -56,7 +64,7 @@ function ManagerEditor.onAddSize(self, value)
 end
 
 function ManagerEditor.onAddBridge(self, value)
-        
+    
     assert(value ~= nil)
     
     local result = false
@@ -72,7 +80,7 @@ function ManagerEditor.onAddBridge(self, value)
 end
 
 function ManagerEditor.onAddBarrier(self, value)
-        
+    
     assert(value ~= nil)
     
     local result = false
@@ -94,9 +102,24 @@ function ManagerEditor.shuffle(self, count)
     
     self._gridCreator:shuffles(count)
     
-    print(self._gridCreator:createFunctionDataLines())
-    print(self._gridCreator:createFunctionDataGrid())
+    local dataLinesString   = self._gridCreator:createFunctionDataLines()
+    print(dataLinesString)
     
+    local functionDataLines = loadstring(dataLinesString)
+    
+    self._dataLines         = functionDataLines()
+    
+    print(self._dataLines )
+    
+    local dataGridString    = self._gridCreator:createFunctionDataGrid()
+    print(dataGridString)
+    
+    local functionDataGrid  = loadstring(dataGridString)
+    
+    self._dataGrid          = functionDataGrid()
+    
+    
+    print(self._dataGrid )
 end
 
 function ManagerEditor.init(self, params)
@@ -115,7 +138,7 @@ function ManagerEditor.init(self, params)
     self:createGrid()
     
     
-
+    
     ManagerGame.init(self, params)
     
 end

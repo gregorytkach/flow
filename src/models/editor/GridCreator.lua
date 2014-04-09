@@ -31,81 +31,6 @@ function GridCreator.barriersCount(self)
     return self._barriersCount
 end
 
-function GridCreator.getDataLines(self)
-    local result = {}
-    
-    local dataLines = self:createDataLines()
-    
-    local j = 1
-    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
-        
-        local needAddInfoAboutFlowType = false
-        
-        local cells = {}
-        
-        local cell = dataLines[j]
-        
-        
-        while cell.flow_type == i do
-            
-            needAddInfoAboutFlowType = true
-            
-            --insert data about cell
-            table.insert(cells, 
-            {
-                x = cell.x,
-                y = cell.y
-            })
-            
-            if j < #dataLines then
-                j = j + 1
-                cell = dataLines[j]
-            else
-                break
-            end
-        end
-        
-        if(needAddInfoAboutFlowType)then
-            result[tostring(cell.flow_type)] = cells
-        end
-        
-    end
-    
-    return result
-end
-
-function GridCreator.getDataGrid(self)
-    local result = {}
-    
-    for _, row in ipairs(self._gridData)do 
-        
-        local rowData = {}
-        
-        for _, cell in ipairs(row)do
-            local cellData = 
-            {
-                x           = cell.x,
-                y           = cell.y,
-                type        = cell.type
-            }
-            
-            if(cell.type == ECellType.ECT_FLOW_POINT)then
-                cellData.is_start       = cell.is_start
-                cellData.flow_type      = tostring(cell.flow_type)
-            else
-                cellData.flow_type      = EFlowType.EFT_NONE 
-            end
-            
-            table.insert(rowData, cellData)
-        end
-        
-        table.insert(result, rowData)
-        
-    end
-    
-    return result
-end
-
 --
 --Methods
 --
@@ -868,8 +793,9 @@ function GridCreator.createDataLines(self)
 end
 
 function GridCreator.createFunctionDataLines(self)
+    local functionName = 'getDataLines_'..os.time()..'()'
     
-    local result = 'local function getDataLines_'..os.time()..'()\n'..
+    local result = 'local function '..functionName..'\n'..
     
     '\tlocal result =\n'
     
@@ -940,13 +866,17 @@ function GridCreator.createFunctionDataLines(self)
     'return result\n'..
     'end'
     
+    result = result..'\n'..'return '..functionName
+    
     return result
     
 end
 
 function GridCreator.createFunctionDataGrid(self)
     
-    local result = 'local function getDataGrid_'..os.time()..'()\n'..
+    local functionName = 'getDataGrid_'..os.time()..'()'
+    
+    local result = 'local function '..functionName..'\n'..
     
     '\tlocal result = {}\n\n'..
     
@@ -1018,6 +948,8 @@ function GridCreator.createFunctionDataGrid(self)
     
     '\treturn result\n\n'..
     'end'
+    
+   result = result..'\n'..'return '..functionName
     
     return result
 end
