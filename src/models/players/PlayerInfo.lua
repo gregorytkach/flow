@@ -5,6 +5,23 @@ PlayerInfo = classWithSuper(PlayerInfoBase, 'PlayerInfo')
 -- Properties
 --
 
+function PlayerInfo.freeBonusSpins(self)
+    return self._freeBonusSpins
+end
+
+function PlayerInfo.setFreeBonusSpins(self, value)
+    if(self._freeBonusSpins == value)then
+        return  
+    end
+    
+    self._freeBonusSpins = value
+    
+    self:trySaveProgress()
+    
+    self:tryUpdateCurrentState(EControllerUpdate.ECUT_FREE_BONUS_SPINS)
+end
+
+
 function PlayerInfo.setEnergy(self, value)
     if(self._energy == value) then
         return
@@ -89,6 +106,7 @@ function PlayerInfo.serialize(self)
     result.free_purchase_count_add_time     = self._freePurchaseAddTime
     result.free_purchase_count_resolve      = self._freePurchaseResolve
     result.free_purchase_count_show_turn    = self._freePurchaseShowTurn
+    result.free_bonus_spins                 = self._freeBonusSpins
     
     return result
 end
@@ -97,12 +115,9 @@ end
 function PlayerInfo.deserialize(self, data)
     PlayerInfoBase.deserialize(self, data)
     
-    assert(data.free_purchase_count_add_time    ~= nil)
-    assert(data.free_purchase_count_resolve     ~= nil)
-    assert(data.free_purchase_count_show_turn   ~= nil)
-    
-    self._freePurchaseAddTime   = tonumber(data.free_purchase_count_add_time)
-    self._freePurchaseResolve   = tonumber(data.free_purchase_count_resolve)
-    self._freePurchaseShowTurn  = tonumber(data.free_purchase_count_show_turn)
+    self._freePurchaseAddTime   = tonumber(assertProperty(data, 'free_purchase_count_add_time'))
+    self._freePurchaseResolve   = tonumber(assertProperty(data, 'free_purchase_count_resolve'))
+    self._freePurchaseShowTurn  = tonumber(assertProperty(data, 'free_purchase_count_show_turn'))
+    self._freeBonusSpins        = tonumber(assertProperty(data, 'free_bonus_spins'))
     
 end

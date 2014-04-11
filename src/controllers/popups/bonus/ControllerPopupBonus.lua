@@ -29,7 +29,9 @@ function ControllerPopupBonus.onViewClicked(self, target, event)
             function()
                 
                 self._view:buttonSpin():hide()
-                self._view:buttonClose():show()
+                self._view:buttonBuy():show()
+                
+                self._view:buttonClose():setIsEnabled(true)
                 
                 local bonus = bonuses[bonusIndex]
                 
@@ -43,6 +45,13 @@ function ControllerPopupBonus.onViewClicked(self, target, event)
             end)
             
             self._view:buttonSpin():setIsEnabled(false)
+            self._view:buttonClose():setIsEnabled(false)
+            
+        elseif(target == self._view:buttonBuy())then
+            --todo: buy free spins
+            print('todo: implement purchases', ELogLevel.ELL_WARNING)
+            
+            self._playerCurrent:setFreeBonusSpins(self._playerCurrent:freeBonusSpins() + self._purchaseBonusSpin:contentCount())
             
         else
             assert(false)
@@ -53,12 +62,9 @@ function ControllerPopupBonus.onViewClicked(self, target, event)
     return result
 end
 
-
-
 --
 -- Methods
 --
-
 
 function ControllerPopupBonus.init(self)
     
@@ -85,27 +91,53 @@ function ControllerPopupBonus.init(self)
     end, 
     -1)
     
+    self._purchaseBonusSpin = GameInfo:instance():managerPurchases():getPurchaseFirst(EPurchaseType.EPT_BONUS_SPIN)
+    
+    self._view:setPurchasePrice(self._purchaseBonusSpin:priceHard())
+    
+    self._playerCurrent = GameInfo:instance():managerPlayers():playerCurrent()
+end
+
+function ControllerPopupBonus.update(self, updateType)
+    if(updateType == EControllerUpdate.ECUT_FREE_BONUS_SPINS)then
+        self:updateButtons()
+    else
+        assert(false)
+    end
 end
 
 function ControllerPopupBonus.updateTime(self)
     
     self._view:setTime(self._managerBonus:timeLeft())
     
-    local isBonusAvailable =  self._managerBonus:isBonusAvailable()
+    self:updateButtons()
     
-    if(self._isBonusAvailable  ~= isBonusAvailable)then
-        
-        self._isBonusAvailable  = isBonusAvailable
-        
-        if(self._isBonusAvailable)then
-            self._view:buttonClose():hide()
-            self._view:buttonSpin():show()
-            self._view:buttonSpin():setIsEnabled(true)
-        else
-            self._view:buttonClose():show()
-            self._view:buttonSpin():hide()
-        end
+end
+
+function ControllerPopupBonus.updateButtons(self)
+    
+    local isBonusAvailable =  self._managerBonus:isBonusAvailable() or self._playerCurrent:freeBonusSpins() > 0
+    
+    if(self._isBonusAvailable  == isBonusAvailable)then
+        return
     end
+    
+    self._isBonusAvailable  = isBonusAvailable
+    
+    print('change bonus state')
+    print(self._isBonusAvailable)
+    
+    if(self._isBonusAvailable)then
+        self._view:buttonBuy():hide()
+        self._view:buttonSpin():show()
+        
+        self._view:buttonSpin():setIsEnabled(true)
+    else
+        self._view:buttonBuy():show()
+        self._view:buttonSpin():hide()
+    end
+    
+    local labelButtonSpin = ""
     
 end
 

@@ -62,7 +62,11 @@ function ViewUI.init(self, params)
     self._buttonHelp = self:createButton(managerResources:getAsButton(EResourceType.ERT_BUTTON_HELP))
     self._buttonHome = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_GAME_BUTTON_HOME))
     
-    self._labelCurrencySoft    = self:createLabel("%i", EFontType.EFT_0, nil, nil, 0, application.animation_duration * 2)
+    self._labelCurrencySoft    = self:createLabel("%i", EFontType.EFT_0, nil, nil, nil, nil,
+    {
+        value       = 0,
+        timeUpdate  = application.animation_duration * 2
+    })
     self._labelCurrencySoft:sourceView():setColorHex("0xFFB600")
     
     self._labelTime     = self:createLabel("0:0", EFontType.EFT_0)

@@ -25,9 +25,6 @@ end
 
 function ManagerRemoteFlow.update(self, type, data, callback)
     
-    --todo remove after debug
-    self._isConnectionEstablished = true
-    
     if(self._isConnectionEstablished)then
         
         local callbackWrapper = function (response)

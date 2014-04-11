@@ -79,6 +79,8 @@ function ControllerMapItem.init(self, params)
     
     Controller.init(self, paramsController)
     
+    self._view:setNumber(self._entry:number())
+    
 end
 
 function ControllerMapItem.showIcon(self, delay)

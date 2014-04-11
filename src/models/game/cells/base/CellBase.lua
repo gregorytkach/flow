@@ -86,6 +86,10 @@ end
 -- 
 
 function CellBase.onPurchased(self, flowType)
+    if(self._isPurchased)then
+        print('set breakpoint here')
+    end
+    
     assert(not self._isPurchased, 'Cell already purchased')
     assert(flowType ~= nil)
     

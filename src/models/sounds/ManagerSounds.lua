@@ -14,72 +14,85 @@ end
 --
 --Events
 --
-function ManagerSounds.onStateChanged(self, stateType)
-    if(self._prevStateType == stateType)then
-        return
-    end
-    
-    if(stateType == EStateType.EST_GAME or 
-        self._prevStateType == nil or 
-        self._prevStateType == EStateType.EST_GAME)then
-        
-        self:stopMusic()
-        
-        self:unloadSounds()
-        self._prevStateType = stateType
-        
-        if(application.music)then
-            self:playMusic(stateType)
-        end
-        
-        self:_loadSounds(stateType)
-        
-    end
-    
-end
+
 --
 --Methods
 --
 
 function ManagerSounds.init(self)
     ManagerSoundsBase.init(self)
+    
+    --sync sounds and music states
+    application.sounds = application.music
 end
 
-function ManagerSounds._loadSounds(self, stateType)
-    --todo:implement
+function ManagerSounds.getMusicForState(self, stateType)
+    local result = nil
     
---    if(stateType == EStateType.EST_GAME)then
---        self:_loadSounds(EStateType.EST_MAIN)
---        
---    else
---        self:_loadSoundsButtons()
---    end
-end
-
-function ManagerSounds._loadSoundsGame(self)
-    self:_loadSoundsLobby()
-    
-    --bonuses
-    for i = 0, 4, 1 do
-        local soundName = string.format("assets/sounds/bonuses/bonus%i.mp3", i)
+    if(stateType == EStateType.EST_MAP)then
         
-        self._audioHandlers[ESoundType["EST_BONUS"]..i] = audio.loadStream(soundName)
+        result = application.dir_assets..'sounds/music_map.mp3'
+        
+    elseif(stateType == EStateType.EST_GAME)then
+        
+        result = application.dir_assets..'sounds/music_game.mp3'
+        
+    elseif(stateType == EStateType.EST_EDITOR)then
+        --do nothing
+    else
+        assert(false)
     end
+    
+    return result
+end
+
+function ManagerSounds.loadSounds(self, stateType)
+    
+    self:loadSoundsBase()
+    
+    if(stateType == EStateType.EST_GAME)then
+        
+        self:loadSoundsGame()
+        
+    elseif(stateType == EStateType.EST_MAP)then
+        
+        self:loadSoundsMap()
+        
+    elseif(stateType == EStateType.EST_EDITOR)then
+        --do nothing
+    else
+        assert(false)
+    end
+end
+
+function ManagerSounds.loadSoundsBase(self)
+    self._audioHandlers[ESoundTypeBase.ESTB_BUTTON_DOWN]    = audio.loadStream(application.dir_assets..'sounds/button_down.mp3')
+    self._audioHandlers[ESoundTypeBase.ESTB_BUTTON_UP]      = audio.loadStream(application.dir_assets..'sounds/button_up.mp3')
+    
+    self._audioHandlers[ESoundType.EST_BUTTON_BUY]          = audio.loadStream(application.dir_assets..'sounds/button_buy.mp3')
+    
+    self._audioHandlers[ESoundType.EST_POPUP_SHOW]      = audio.loadStream(application.dir_assets..'sounds/popup_show.mp3')
+end
+
+function ManagerSounds.loadSoundsMap(self)
+    
+    --    ["EST_BUTTON_SPIN"]         = "EST_BUTTON_SPIN";
+    
+end
+
+function ManagerSounds.loadSoundsGame(self)
+    
+    self._audioHandlers[ESoundType.EST_BUTTON_PURCHASE]     = audio.loadStream(application.dir_assets..'sounds/button_purchase.mp3')
+    
+    self._audioHandlers[ESoundType.EST_GAME_LOSE]          = audio.loadStream(application.dir_assets..'sounds/game_lose.mp3')
+    self._audioHandlers[ESoundType.EST_GAME_WIN]           = audio.loadStream(application.dir_assets..'sounds/game_win.mp3')
     
 end
 
 function ManagerSounds.getSound(self, soundType)
     local result
     
-    if(soundType == ESoundType.EST_BONUS)then
-        
-        result = self._audioHandlers[ESoundType.EST_BONUS..math.random(0, 4)]
-        
-    else
-        
-        result = ManagerSoundsLego.getSound(self, soundType)
-        
-    end
+    result = ManagerSoundsBase.getSound(self, soundType)
     
     return result
 end

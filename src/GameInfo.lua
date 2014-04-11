@@ -31,10 +31,9 @@ require('game_flow.src.controllers.popups.game_over.ControllerPopupGameOver')
 require('game_flow.src.controllers.popups.no_energy.ControllerPopupNoEnergy')
 require('game_flow.src.controllers.popups.no_currency.ControllerPopupNoCurrency')
 require('game_flow.src.controllers.popups.bonus.ControllerPopupBonus')
-
+require('game_flow.src.controllers.popups.tutorial.ControllerPopupTutorial')
 
 GameInfo = classWithSuper(GameInfoBase, 'GameInfo')
-
 
 --
 -- Static 
@@ -79,20 +78,22 @@ function GameInfo.onGameStartComplete(self, response)
         self._managerPlayers:deserialize(data.players)
         self._managerPurchases:deserialize(data.purchases)
         self._managerBonus:deserialize(data.bonus)
+        self._managerTutorial:deserialize(data.tutorial)
         
         local paramsGame = 
         {
             currentLevel = self._managerLevels:firstIncompleteLevel()
         }
         
---        self:onGameStart(ManagerEditor:new(paramsGame))
---        self._managerStates:setState(EStateType.EST_EDITOR)
+        --        self:onGameStart(ManagerEditor:new(paramsGame))
+        --        self._managerStates:setState(EStateType.EST_EDITOR)
         --        
         
-                                self:onGameStart(ManagerGame:new(paramsGame))
-                                self._managerStates:setState(EStateType.EST_GAME)
+        --                                self:onGameStart(ManagerGame:new(paramsGame))
+        --                                self._managerStates:setState(EStateType.EST_GAME)
         
-        --        self._managerStates:setState(EStateType.EST_MAP)
+        self._managerStates:setState(EStateType.EST_MAP)
+        
     end
 end
 
@@ -137,6 +138,7 @@ function GameInfo.initManagers(self)
     self._managerBonusEnergy    = ManagerBonusEnergyBase:new(BonusInfoBase)
     self._managerPlayers        = ManagerPlayersBase:new(PlayerInfo)
     self._managerLevels         = ManagerLevelsBase:new(LevelInfo) 
+    self._managerTutorial       = ManagerTutorialBase:new()
     
     self._managerAdChartboost   = ManagerAdChartboost:new()
     self._managerAdVungle       = ManagerAdVungle:new()

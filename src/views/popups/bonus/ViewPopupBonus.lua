@@ -15,6 +15,20 @@ function ViewPopupBonus.buttonSpin(self)
     return self._buttonSpin
 end
 
+function ViewPopupBonus.buttonBuy(self)
+    return self._buttonBuy
+end
+
+function ViewPopupBonus.setPurchasePrice(self, value)
+    assert(value ~= nil)
+    
+    local managerString = GameInfo:instance():managerString()
+    
+    local stringFormat = managerString:getString(EStringType.EST_POPUP_BONUS_BUTTON_BUY)
+    
+    self._buttonBuy:label():sourceView():setText(string.format(stringFormat, tostring(value)))
+end
+
 function ViewPopupBonus.setReward(self, value, type)
     assert(value ~= nil)
     
@@ -72,6 +86,13 @@ function ViewPopupBonus.init(self, params)
     EFontType.EFT_1)
     
     
+    self._buttonBuy = self:createButton(managerResources:getAsButton(EResourceType.ERT_POPUP_BUTTON_BLUE0),
+    nil,
+    "",
+    EFontType.EFT_1)
+    
+    self._buttonBuy:label():sourceView():setColorHex("0xE5FBFF")
+    
     local buttonClose = self:createButton(managerResources:getAsButton(EResourceType.ERT_POPUP_BUTTON_BLUE0),
     nil,
     managerString:getString(EStringType.EST_POPUP_BONUS_BUTTON_CLOSE),
@@ -88,7 +109,11 @@ function ViewPopupBonus.init(self, params)
     self._viewReward        = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_BONUS_VIEW_REWARD))
     self._labelReward       = self:createLabel(managerString:getString(EStringType.EST_POPUP_BONUS_REWARD), EFontType.EFT_2)
     
-    self._labelRewardCount  = self:createLabel("%i", EFontType.EFT_0, ELabelTextAlign.ELTA_LEFT, nil, 0, application.animation_duration * 4)
+    self._labelRewardCount  = self:createLabel("%i", EFontType.EFT_0, ELabelTextAlign.ELTA_LEFT, nil, nil, nil,
+    {
+        value       = 0,
+        timeUpdate  = application.animation_duration * 4
+    })
     
     self._labelRewardCount:sourceView():setColorHex("0xFFB600")
     
@@ -129,13 +154,16 @@ function ViewPopupBonus.placeViews(self)
     self._labelTitle:sourceView().x = 0 
     self._labelTitle:sourceView().y = 30 - realHeight / 2
     
-    self._buttonClose:sourceView().x = 0
+    self._buttonClose:sourceView().x = -self._buttonClose:realWidth() / 2 - 10
     self._buttonClose:sourceView().y = realHeight / 2 - self._buttonClose:realHeight() / 2 - 25
     
-    self._buttonSpin:sourceView().x = self._buttonClose:sourceView().x 
+    self._buttonBuy:sourceView().x = self._buttonBuy:realWidth() / 2 + 10
+    self._buttonBuy:sourceView().y = self._buttonClose:sourceView().y
+    
+    self._buttonSpin:sourceView().x = self._buttonBuy:sourceView().x 
     self._buttonSpin:sourceView().y = self._buttonClose:sourceView().y
     
-    self._viewDrumBg:sourceView().x =  self._buttonSpin:sourceView().x 
+    self._viewDrumBg:sourceView().x =  0 
     self._viewDrumBg:sourceView().y =  self._buttonSpin:sourceView().y - self._viewDrumBg:realHeight() / 2 - self._buttonSpin:realHeight() / 2 - 10
     
     self._viewDrum:sourceView().x =  self._viewDrumBg:sourceView().x
@@ -189,6 +217,9 @@ function ViewPopupBonus.cleanup(self)
     end
     
     self._iconsReward = nil
+    
+    self._buttonBuy:cleanup()
+    self._buttonBuy = nil
     
     self._buttonSpin:cleanup() 
     self._buttonSpin = nil

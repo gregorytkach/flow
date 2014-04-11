@@ -9,6 +9,12 @@ function ViewMapItemBase.button(self)
     return self._button
 end
 
+function ViewMapItemBase.setNumber(self, value)
+    assert(value ~= nil)
+    
+    self._labelNumber:sourceView():setText(value)
+end
+
 --
 -- Methods
 --
@@ -17,6 +23,8 @@ function ViewMapItemBase.init(self, params)
     ViewBase.init(self, params)
     
     self._sourceView = display.newGroup()
+    
+    self._labelNumber = self:createLabel("0" , EFontType.EFT_0)
     
 end
 
@@ -29,10 +37,10 @@ function ViewMapItemBase.createImageItem(self, imageType)
 end
 
 
-
 function ViewMapItemBase.placeViews(self)
     ViewBase.placeViews(self)
     
+    self._labelNumber:sourceView().y = -self:realHeight() / 2 - self._labelNumber:realHeight() / 2 - 5
 end
 
 function ViewMapItemBase.getParamsTweenShow(self, time, callback)
@@ -92,6 +100,9 @@ function ViewMapItemBase.cleanup(self)
         self._image:cleanup()
         self._image = nil
     end
+    
+    self._labelNumber:cleanup()
+    self._labelNumber = nil
     
     ViewBase.cleanup(self)
 end

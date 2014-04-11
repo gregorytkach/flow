@@ -11,8 +11,9 @@ ControllerPurchases = classWithSuper(Controller, 'ControllerPurchases')
 function ControllerPurchases.onViewClicked(self, target, event)
     local needShowPopupNoCurrency = false
     
+    local applyPurchase = false
+    
     if (self._view:buttonResolve() == target) then
-        local applyPurchase = false
         
         if(self._playerCurrent:freePurchaseResolve() > 0)then
             
@@ -33,7 +34,6 @@ function ControllerPurchases.onViewClicked(self, target, event)
         end
         
     elseif (self._view:buttonShowTurn() == target) then
-        local applyPurchase = false
         
         if(self._playerCurrent:freePurchaseShowTurn() > 0)then
             
@@ -55,8 +55,6 @@ function ControllerPurchases.onViewClicked(self, target, event)
         
         
     elseif (self._view:buttonAddTime() == target) then
-        
-        local applyPurchase = false
         
         if(self._playerCurrent:freePurchaseAddTime() > 0)then
             
@@ -81,6 +79,10 @@ function ControllerPurchases.onViewClicked(self, target, event)
     
     if(needShowPopupNoCurrency)then
         GameInfo:instance():managerStates():currentState():showPopup(EPopupType.EPT_NO_CURRENCY)
+    end
+    
+    if(applyPurchase and application.sounds)then
+        audio.play(GameInfoBase:instance():managerSounds():getSound(ESoundType.EST_BUTTON_PURCHASE))
     end
     
 end

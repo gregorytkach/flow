@@ -252,7 +252,9 @@ end
 function ManagerGame.getCellsByType(self, type)
     local result = self._cellsBytTypes[type]
     
-    assert(result ~= nil)
+    if(result == nil)then
+        print("Not found cell with type: "..tostring(type), ELogLevel.ELL_WARNING) 
+    end    
     
     return result
 end

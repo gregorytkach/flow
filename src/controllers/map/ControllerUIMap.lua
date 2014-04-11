@@ -8,16 +8,37 @@ ControllerUIMap = classWithSuper(Controller, 'ControllerUIMap')
 
 function ControllerUIMap.onViewClicked(self, target, event)
     
-    if (target == self._view:buttonSound() or target == self._view:buttonSoundDisabled()) then
-        --todo: implement
-        --        GameInfo:instance():managerSounds()
+    if (target == self._view:buttonSound()) then
+        
+        application.sounds  = true
+        application.music   = true
+        
+        --try play music
+        GameInfo:instance():managerSounds():playMusic()
+        
+        self:updateButtonSound()
+        
+    elseif(target == self._view:buttonSoundDisabled())then
+        
+        application.sounds  = false
+        application.music   = false
+        
+        --try stop music
+        GameInfo:instance():managerSounds():stopMusic()
+        
+        self:updateButtonSound()
         
     elseif(target == self._view:buttonBonus())then
         
         self._currentState:showPopup(EPopupType.EPT_BONUS)
         
     elseif(target == self._view:buttonHelp())then
-        --todo: implement
+        
+        local popupTutorial = self._currentState:getPopup(EPopupType.EPT_TUTORIAL)
+        
+        popupTutorial:prepare()
+        
+        self._currentState:showPopup(EPopupType.EPT_TUTORIAL)
         
     elseif(target == self._view:buttonBuyCurrency())then
         local popupShop = self._currentState:getPopup(EPopupType.EPT_SHOP)
@@ -84,12 +105,12 @@ function ControllerUIMap.init(self)
         self:update(EControllerUpdate.ECUT_BONUS_ENERGY_TIME)
     end, -1)
     
-    self:updateTimerBonus()
     self:updateTimerEnergy()
+    
+    self:updateButtonSound()
 end
 
 function ControllerUIMap.update(self, updateType)
-    
     
     if(updateType == EControllerUpdate.ECUT_GAME_SCORES) then
         
@@ -110,7 +131,7 @@ function ControllerUIMap.update(self, updateType)
         
     elseif(updateType == EControllerUpdateBase.ECUT_BONUS_TIME)then
         
-        self:updateTimerBonus()
+        self._view:setTimeBonus(self._managerBonus:timeLeft())
         
     elseif(updateType == EControllerUpdate.ECUT_BONUS_ENERGY_TIME)then
         
@@ -122,15 +143,15 @@ function ControllerUIMap.update(self, updateType)
     
 end
 
-function ControllerUIMap.updateTimerBonus(self)
-    self._view:setTimeBonus(self._managerBonus:timeLeft())
-    
-    self._view:buttonBonus():setIsEnabled(self._managerBonus:isBonusAvailable())
-end
-
-
 function ControllerUIMap.updateTimerEnergy(self)
     self._view:setTimeEnergy(self._managerBonusEnergy:timeLeft())
+end
+
+function ControllerUIMap.updateButtonSound(self)
+    
+    self._view:buttonSoundDisabled():sourceView().isVisible  = not application.sounds
+    self._view:buttonSound():sourceView().isVisible          = application.sounds
+    
 end
 
 function ControllerUIMap.cleanup(self)

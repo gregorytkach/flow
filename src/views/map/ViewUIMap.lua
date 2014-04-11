@@ -98,13 +98,23 @@ function ViewUIMap.init(self, params)
     
     self._viewCurrency          = self:createSprite(managerResources:getAsImage(EResourceType.ERT_VIEW_CURRENCY))
     
-    self._labelCurrencySoft     = self:createLabel("%i", EFontType.EFT_0, ELabelTextAlign.ELTA_RIGHT, nil, 0, application.animation_duration * 4)
+    self._labelCurrencySoft     = self:createLabel("%i", EFontType.EFT_0, ELabelTextAlign.ELTA_RIGHT, nil, nil, nil, 
+    {
+        value       = 0,
+        timeUpdate  = application.animation_duration * 4
+    })
+    
     self._labelCurrencySoft:sourceView():setColorHex("0xFFB600")
     
     self._buttonBuyCurrency     = self:createButton(managerResources:getAsButton(EResourceType.ERT_BUTTON_SHOP))
     
     self._viewEnergy            = self:createSprite(managerResources:getAsImage(EResourceType.ERT_STATE_MAP_VIEW_ENERGY))
-    self._labelEnergy           = self:createLabel("%i",  EFontType.EFT_0, ELabelTextAlign.ELTA_RIGHT, nil, 0, application.animation_duration * 4)
+    self._labelEnergy           = self:createLabel("%i",  EFontType.EFT_0, ELabelTextAlign.ELTA_RIGHT, nil, nil, nil,
+    {
+        value       = 0,
+        timeUpdate  = application.animation_duration * 4
+    })
+    
     self._labelEnergy:sourceView():setColorHex("0xFFB600")
     
     self._buttonBuyEnergy       = self:createButton(managerResources:getAsButton(EResourceType.ERT_BUTTON_SHOP))
@@ -161,7 +171,7 @@ function ViewUIMap.placeViews(self)
     if(borderRight > borderRightMax)then
         local targetScale =  widthMax / widthCurrent 
         
---        targetScale = 0.8
+        --        targetScale = 0.8
         
         self:scaleItem(self._buttonSound, targetScale)
         self:scaleItem(self._buttonSoundDisabled, targetScale)
@@ -184,7 +194,7 @@ end
 function ViewUIMap.placeBottomButtons(self)
     local buttonsOffsetY = application.margin_bottom - self._buttonSound:realHeight() / 2 - 5
     
---    local buttonSoundRealWidth = self._buttonSound:realWidth()
+    --    local buttonSoundRealWidth = self._buttonSound:realWidth()
     self._buttonSound:sourceView().x = application.margin_left + self._buttonSound:realWidth() / 2 + 5 / application.scaleFillWidth
     self._buttonSound:sourceView().y = buttonsOffsetY
     

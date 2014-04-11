@@ -45,17 +45,31 @@ function ViewPopupWin.init(self, params)
     self._labelText = self:createLabel(text,        --text
     EFontType.EFT_1,                                --fontType
     nil,                                            --align
-    self._viewText:sourceView().width)              --wrapWidth
+    nil,              --wrapWidth
+    nil,                                            --value
+    nil,        
+    {
+        wrapWidth   = self._viewText:sourceView().width,
+        lineSpacing = 5                             --params
+    })
     
     self._viewReward = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_WIN_VIEW_REWARD))
     self._labelReward = self:createLabel(managerString:getString(EStringType.EST_POPUP_WIN_REWARD), 
     EFontType.EFT_1,
     ELabelTextAlign.ELTA_RIGHT, 
     nil, 
-    0, 
-    application.animation_duration * 4 * 10)
+    nil,
+    nil,
+    { 
+        value       = 0,
+        timeUpdate  = application.animation_duration * 4 * 10
+    })
     
-    self._labelRewardCount = self:createLabel("%i", EFontType.EFT_0, ELabelTextAlign.ELTA_RIGHT, nil, 0, application.animation_duration * 4)
+    self._labelRewardCount = self:createLabel("%i", EFontType.EFT_0, ELabelTextAlign.ELTA_RIGHT, nil, nil, nil, 
+    {
+        value       = 0, 
+        timeUpdate  = application.animation_duration * 4
+    })
     self._labelRewardCount:sourceView():setColorHex("0xFFB600")
     
     self._iconCurrency = self:createSprite(managerResources:getAsImage(EResourceType.ERT_ICON_CURRENCY))
@@ -95,7 +109,7 @@ function ViewPopupWin.placeViews(self)
     self._viewReward:sourceView().x = 0
     self._viewReward:sourceView().y = 0 + self._viewReward:realHeight() / 2 + 5
     
-    self._labelReward:sourceView().x = self._viewReward:sourceView().x
+    self._labelReward:sourceView().x = self._viewReward:sourceView().x + 10
     self._labelReward:sourceView().y = self._viewReward:sourceView().y
     
     self._iconCurrency:sourceView().x = self._viewReward:sourceView().x + self._viewReward:realWidth() / 2 - self._iconCurrency:realWidth() / 2 - 5
@@ -104,14 +118,14 @@ function ViewPopupWin.placeViews(self)
     self._labelRewardCount:sourceView().x = self._iconCurrency:sourceView().x - self._iconCurrency:realWidth() / 2 - 5
     self._labelRewardCount:sourceView().y = self._viewReward:sourceView().y
     
-    self._animationDog.x = - realWidth / 2  + self._animationDog.contentWidth / 2
-    self._animationDog.y = - realHeight / 2 - self._animationDog.contentHeight / 2 + 10
+    self._animationDog.x = -realWidth / 2  + self._animationDog.contentWidth / 2
+    self._animationDog.y = -realHeight / 2 - self._animationDog.contentHeight / 2 + 10
     
     self._ballonsLeft.x = - realWidth / 2
     self._ballonsLeft.y = 40
     
     self._ballonsRight.x = realWidth / 2
-    self._ballonsRight.y = - 20
+    self._ballonsRight.y = -20
 end
 
 function ViewPopupWin.cleanup(self)

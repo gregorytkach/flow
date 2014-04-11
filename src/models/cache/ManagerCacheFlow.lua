@@ -34,6 +34,11 @@ function ManagerCacheFlow.getDataBonusEnergy(self)
     return result
 end
 
+function ManagerCacheFlow.getDataTutorial(self)
+    local result = require('game_flow.src.models.cache.default_data.tutorial.tutorial')
+    return result
+end
+
 
 --
 -- Methods
@@ -43,6 +48,9 @@ function ManagerCacheFlow.init(self)
     ManagerCacheBase.init(self)
 end
 
+function ManagerCacheFlow.updateTutorial(self, data)
+    --do nothing, because serverside do not implement tutorial data
+end
 
 function ManagerCacheFlow.cleanup(self)
     ManagerCacheBase.cleanup(self)

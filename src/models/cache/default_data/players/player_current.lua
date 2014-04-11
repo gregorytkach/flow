@@ -7,7 +7,8 @@ local function getDataPlayerCurrent()
         
         free_purchase_count_add_time    = 3,
         free_purchase_count_resolve     = 3,
-        free_purchase_count_show_turn   = 3
+        free_purchase_count_show_turn   = 3,
+        free_bonus_spins                = 1
     }
     
     return result

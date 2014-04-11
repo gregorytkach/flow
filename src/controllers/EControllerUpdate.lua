@@ -2,7 +2,7 @@ EControllerUpdate =
 {
     ["ECUT_CELL_PURCHASED"]             = "ECUT_CELL_PURCHASED";
     ["ECUT_CELL_NEXT"]                  = "ECUT_CELL_NEXT";
-
+    
     ["ECUT_INCLUSION_IN_LINE"]          = "ECUT_INCLUSION_IN_LINE";
     ["ECUT_EXCLUSION_FROM_LINE"]        = "ECUT_EXCLUSION_FROM_LINE";
     
@@ -17,6 +17,7 @@ EControllerUpdate =
     ["ECUT_FREE_PURCHASE_ADD_TIME"]     = "ECUT_FREE_PURCHASE_ADD_TIME";
     ["ECUT_FREE_PURCHASE_SHOW_TURN"]    = "ECUT_FREE_PURCHASE_SHOW_TURN";
     ["ECUT_FREE_PURCHASE_RESOLVE"]      = "ECUT_FREE_PURCHASE_RESOLVE";
+    ["ECUT_FREE_BONUS_SPINS"]           = "ECUT_FREE_BONUS_SPINS";
     
     ["ECUT_EDIT"]                       = "ECUT_EDIT";
     ["ECUT_SET_DOGS"]                   = "ECUT_SET_DOGS";

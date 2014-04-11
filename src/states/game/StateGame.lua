@@ -68,7 +68,7 @@ function StateGame.initLayerPopups(self)
     self:registerPopup(ControllerPopupWin:new())
     self:registerPopup(ControllerPopupGameOver:new())
     self:registerPopup(ControllerPopupNoCurrency:new())
-    
+    self:registerPopup(ControllerPopupTutorial:new())
 end
 
 function StateGame.update(self, updateType)
@@ -80,6 +80,9 @@ function StateGame.update(self, updateType)
         self._sceneEntered = true
         
         self._controllerGrid:update(updateType)
+        
+        self:tryStartTutorial()
+        
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         
     elseif(updateType == EControllerUpdate.ECUT_GAME_TIME)then
@@ -120,14 +123,24 @@ function StateGame.update(self, updateType)
         
         timer.performWithDelay(application.animation_duration * 4 * 2, 
         function() 
+            
+            local managerSounds = GameInfoBase:instance():managerSounds()
+            
             if(self._managerGame:isPlayerWin()) then
                 self:showPopup(EPopupType.EPT_WIN)
+                
+                if(application.sounds)then
+                    audio.play(managerSounds:getSound(ESoundType.EST_GAME_WIN))
+                end
             else
                 
                 managerAd:showAd()
                 
                 self:showPopup(EPopupType.EPT_GAME_OVER)
                 
+                if(application.sounds)then
+                    audio.play(managerSounds:getSound(ESoundType.EST_GAME_LOSE))
+                end
             end
             
         end,1)
@@ -159,6 +172,48 @@ function StateGame.hidePopup(self, callback)
     end
     
     StateBase.hidePopup(self, callbackWrapper)
+end
+
+function StateGame.tryStartTutorial(self)
+    local managerTutorial = GameInfo:instance():managerTutorial()
+    
+    if(managerTutorial:isComplete())then
+        return
+    end
+    
+    local stepCurrent   = managerTutorial:stepCurrent()
+    local needShowPopup = false
+    
+    if(stepCurrent == 0)then
+        needShowPopup = true
+        
+    elseif(stepCurrent == 1)then
+        --need check if grid has barriers 
+        local barriers = self._managerGame:getCellsByType(ECellType.ECT_BARRIER)
+        
+        needShowPopup = barriers ~= nil
+        
+    elseif(stepCurrent == 2)then
+        --need check if grid has bridges 
+        
+        local bridges = self._managerGame:getCellsByType(ECellType.ECT_BRIDGE)
+        
+        needShowPopup = bridges ~= nil
+        
+    else
+        assert(false)
+    end
+    
+    if(needShowPopup)then
+        
+        local popupTutorial = self:getPopup(EPopupType.EPT_TUTORIAL)
+        
+        popupTutorial:prepare(stepCurrent + 1)
+        
+        self:showPopup(EPopupType.EPT_TUTORIAL)
+        
+        managerTutorial:onStepCurrentComplete()
+    end
 end
 
 

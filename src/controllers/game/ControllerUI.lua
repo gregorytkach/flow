@@ -11,12 +11,22 @@ function ControllerUI.onViewClicked(self, target, event)
     
     if (self._view:buttonHome() == target) then
         
+        local playerCurrent = GameInfo:instance():managerPlayers():playerCurrent()
+        
+        playerCurrent:setEnergy(playerCurrent:energy() - 1)
+        
         GameInfo:instance():onGameEnd()
         
         GameInfo:instance():managerStates():setState(EStateType.EST_MAP)
         
     elseif (self._view:buttonHelp() == target) then 
+        local currentState = GameInfo:instance():managerStates():currentState()
         
+        local popupTutorial = currentState:getPopup(EPopupType.EPT_TUTORIAL)
+        
+        popupTutorial:prepare()
+        
+        currentState:showPopup(EPopupType.EPT_TUTORIAL)
     elseif (self._view:buttonShop() == target) then
         GameInfo:instance():managerStates():currentState():showPopup(EPopupType.EPT_SHOP)
     else

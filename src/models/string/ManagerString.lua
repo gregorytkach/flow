@@ -24,12 +24,23 @@ function ManagerString.initLanguageEnglish(self)
     --map
     language[EStringType.EST_STATE_MAP_FREE_CURRENCY]       = 'FREE CURRENCY'
     
+    --tutorial
+    language[EStringType.EST_POPUP_TUTORIAL_BUTTON_CLOSE]   = 'CLOSE'
+    language[EStringType.EST_POPUP_TUTORIAL_BUTTON_NEXT]    = 'NEXT'
+    language[EStringType.EST_POPUP_TUTORIAL_TITLE_1]        = 'TUTORIAL'
+    language[EStringType.EST_POPUP_TUTORIAL_TITLE_2]        = 'GRASS'
+    language[EStringType.EST_POPUP_TUTORIAL_TEXT_2]         = 'NEW! GRASS ON THE | FIELD - YOU NEED | TO AVOID IT'
+    language[EStringType.EST_POPUP_TUTORIAL_TITLE_3]        = 'BRIDGES'
+    language[EStringType.EST_POPUP_TUTORIAL_TEXT_3]         = 'BRIDGES AREAS CAN | BE CROSSED BY | TWO DOGS'
+    
+    
     --bonus
     language[EStringType.EST_POPUP_BONUS_TITLE]             = 'DAILY BONUS'
     language[EStringType.EST_POPUP_BONUS_TIME]              = '%i:%i'
     language[EStringType.EST_POPUP_BONUS_BUTTON_CLOSE]      = 'CLOSE'
     language[EStringType.EST_POPUP_BONUS_REWARD]            = 'REWARD:'
     language[EStringType.EST_POPUP_BONUS_BUTTON_SPIN]       = 'SPIN'
+    language[EStringType.EST_POPUP_BONUS_BUTTON_BUY]        = 'BUY %s'
     
     --no currency
     language[EStringType.EST_POPUP_NO_CURRENCY_TITLE]       = 'OOPS'

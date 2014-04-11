@@ -310,7 +310,7 @@ function ControllerGrid.sortDogs(self)
         
         self._dogsList[indexJ + 1] = value
     end
-    
+
     for _, controllerDog in ipairs(self._dogsList) do
         controllerDog._view._sourceView:toFront()
     end

@@ -98,6 +98,11 @@ EResourceType =
     --popup shop
     ["ERT_POPUP_SHOP_VIEW_ITEM"]                = "ERT_POPUP_SHOP_VIEW_ITEM";
     
+    --popup tutorial
+    ["ERT_POPUP_TUTORIAL_VIEW_BASE"]            = "ERT_POPUP_TUTORIAL_VIEW_BASE";
+    ["ERT_POPUP_TUTORIAL_VIEW1"]                = "ERT_POPUP_TUTORIAL_VIEW1";
+    
+    
     --state editor
     
     ["ERT_STATE_EDITOR_BUTTON_SHUFFLE"]    = "ERT_STATE_EDITOR_BUTTON_SHUFFLE";

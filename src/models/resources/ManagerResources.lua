@@ -51,6 +51,10 @@ function ManagerResources.init(self)
     --popup shop
     self._resources[EResourceType.ERT_POPUP_SHOP_VIEW_ITEM]         = '%spopup_shop/view_item/view_item%s.png'
     
+    --popup tutorial
+    self._resources[EResourceType.ERT_POPUP_TUTORIAL_VIEW_BASE]     = "%spopup_tutorial/view_tutorial_base/view_tutorial_base%s.png"
+    self._resources[EResourceType.ERT_POPUP_TUTORIAL_VIEW1]         = "%spopup_tutorial/view_tutorial1/view_tutorial1%s.png"
+    
     --state game
     self._resources[EResourceType.ERT_STATE_GAME_BUTTON_HOME]       = '%sstate_game/ui/button_home/%s%s.png'
     
@@ -222,18 +226,19 @@ function ManagerResources.getPopupBackground(self, type)
     
     local result = ''
     
-    if (type == EPopupType.EPT_SHOP) then
-        result = '%spopup_shop/background/background%s.png'
-    elseif (type == EPopupType.EPT_WIN) then
-        result = '%spopup_win/background/background%s.png'
-    elseif (type == EPopupType.EPT_GAME_OVER) then
-        result = '%spopup_game_over/background/background%s.png'
-    elseif (type == EPopupType.EPT_BONUS) then
-        result = '%spopup_bonus/background/background%s.png'
-    elseif(type == EPopupType.EPT_NO_CURRENCY)then
-        result = '%spopup_no_resource/background/background%s.png'
-    elseif(type == EPopupType.EPT_NO_ENERGY)then
-        result = '%spopup_no_resource/background/background%s.png'
+    if (type == EPopupType.EPT_SHOP     or 
+        type == EPopupType.EPT_BONUS    or
+        type == EPopupType.EPT_TUTORIAL) then
+        
+        result = '%spopup_base/background_big/background%s.png'
+        
+    elseif (type == EPopupType.EPT_WIN          or
+        type == EPopupType.EPT_GAME_OVER    or
+        type == EPopupType.EPT_NO_CURRENCY  or
+        type == EPopupType.EPT_NO_ENERGY) then
+        
+        result = '%spopup_base/background_small/background%s.png'
+        
     else
         assert(false)
     end

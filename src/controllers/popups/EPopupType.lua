@@ -6,6 +6,6 @@ EPopupType =
     ["EPT_NO_ENERGY"]   = "EPT_NO_ENERGY";
     ["EPT_NO_CURRENCY"] = "EPT_NO_CURRENCY";
     ["EPT_BONUS"]       = "EPT_BONUS";
-    
+    ["EPT_TUTORIAL"]    = "EPT_TUTORIAL";
 }
 

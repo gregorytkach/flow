@@ -64,7 +64,7 @@ function StateMap.initLayerPopups(self)
     self:registerPopup(ControllerPopupBonus:new())
     self:registerPopup(ControllerPopupShop:new())
     self:registerPopup(ControllerPopupNoEnergy:new())
-    
+    self:registerPopup(ControllerPopupTutorial:new())
     
 end
 
@@ -73,6 +73,8 @@ function StateMap.update(self, updateType)
     if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
         
         self._controllerStateMap:itemsShow()
+        
+        self:showPopup(EPopupType.EPT_BONUS)
         
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         
@@ -91,7 +93,10 @@ function StateMap.update(self, updateType)
         updateType == EControllerUpdate.ECUT_FREE_PURCHASE_RESOLVE)then
         
         --do nothing
+    elseif(updateType == EControllerUpdate.ECUT_FREE_BONUS_SPINS)then
+        local popupBonus = self:getPopup(EPopupType.EPT_BONUS)
         
+        popupBonus:update(updateType)
     else
         assert(false, updateType)
     end

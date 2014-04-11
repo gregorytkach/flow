@@ -1,6 +1,5 @@
 ESoundType = 
 {
-    ["EST_BUTTON_ADD_TIME"]     = "EST_BUTTON_ADD_TIME";
     ["EST_BUTTON_BUY"]          = "EST_BUTTON_BUY";
     ["EST_BUTTON_DEFAULT"]      = "EST_BUTTON_DEFAULT";
     ["EST_BUTTON_PURCHASE"]     = "EST_BUTTON_PURCHASE";
@@ -11,7 +10,7 @@ ESoundType =
     
     ["EST_POPUP_SHOW"]          = "EST_POPUP_SHOW";
     
-    ["EST_MUSIC_MAP"]           = "EST_MUSIC_MAP";
+    ["EST_MUSIC_GAME"]          = "EST_MUSIC_GAME";
     ["EST_MUSIC_MAP"]           = "EST_MUSIC_MAP";
 }
 

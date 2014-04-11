@@ -26,6 +26,22 @@ function ViewPopupFlowBase.placeViews(self)
     ViewPopup.placeViews(self)
 end
 
+function ViewPopupFlowBase.hide(self, time, callback)
+    if(application.sounds)then
+        audio.play(GameInfoBase:instance():managerSounds():getSound(ESoundType.EST_POPUP_SHOW))
+    end
+    
+    ViewPopup.hide(self, time, callback)
+end
+
+function ViewPopupFlowBase.show(self, time, callback)
+    if(application.sounds)then
+        audio.play(GameInfoBase:instance():managerSounds():getSound(ESoundType.EST_POPUP_SHOW))
+    end
+    
+    ViewPopup.show(self, time, callback)
+end
+
 
 function ViewPopupFlowBase.cleanup(self)
     
