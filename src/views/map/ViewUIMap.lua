@@ -37,6 +37,10 @@ end
 function ViewUIMap.setCurrency(self, value)
     assert(value ~= nil)
     
+    if(value > 9999)then
+        value = 9999
+    end
+    
     self._labelCurrencySoft:sourceView():setText(value)
 end
 

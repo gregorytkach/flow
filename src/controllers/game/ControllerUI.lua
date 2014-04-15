@@ -60,8 +60,7 @@ function ControllerUI.init(self)
     
     self._managerPlayers = GameInfo:instance():managerPlayers()
     
-    self._view:labelCurrencySoft():sourceView():setText(self._managerPlayers:playerCurrent():currencySoft()) 
-    
+    self._view:setCurrencySoft(self._managerPlayers:playerCurrent():currencySoft()) 
     
     self._controllerPurchases = ControllerPurchases:new()
     
@@ -80,7 +79,7 @@ function ControllerUI.update(self, updateType)
         
     elseif(updateType == EControllerUpdateBase.ECUT_PLAYER_CURERNCY)then
         
-        self._view:labelCurrencySoft():setValue(self._managerPlayers:playerCurrent():currencySoft())
+        self._view:setCurrencySoft(self._managerPlayers:playerCurrent():currencySoft())
         
     elseif(updateType == EControllerUpdate.ECUT_FREE_PURCHASE_ADD_TIME or
         updateType == EControllerUpdate.ECUT_FREE_PURCHASE_RESOLVE or

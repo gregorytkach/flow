@@ -26,8 +26,14 @@ function ViewUI.buttonShop(self)
     return self._buttonShop
 end
 
-function ViewUI.labelCurrencySoft(self)
-    return self._labelCurrencySoft
+function ViewUI.setCurrencySoft(self, value)
+    assert(value ~= nil)
+    
+    if(value > 9999)then
+        value = 9999
+    end
+    
+    self._labelCurrencySoft:setValue(value)
 end
 
 function ViewUI.setTime(self, value)
