@@ -94,6 +94,7 @@ function ManagerEditor.onAddBarrier(self, value)
     
     return result
 end
+
 --
 -- methods
 --
