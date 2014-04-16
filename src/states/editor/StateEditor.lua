@@ -64,27 +64,27 @@ function StateEditor.update(self, updateType)
         self._controllerGrid:update(EControllerUpdate.ECUT_EDIT)
     elseif(updateType == EControllerUpdate.ECUT_EDIT)then
         
---        self._controllerGrid:cleanup()
---        
---        self._managerGame:createGrid()
---        self._controllerGrid = ControllerGridEditor:new()
---        
---        
---        self._layerScene:insert(self._controllerGrid:view():sourceView())
-    
+        --        self._controllerGrid:cleanup()
+        --        
+        --        self._managerGame:createGrid()
+        --        self._controllerGrid = ControllerGridEditor:new()
+        --        
+        --        
+        --        self._layerScene:insert(self._controllerGrid:view():sourceView())
+        
         self._controllerGrid:removeCells()
         self._managerGame:createGrid()
         self._controllerGrid:createCells()
         
-        self:placeViews(true)
+        self:placeViews()
         self._controllerGrid:update(updateType)
         
         
         
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
-    
+        
     elseif(updateType == EControllerUpdateBase.ECUT_PLAYER_ENERGY)then
-    
+        
     else
         assert(false, updateType)
     end
@@ -92,59 +92,43 @@ function StateEditor.update(self, updateType)
 end
 
 
-function StateEditor.placeViews(self, isAgain)
+function StateEditor.placeViews(self)
     StateBase.placeViews(self)
     
     self._background:sourceView().x = display.contentCenterX
     self._background:sourceView().y = display.contentCenterY
     
     local widthMax = (application.content.width - display.screenOriginX * 2) - 10
-   
-    
-    local cells = self._controllerGrid._cells
-    
-    
-    if not isAgain then
-        self._realWidth = 0
-        
-        for i, controllerCell in ipairs(cells[1])do
-            self._realWidth = self._realWidth + controllerCell:view():realWidth()
-        end
-        
-        --self._realWidth = self._realWidth * 1.2
-        
-    end
-    
-    
-    
-    if self._realWidth > widthMax  then
-        
---        self._controllerGrid:view():sourceView().xScale = self._controllerGrid:view():sourceView().xScale * widthMax / self._realWidth
---        self._controllerGrid:view():sourceView().yScale = self._controllerGrid:view():sourceView().yScale *  widthMax / self._realHeight
-        
-        local scaleWidth = widthMax / self._realWidth
-        for i, row in ipairs(cells)do
-            for j, controllerCell in ipairs(row)do
-                
-                local sourceCell = controllerCell:view():sourceView()
-                sourceCell.xScale = sourceCell.xScale * scaleWidth
-                sourceCell.yScale = sourceCell.xScale
-                
-            end
-        end
-        
-    end
     
     self._controllerGrid:view():placeViews()
     
-    self._controllerUI:view():placeViews()
+    local gridWidth = self._controllerGrid:view():realWidth()
     
-   
+    if gridWidth > widthMax  then
+        
+        local gridSource = self._controllerGrid:view():sourceView()
+        
+        gridSource.xScale = gridSource.xScale * widthMax / gridWidth
+        gridSource.yScale = gridSource.xScale
+        
+        --        local scaleWidth = widthMax / self._realWidth
+        
+        --        for i, row in ipairs(cells)do
+        --            for j, controllerCell in ipairs(row)do
+        
+        --                local sourceCell = controllerCell:view():sourceView()
+        --                sourceCell.xScale = sourceCell.xScale * scaleWidth
+        --                sourceCell.yScale = sourceCell.xScale
+        
+        --            end
+        --        end
+        
+    end
     
     self._controllerGrid:view():sourceView().x = display.contentCenterX
     self._controllerGrid:view():sourceView().y = display.contentCenterY
     
-
+    self._controllerUI:view():placeViews()
 end
 
 function StateEditor.cleanup(self)
