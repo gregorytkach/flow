@@ -801,6 +801,8 @@ function GridCreator.createFunctionDataLines(self)
     
     local dataBaseCells = self:createDataLines()
     
+    print(dataBaseCells)
+    
     result = result..'\t{\n'
     
     local j = 1
@@ -816,7 +818,6 @@ function GridCreator.createFunctionDataLines(self)
         infoAboutFlowType = infoAboutFlowType..'\t\t{\n'
         
         local cell = dataBaseCells[j]
-        
         
         while cell.flow_type == i do
             
@@ -860,7 +861,6 @@ function GridCreator.createFunctionDataLines(self)
         end
         
     end
-    
     
     result = result..'\t}\n'..
     'return result\n'..

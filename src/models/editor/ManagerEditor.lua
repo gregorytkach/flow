@@ -119,7 +119,6 @@ function ManagerEditor.shuffle(self, count)
     
     self._dataGrid          = functionDataGrid()
     
-    
     print(self._dataGrid )
 end
 
