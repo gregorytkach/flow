@@ -125,6 +125,9 @@ function ManagerGame.onBuyPurchaseShowTurn(self)
     local targetFlowTypeIndex = math.random(1, #notPurchasedFlowTypes)
     local targetFlowType = notPurchasedFlowTypes[targetFlowTypeIndex]
     
+    --todo: remove
+    targetFlowType = EFlowType.EFT_2 
+    
     self:onPurchaseFlowType(targetFlowType)
 end
 
@@ -150,6 +153,8 @@ function ManagerGame.onPurchaseFlowType(self, flowType, ignoreValidate)
     assert(lineData ~= nil)
     
     for _, cell in ipairs(lineData)do
+        
+        print(cell._x..':'..cell._y)
         
         cell:onPurchased(flowType)
         

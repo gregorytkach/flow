@@ -40,6 +40,12 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
         
         local cells = {}
         
+        --todo: remove
+        print('flow type: '..flowType)
+        for _, dataCell in ipairs(dataLine)do
+            print(dataCell.x..':'..dataCell.y)
+        end
+        
         
         for i, positionCellCurrent in ipairs(dataLine)do
             assert(positionCellCurrent.x ~= nil)
@@ -48,7 +54,6 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
             local cell = grid[positionCellCurrent.y][positionCellCurrent.x]
             
             assert(cell ~= nil, 'Not found cell')
-            
             
             if i > 1 then
                 
