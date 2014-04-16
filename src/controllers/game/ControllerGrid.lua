@@ -32,9 +32,6 @@ end
 function ControllerGrid.init(self)
     
     
-    
-    
-    
     self._dogsMap       = {}
     self._dogsList      = {}
     

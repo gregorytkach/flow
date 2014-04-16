@@ -15,6 +15,7 @@ function GridCreator.gridData(self)
     return self._gridData
 end
 
+
 function GridCreator.flowCount(self)
     return self._flowCount
 end
@@ -783,8 +784,54 @@ function GridCreator.createDataLines(self)
         end
         
         for i = 1, #cellsByType, 1 do
+            
             local cell = cellsByType[i]
-            table.insert(result, cell)
+            
+            local resultCell = 
+            {
+                type      = cell.type,
+                flow_type = cell.flow_type,
+                is_start  = cell.flow_type,
+                x         = cell.x,
+                y         = cell.y,
+            }
+            table.insert(result, resultCell)
+            
+        end
+        
+    end
+    
+    return result
+end
+
+function GridCreator.createFormatDataLines(self)
+    
+    local dataBaseCells = self:createDataLines()
+    
+    local result = {}
+    
+    local j = 1
+    for i = 0, EFlowType.EFT_COUNT - 1, 1 do
+        
+        local flowTypeStr = EFlowType['EFT_'..i]
+        
+        result[flowTypeStr] = {}
+        
+        local cell = dataBaseCells[j]
+        
+        while cell.flow_type == i do
+            
+            table.insert(result[flowTypeStr], cell)
+            if j < #dataBaseCells then
+                j = j + 1
+                cell = dataBaseCells[j]
+                
+            else
+                 
+                table.insert(result[flowTypeStr], cell)
+                break
+                
+            end
         end
         
     end
@@ -872,6 +919,40 @@ function GridCreator.createFunctionDataLines(self)
     
 end
 
+function GridCreator.gridDataFormat(self)
+    
+    local result = {}
+    for rowIndex = 1, self._rowsCount, 1 do
+        
+        result[rowIndex] = {}
+        for columnIndex = 1, self._columnsCount, 1 do
+            
+            local cellData = self._gridData[rowIndex][columnIndex]
+            
+            
+            local cellDataFormat = 
+            {
+                flow_type = cellData.flow_type,
+                type      = cellData.type,
+                x         =  columnIndex,
+                y         =  rowIndex,
+            }
+            
+            if(cellData.type == ECellType.ECT_FLOW_POINT)then
+                    
+                    
+                cellDataFormat.is_start = cellData.is_start
+                    
+            end
+            
+            result[rowIndex][columnIndex] = cellDataFormat
+            
+        end
+    end
+    
+    return result
+end
+
 function GridCreator.createFunctionDataGrid(self)
     
     local functionName = 'getDataGrid_'..os.time()..'()'
@@ -951,7 +1032,8 @@ function GridCreator.createFunctionDataGrid(self)
     
    result = result..'\n'..'return '..functionName
     
-    return result
+   return result
+   
 end
 
 function GridCreator.shuffles(self, count)
