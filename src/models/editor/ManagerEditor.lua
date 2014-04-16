@@ -107,19 +107,18 @@ function ManagerEditor.shuffle(self, count)
     print(dataLinesString)
     
     
-    
     self._dataLines         = self._gridCreator:createFormatDataLines()
     
     print(self._dataLines )
     
     local dataGridString    = self._gridCreator:createFunctionDataGrid()
-    print(dataGridString)
+    --print(dataGridString)
     
     
     self._dataGrid          = self._gridCreator:gridDataFormat()
     
     
-    print(self._dataGrid )
+    --print(self._dataGrid )
 end
 
 function ManagerEditor.init(self, params)

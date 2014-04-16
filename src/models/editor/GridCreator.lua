@@ -225,7 +225,7 @@ function GridCreator.tryAddCanBridge(self, neighbour, cellAfterPotentialBridge, 
         
     else
         
-        neighbour.cellAfterPotentialBridge = nil
+        neighbour.cellAfterPotentialBridpushge = nil
         
     end 
     
@@ -747,6 +747,7 @@ end
 function GridCreator.createDataLines(self)
     local result = {}
     
+    
     for i = 0, EFlowType.EFT_COUNT - 1, 1 do
         
         local point = nil
@@ -787,17 +788,29 @@ function GridCreator.createDataLines(self)
             
             local cell = cellsByType[i]
             
-            local resultCell = 
-            {
-                type      = cell.type,
-                flow_type = cell.flow_type,
-                is_start  = cell.flow_type,
-                x         = cell.x,
-                y         = cell.y,
-            }
-            table.insert(result, resultCell)
+            if table.indexOf(result, cell) == nil then
+                table.insert(result, cell)
+            end
             
         end
+        
+    end
+    
+    for i = 1, #result, 1 do
+        
+        local cell = result[i]
+        
+        local resultCell = 
+        {
+            type      = cell.type,
+            flow_type = cell.flow_type,
+            is_start  = cell.is_start,
+            x         = cell.x,
+            y         = cell.y,
+        }
+
+        
+        result[i] = resultCell
         
     end
     
@@ -823,6 +836,7 @@ function GridCreator.createFormatDataLines(self)
             
             table.insert(result[flowTypeStr], cell)
             if j < #dataBaseCells then
+                
                 j = j + 1
                 cell = dataBaseCells[j]
                 
@@ -832,6 +846,10 @@ function GridCreator.createFormatDataLines(self)
                 break
                 
             end
+        end
+        
+        if #result[flowTypeStr] == 0 then
+            result[flowTypeStr] = nil
         end
         
     end
@@ -883,7 +901,9 @@ function GridCreator.createFunctionDataLines(self)
                     infoAboutFlowType = infoAboutFlowType..'\n' 
                     
                 else
+                    
                     infoAboutFlowType = infoAboutFlowType..',\n' 
+                    
                 end
             else
                 infoAboutFlowType = infoAboutFlowType..'\n' 
