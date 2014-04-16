@@ -99,10 +99,10 @@ function StateEditor.placeViews(self, isAgain)
     self._background:sourceView().y = display.contentCenterY
     
     local widthMax = (application.content.width - display.screenOriginX * 2) - 10
-    
-    
+   
     
     local cells = self._controllerGrid._cells
+    
     
     if not isAgain then
         self._realWidth = 0
@@ -110,37 +110,41 @@ function StateEditor.placeViews(self, isAgain)
         for i, controllerCell in ipairs(cells[1])do
             self._realWidth = self._realWidth + controllerCell:view():realWidth()
         end
-        self._realWidth = self._realWidth * 1.2
+        
+        --self._realWidth = self._realWidth * 1.2
+        
     end
     
     
-    self._scaleWidth = 1
-
-    if self._realWidth > widthMax  then
-        self._scaleWidth = widthMax / self._realWidth
-        self._controllerGrid:view():sourceView().xScale = self._controllerGrid:view():sourceView().xScale * self._scaleWidth
-        self._controllerGrid:view():sourceView().yScale = self._controllerGrid:view():sourceView().xScale 
-        
---        self._controllerUI:view():sourceView().xScale = self._controllerUI:view():sourceView().xScale * self._scaleWidth
---        self._controllerUI:view():sourceView().yScale = self._controllerUI:view():sourceView().xScale 
     
+    if self._realWidth > widthMax  then
         
+--        self._controllerGrid:view():sourceView().xScale = self._controllerGrid:view():sourceView().xScale * widthMax / self._realWidth
+--        self._controllerGrid:view():sourceView().yScale = self._controllerGrid:view():sourceView().yScale *  widthMax / self._realHeight
         
+        local scaleWidth = widthMax / self._realWidth
+        for i, row in ipairs(cells)do
+            for j, controllerCell in ipairs(row)do
+                
+                local sourceCell = controllerCell:view():sourceView()
+                sourceCell.xScale = sourceCell.xScale * scaleWidth
+                sourceCell.yScale = sourceCell.xScale
+                
+            end
+        end
         
     end
     
     self._controllerGrid:view():placeViews()
+    
     self._controllerUI:view():placeViews()
-    
-    
     
    
     
     self._controllerGrid:view():sourceView().x = display.contentCenterX
     self._controllerGrid:view():sourceView().y = display.contentCenterY
     
---    self._controllerUI:view():sourceView().x = display.contentCenterX
---    self._controllerUI:view():sourceView().y = display.contentCenterY
+
 end
 
 function StateEditor.cleanup(self)
