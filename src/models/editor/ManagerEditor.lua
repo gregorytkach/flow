@@ -116,6 +116,7 @@ function ManagerEditor.shuffle(self, count)
     self._dataGrid          = self._gridCreator:gridDataFormat()
     
     print(self._dataGrid )
+    
 end
 
 function ManagerEditor.init(self, params)

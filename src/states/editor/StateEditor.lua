@@ -76,7 +76,7 @@ function StateEditor.update(self, updateType)
         self._managerGame:createGrid()
         self._controllerGrid:createCells()
         
-        self:placeViews()
+        self:placeViews(true)
         self._controllerGrid:update(updateType)
         
         
@@ -92,41 +92,47 @@ function StateEditor.update(self, updateType)
 end
 
 
-function StateEditor.placeViews(self)
+function StateEditor.placeViews(self, isAgain)
     StateBase.placeViews(self)
     
     self._background:sourceView().x = display.contentCenterX
     self._background:sourceView().y = display.contentCenterY
     
     local widthMax = (application.content.width - display.screenOriginX * 2) - 10
-    self._scaleWidth = 1
     
-    local realWidth = 0
+    
+    
     local cells = self._controllerGrid._cells
     
-    for i, controllerCell in ipairs(cells[1])do
-        realWidth = realWidth + controllerCell:view():realWidth()
-    end
-    
-    realWidth = realWidth * 1.2
-    
-    if realWidth > widthMax then
-        self._scaleWidth = widthMax / realWidth
---        self._controllerGrid:view():sourceView().xScale = self._controllerGrid:view():sourceView().xScale * self._scaleWidth
---        self._controllerGrid:view():sourceView().yScale = self._controllerGrid:view():sourceView().xScale 
-    end
-    
-    
-    
-    for i, row in ipairs(cells)do
-        for i, controllerCell in ipairs(row)do
-            controllerCell:view():sourceView().xScale = controllerCell:view():sourceView().xScale * self._scaleWidth
-            controllerCell:view():sourceView().yScale = controllerCell:view():sourceView().xScale 
+    if not isAgain then
+        self._realWidth = 0
+        
+        for i, controllerCell in ipairs(cells[1])do
+            self._realWidth = self._realWidth + controllerCell:view():realWidth()
         end
+        self._realWidth = self._realWidth * 1.2
+    end
+    
+    
+    self._scaleWidth = 1
+
+    if self._realWidth > widthMax  then
+        self._scaleWidth = widthMax / self._realWidth
+        self._controllerGrid:view():sourceView().xScale = self._controllerGrid:view():sourceView().xScale * self._scaleWidth
+        self._controllerGrid:view():sourceView().yScale = self._controllerGrid:view():sourceView().xScale 
+        
+--        self._controllerUI:view():sourceView().xScale = self._controllerUI:view():sourceView().xScale * self._scaleWidth
+--        self._controllerUI:view():sourceView().yScale = self._controllerUI:view():sourceView().xScale 
+    
+        
+        
+        
     end
     
     self._controllerGrid:view():placeViews()
     self._controllerUI:view():placeViews()
+    
+    
     
    
     
