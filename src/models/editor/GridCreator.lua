@@ -15,50 +15,11 @@ function GridCreator.gridData(self)
     return self._gridData
 end
 
-function GridCreator.rowsCount(self)
-    return self._rowsCount
-end
-
-function GridCreator.bridgesCount(self)
-    return self._bridgesCount
-end
-
-function GridCreator.barriersCount(self)
-    return self._barriersCount
-end
-
 --
 --Methods
 --
 
 function GridCreator.init(self, params)
-    
-    math.randomseed(os.time())
-    
-    assert(params.columns       ~= nil)
-    assert(params.rows          ~= nil)
-    assert(params.flowCount     ~= nil)
-    
-    assert(params.bridgesCount  ~= nil)
-    assert(params.barriersCount ~= nil)
-    
-    
-    self._counts        = {}
-    
-    
-    self._flowCount             = params.flowCount
-    
-    self._rowsCount             = params.rows
-    self._columnsCount          = params.columns
-    
-    self._bridgesCountLeft      = params.bridgesCount
-    self._barriersCountLeft     = params.barriersCount
-    
-    self._bridgesCount          = params.bridgesCount
-    self._barriersCount         = params.barriersCount
-    
-    self:createGrid()
-    
 end
 
 function GridCreator.addSize(self, value)
@@ -86,102 +47,7 @@ function GridCreator.addBarrier(self, value)
     
 end
 
-function GridCreator.createGrid(self)
-    self._gridData  = {}
-    self._points    = {}
-    
-    self:createEmptyGrid()
-    
-    local row    = 1
-    local column = 1
-    
-    local count = math.floor(self._rowsCount * self._columnsCount / self._flowCount)
-    
-    for i = 1, self._flowCount - 1, 1 do
-        self._counts[i] = count
-    end
-    
-    self._counts[self._flowCount] = self._rowsCount * self._columnsCount - (self._flowCount - 1) * count
-    
-    local row    = 1
-    local column = 1
-    local step   = 1
-    
-    local flow_type = 0
-    count           = 1
-    
-    local cellDataPrev = nil
-    
-    for i = 1, self._rowsCount * self._columnsCount, 1 do
-        local cellData  = self._gridData[row][column] 
-        cellData._prev = cellDataPrev
-        
-        if cellData._prev ~= nil then
-            cellData._prev._next = cellData
-        end
-        
-        cellData.flow_type = flow_type
-        
-        if count == self._counts[flow_type + 1] then
-            count = 1
-            cellData.type       = ECellType.ECT_FLOW_POINT
-            self:addPoint(cellData)
-            
-            cellData  = nil
-            flow_type = flow_type + 1
-            
-        elseif count == 1 then
-            
-            cellData.type       = ECellType.ECT_FLOW_POINT
-            self:addPoint(cellData)
-            count = count + 1
-        else
-            count = count + 1
-        end
-        
-        if row == self._rowsCount and step == 1 then
-            column = column + 1
-            step = - 1
-        elseif row == 1 and step == -1 then 
-            column = column + 1
-            step = 1
-            
-        else
-            row = row + step
-        end
-        
-        cellDataPrev = cellData
-        
-    end
-    
-end
 
-function GridCreator.createEmptyGrid(self)
-    for rowIndex = 1, self._rowsCount, 1 do
-        
-        local row = {}
-        
-        for columnIndex = 1, self._columnsCount, 1 do
-            
-            local cellData
-            
-            cellData =
-            {
-                type            = ECellType.ECT_EMPTY,
-                flow_type       = EFlowType.EFT_NONE,
-            } 
-            
-            table.insert(row, cellData)
-            
-            cellData.x = columnIndex
-            cellData.y = rowIndex
-            
-        end
-        
-        table.insert(self._gridData, row)
-        
-    end
-end
 
 function GridCreator.tryAddNeighbour(self, neighbours, cell, flow_type)
     
@@ -296,27 +162,6 @@ function GridCreator.getNeighbours(self, cell)
             neighbour.cellAfterPotentialBridge = nil
             
         end
-        
-    end
-    
-    return result
-end
-
-
-function GridCreator.addPoint(self, point)
-    local result = point.type ~= ECellType.ECT_BRIDGE
-    
-    if result then
-        
-        point.type = ECellType.ECT_FLOW_POINT
-        
-        if table.indexOf(self._points, point) == nil then
-            
-            table.insert(self._points, point)
-            
-        end
-        
-        point.is_start = false
         
     end
     

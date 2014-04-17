@@ -77,7 +77,7 @@ function ViewUIEditor.init(self, params)
     self._sourceView  = display.newGroup()
     
     local managerResources = GameInfo:instance():managerResources()
-    self._gridCreator = GameInfo:instance():managerGame():gridCreator()
+    self._managerGame = GameInfo:instance():managerGame()
     
     self._buttonShuffle = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_SHUFFLE),
     nil,
@@ -89,7 +89,7 @@ function ViewUIEditor.init(self, params)
     "send",
     EFontType.EFT_1)
     
-    self._labelFlowType     = self:createLabel("Flow type: "..tostring(self._gridCreator:flowCount()), EFontType.EFT_0)
+    self._labelFlowType     = self:createLabel("Flow type: "..tostring(self._managerGame:flowCount()), EFontType.EFT_0)
     
     self._buttonFlowTypeAdd    = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_ADD))
     self._buttonFlowTypeRemove = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_REMOVE),
@@ -101,7 +101,7 @@ function ViewUIEditor.init(self, params)
     self._buttonFlowTypeRemove:sourceView():scale(scale, 1)
     self._buttonFlowTypeRemove:label():sourceView():scale(1 / scale, 1)
     
-    self._labelSize     = self:createLabel("Size: "..tostring(self._gridCreator:rowsCount()), EFontType.EFT_0)
+    self._labelSize     = self:createLabel("Size: "..tostring(self._managerGame:gridSize()), EFontType.EFT_0)
     
     self._buttonSizeAdd    = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_ADD))
     self._buttonSizeRemove = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_REMOVE),
@@ -112,7 +112,7 @@ function ViewUIEditor.init(self, params)
     self._buttonSizeRemove:sourceView():scale(scale, 1)
     self._buttonSizeRemove:label():sourceView():scale(1 / scale, 1)
     
-    self._labelBridge     = self:createLabel("Bridges: "..tostring(self._gridCreator:bridgesCount()), EFontType.EFT_0)
+    self._labelBridge     = self:createLabel("Bridges: "..tostring(self._managerGame:bridgesCount()), EFontType.EFT_0)
     
     self._buttonBridgeAdd    = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_ADD))
     self._buttonBridgeRemove = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_REMOVE),
@@ -123,7 +123,7 @@ function ViewUIEditor.init(self, params)
     self._buttonBridgeRemove:sourceView():scale(scale, 1)
     self._buttonBridgeRemove:label():sourceView():scale(1 / scale, 1)
     
-    self._labelBarrier     = self:createLabel("Barriers: "..tostring(self._gridCreator:barriersCount()), EFontType.EFT_0)
+    self._labelBarrier     = self:createLabel("Barriers: "..tostring(self._managerGame:barriersCount()), EFontType.EFT_0)
     
     self._buttonBarrierAdd    = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_ADD))
     self._buttonBarrierRemove = self:createButton(managerResources:getAsButton(EResourceType.ERT_STATE_EDITOR_BUTTON_REMOVE),
@@ -151,7 +151,7 @@ function ViewUIEditor.placeViews(self)
     
     sourceFlowType.x = application.margin_left + sourceFlowType.contentWidth / 2 
     sourceFlowType.y = application.margin_top + sourceFlowType.contentHeight  
-    self._buttonFlowTypeAdd:setIsEnabled(self._gridCreator:flowCount() ~= tonumber(EFlowType.EFT_COUNT))
+    self._buttonFlowTypeAdd:setIsEnabled(self._managerGame:flowCount() ~= tonumber(EFlowType.EFT_COUNT))
     
     local sourceFlowTypeAdd = self._buttonFlowTypeAdd:sourceView()
     sourceFlowTypeAdd.x = sourceFlowType.x + sourceFlowType.contentWidth * 0.55 + sourceFlowTypeAdd.contentWidth * 0.5
@@ -161,7 +161,7 @@ function ViewUIEditor.placeViews(self)
     sourceFlowTypeRemove.x = sourceFlowTypeAdd.x + sourceFlowTypeAdd.contentWidth / 2 + sourceFlowTypeRemove.contentWidth * 0.55
     sourceFlowTypeRemove.y = sourceFlowTypeAdd.y
     
-    self._buttonFlowTypeRemove:setIsEnabled(self._gridCreator:flowCount() ~= 1)
+    self._buttonFlowTypeRemove:setIsEnabled(self._managerGame:flowCount() ~= 1)
     
     local sourceSize = self._labelSize:sourceView()
     
@@ -171,18 +171,18 @@ function ViewUIEditor.placeViews(self)
     local sourceSizeAdd = self._buttonSizeAdd:sourceView()
     sourceSizeAdd.x = sourceFlowTypeAdd.x
     sourceSizeAdd.y = sourceSize.y
-    self._buttonSizeAdd:setIsEnabled(self._gridCreator:rowsCount() ~= Constants.MAX_GRID_SIZE)
+    self._buttonSizeAdd:setIsEnabled(self._managerGame:gridSize() ~= Constants.MAX_GRID_SIZE)
     
     local sourceSizeRemove = self._buttonSizeRemove:sourceView()
     sourceSizeRemove.x = sourceFlowTypeRemove.x
     sourceSizeRemove.y = sourceSize.y
-    self._buttonSizeRemove:setIsEnabled(self._gridCreator:rowsCount() ~= Constants.MIN_GRID_SIZE)
+    self._buttonSizeRemove:setIsEnabled(self._managerGame:gridSize() ~= Constants.MIN_GRID_SIZE)
     
     local sourceBridge = self._labelBridge:sourceView()
     
     sourceBridge.x = sourceFlowTypeRemove.x + sourceFlowTypeRemove.contentWidth / 2 + sourceBridge.contentWidth 
     sourceBridge.y = sourceFlowType.y
-    self._buttonBridgeAdd:setIsEnabled(self._gridCreator:bridgesCount() ~= Constants.MAX_COUNT_BRIDGES)
+    self._buttonBridgeAdd:setIsEnabled(self._managerGame:bridgesCount() ~= Constants.MAX_COUNT_BRIDGES)
     
     local sourceBridgeAdd = self._buttonBridgeAdd:sourceView()
     sourceBridgeAdd.x = sourceBridge.x + sourceBridge.contentWidth * 0.55 + sourceBridgeAdd.contentWidth * 0.5
@@ -201,12 +201,12 @@ function ViewUIEditor.placeViews(self)
     sourceBarrierAdd.x = sourceBridgeAdd.x
     sourceBarrierAdd.y = sourceBarrier.y
     
-    self._buttonBarrierAdd:setIsEnabled(self._gridCreator:barriersCount() ~= Constants.MAX_COUNT_BARRIERS)
+    self._buttonBarrierAdd:setIsEnabled(self._managerGame:barriersCount() ~= Constants.MAX_COUNT_BARRIERS)
     
     local sourceBarrierRemove = self._buttonBarrierRemove:sourceView()
     sourceBarrierRemove.x = sourceBridgeRemove.x
     sourceBarrierRemove.y = sourceBarrierAdd.y
-    self._buttonBarrierRemove:setIsEnabled(self._gridCreator:barriersCount() ~= 0)
+    self._buttonBarrierRemove:setIsEnabled(self._managerGame:barriersCount() ~= 0)
     
 end
 
@@ -256,7 +256,7 @@ function ViewUIEditor.cleanup(self)
     self._buttonBarrierRemove:cleanup()
     self._buttonBarrierRemove = nil
     
-    self._gridCreator = nil
+    self._managerGame = nil
     
     ViewBase.cleanup(self)
 end
