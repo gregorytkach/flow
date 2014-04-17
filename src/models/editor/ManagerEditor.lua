@@ -7,15 +7,11 @@ ManagerEditor = classWithSuper(ManagerGame, 'ManagerEditor')
 -- 
 
 function ManagerEditor.gridCreator(self)
-    
     return self._gridCreator
-    
 end
 
 function ManagerEditor.grid(self)
-    
     return self._gridEditor
-    
 end
 
 function ManagerEditor.getDataGrid(self)
@@ -108,14 +104,15 @@ function ManagerEditor.shuffle(self, count)
     
     self._dataLines         = self._gridCreator:createFormatDataLines()
     
-    print(self._dataLines )
-    
     local dataGridString    = self._gridCreator:createFunctionDataGrid()
     print(dataGridString)
     
     self._dataGrid          = self._gridCreator:gridDataFormat()
     
-    print(self._dataGrid )
+    local json              = require('json')
+    
+    print(json.encode(self._dataLines))
+    print(json.encode(self._dataGrid))
     
 end
 

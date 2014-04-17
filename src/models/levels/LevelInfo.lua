@@ -40,13 +40,6 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
         
         local cells = {}
         
-        --todo: remove
-        print('flow type: '..flowType)
-        for _, dataCell in ipairs(dataLine)do
-            print(dataCell.x..':'..dataCell.y)
-        end
-        
-        
         for i, positionCellCurrent in ipairs(dataLine)do
             assert(positionCellCurrent.x ~= nil)
             assert(positionCellCurrent.y ~= nil)
@@ -104,8 +97,6 @@ function LevelInfo.createNotPurchasedLinesFor(self, grid)
             
         end
         
-        
-        
         result[flowType] = cells
         
     end
@@ -124,7 +115,7 @@ function LevelInfo.deserialize(self, data)
     self._timeLeft  = tonumber(data.time_left)
     self._dataGrid  = data.data_grid 
     
-    --    local json = require('json')
+    --local json = require('json')
     
     self._dataLines = data.data_lines
 end

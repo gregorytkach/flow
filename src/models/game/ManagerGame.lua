@@ -20,15 +20,11 @@ end
 --
 
 function ManagerGame.currentCell(self)
-    
     return self._currentCell
-    
 end
 
 function ManagerGame.setCurrentCell(self, cell)
-    
     self._currentCell = cell
-    
 end
 
 
@@ -51,8 +47,6 @@ function ManagerGame.setCurrentLineFlowType(self, value)
         self._currentLineFlowType = value
         
     end
-    
-    
     
 end
 
@@ -116,7 +110,7 @@ function ManagerGame.onBuyPurchaseShowTurn(self)
     
     local notPurchasedFlowTypes = {}
     
-    for flowType, lineData in pairs(self._notPurchasedLines)do
+    for flowType, _ in pairs(self._notPurchasedLines)do
         table.insert(notPurchasedFlowTypes, flowType)
     end
     
@@ -124,9 +118,6 @@ function ManagerGame.onBuyPurchaseShowTurn(self)
     
     local targetFlowTypeIndex = math.random(1, #notPurchasedFlowTypes)
     local targetFlowType = notPurchasedFlowTypes[targetFlowTypeIndex]
-    
-    --todo: remove
-    targetFlowType = EFlowType.EFT_2 
     
     self:onPurchaseFlowType(targetFlowType)
 end

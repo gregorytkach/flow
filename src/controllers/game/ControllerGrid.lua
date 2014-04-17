@@ -86,13 +86,13 @@ function ControllerGrid.initControllersDogs(self, flowTypes)
     end
 end
 
-function ControllerGrid.update(self, type, flowType)
+function ControllerGrid.update(self, updateType, flowType)
     
-    if(type == EControllerUpdateBase.ECUT_SCENE_ENTER)then
+    if(updateType == EControllerUpdateBase.ECUT_SCENE_ENTER)then
         
         for indexRow, row in ipairs(self._cells)do
             for indexColumn, cell in ipairs(row)do
-                cell:update(type)
+                cell:update(updateType)
                 cell:view():establishBounds()
                 
                 
@@ -106,7 +106,7 @@ function ControllerGrid.update(self, type, flowType)
             controllerDog:view():show()
             
         end
-    elseif(type == EControllerUpdate.ECUT_SET_DOGS)then
+    elseif(updateType == EControllerUpdate.ECUT_SET_DOGS)then
         
         for indexRow, row in ipairs(self._cells)do
             for indexColumn, cell in ipairs(row)do
@@ -117,6 +117,7 @@ function ControllerGrid.update(self, type, flowType)
                     
                     cell:onInHouse(true)
                     local controllerDog = self._dogsMap[entry:flowType()]
+                    
                     controllerDog:view():sourceView().isVisible = false
                     
                 elseif  entry:type() == ECellType.ECT_FLOW_POINT    and 
@@ -130,7 +131,7 @@ function ControllerGrid.update(self, type, flowType)
                 end
             end
         end
-    elseif(type == EControllerUpdate.ECUT_GRID)then
+    elseif(updateType == EControllerUpdate.ECUT_GRID)then
         
         local currentCell = self._managerGame:currentCell()
         
@@ -192,7 +193,7 @@ function ControllerGrid.update(self, type, flowType)
         self:sortDogs()
         
         
-    elseif((type ==  EControllerUpdate.ECUT_DOG_UP) or (type ==  EControllerUpdate.ECUT_DOG_DOWN)) 
+    elseif((updateType ==  EControllerUpdate.ECUT_DOG_UP) or (updateType ==  EControllerUpdate.ECUT_DOG_DOWN)) 
         and flowType ~= nil and flowType ~= EFlowType.EFT_NONE
         then
         
@@ -202,9 +203,9 @@ function ControllerGrid.update(self, type, flowType)
         local currentCellByDog     = currentDogByFlowType:currentCell()
         
         local currentUpdateType = currentDogByFlowType._updateType
-        self._updateType        = type
+        self._updateType        = updateType
         
-        if (type ==  EControllerUpdate.ECUT_DOG_UP) then
+        if (updateType ==  EControllerUpdate.ECUT_DOG_UP) then
             
             local currentLineFlowType = self._managerGame:currentLineFlowType()
             
@@ -249,13 +250,13 @@ function ControllerGrid.update(self, type, flowType)
           
         end
         
-        if type ~= currentUpdateType then
-            currentDogByFlowType:update(type)
+        if updateType ~= currentUpdateType then
+            currentDogByFlowType:update(updateType)
             self:update(EControllerUpdate.ECUT_GRID)
-            currentDogByFlowType._updateType = type
+            currentDogByFlowType._updateType = updateType
         end
         
-    elseif (type ==  EControllerUpdate.ECUT_DOG_DOWN) then
+    elseif (updateType ==  EControllerUpdate.ECUT_DOG_DOWN) then
         local controllerDog = self._currentDog
         
         local currentCellByDog = nil
@@ -272,10 +273,10 @@ function ControllerGrid.update(self, type, flowType)
                 controllerDog._cell = currentCellByDog
         end
         
-        if controllerDog ~= nil and type ~= self._updateType then
-            controllerDog:update(type)
-            self._updateType = type
-            controllerDog._updateType = type
+        if controllerDog ~= nil and updateType ~= self._updateType then
+            controllerDog:update(updateType)
+            self._updateType = updateType
+            controllerDog._updateType = updateType
             self:update(EControllerUpdate.ECUT_GRID)
         end
         

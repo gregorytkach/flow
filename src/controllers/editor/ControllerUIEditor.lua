@@ -11,7 +11,9 @@ function ControllerUIEditor.onViewClicked(self, target, event)
     
     if (self._view:buttonShuffle() == target) then
         
-        self._managerGame:shuffle(self._managerGame:gridCreator():rowsCount() * 100)
+        local rowsCount = self._managerGame:gridCreator():rowsCount()
+        
+        self._managerGame:shuffle(rowsCount * 100)
         self._currentState:update(EControllerUpdate.ECUT_EDIT)
         
     elseif(self._view:buttonSend() == target)then

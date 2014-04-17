@@ -84,8 +84,8 @@ end
 
 function GridCreator.addBridge(self, value)
     
-    self._bridgesCount = self._bridgesCount + value
-    self._bridgesCountLeft = self._bridgesCount
+    self._bridgesCount      = self._bridgesCount + value
+    self._bridgesCountLeft  = self._bridgesCount
     self:createGrid()
     
 end
@@ -120,7 +120,7 @@ function GridCreator.createGrid(self)
     local step   = 1
     
     local flow_type = 0
-    count = 1
+    count           = 1
     
     local cellDataPrev = nil
     
@@ -209,7 +209,7 @@ function GridCreator.tryAddNeighbour(self, neighbours, cell, flow_type)
     
 end
 
-function GridCreator.tryAddCanBridge(self, neighbour, cellAfterPotentialBridge, flow_type)
+function GridCreator.tryAddBridge(self, neighbour, cellAfterPotentialBridge, flow_type)
     
     if self._bridgesCountLeft > 0 
         and neighbour.type ~= ECellType.ECT_FLOW_POINT
@@ -247,7 +247,7 @@ function GridCreator.getNeighbours(self, cell)
             then
             
             cellAfterPotentialBridge = self._gridData[cell.y][cell.x - 2]
-            self:tryAddCanBridge(neighbour, cellAfterPotentialBridge, cell.flow_type)
+            self:tryAddBridge(neighbour, cellAfterPotentialBridge, cell.flow_type)
             
         else
             neighbour.cellAfterPotentialBridge = nil
@@ -264,7 +264,7 @@ function GridCreator.getNeighbours(self, cell)
             then
             
             cellAfterPotentialBridge = self._gridData[cell.y][cell.x + 2]
-            self:tryAddCanBridge(neighbour, cellAfterPotentialBridge, cell.flow_type)
+            self:tryAddBridge(neighbour, cellAfterPotentialBridge, cell.flow_type)
         else
             
             neighbour.cellAfterPotentialBridge = nil
@@ -282,7 +282,7 @@ function GridCreator.getNeighbours(self, cell)
             then
             
             cellAfterPotentialBridge = self._gridData[cell.y - 2][cell.x]
-            self:tryAddCanBridge(neighbour, cellAfterPotentialBridge, cell.flow_type)
+            self:tryAddBridge(neighbour, cellAfterPotentialBridge, cell.flow_type)
             
         else
             
@@ -301,7 +301,7 @@ function GridCreator.getNeighbours(self, cell)
             then
             
             cellAfterPotentialBridge = self._gridData[cell.y + 2][cell.x]
-            self:tryAddCanBridge(neighbour, cellAfterPotentialBridge, cell.flow_type)
+            self:tryAddBridge(neighbour, cellAfterPotentialBridge, cell.flow_type)
             
         else
             
@@ -412,7 +412,7 @@ function GridCreator.makeBridge(self, bridge, neighbour)
     self._bridgesCountLeft = self._bridgesCountLeft - 1
 end
 
-function GridCreator.tryMakeBarrier(self)
+function GridCreator.tryAddBarrier(self)
     
     local indexesCounts = {}
     
@@ -423,7 +423,6 @@ function GridCreator.tryMakeBarrier(self)
         if count > 3 then
             table.insert(indexesCounts, i)
         end
-        
         
     end
     
@@ -478,15 +477,16 @@ function GridCreator.tryMakeBarrier(self)
         
         if result then
             
-            cell.type = ECellType.ECT_BARRIER 
             table.remove(self._points, table.indexOf(self._points, cell))
-            cell._prev = nil
-            cell._next = nil
             
-            self._counts[cell.flow_type + 1] = self._counts[cell.flow_type + 1] - 1
-            cell.flow_type = EFlowType.EFT_NONE
-            self._barriersCountLeft = self._barriersCountLeft - 1
+            self._counts[cell.flow_type + 1]    = self._counts[cell.flow_type + 1] - 1
+            self._barriersCountLeft             = self._barriersCountLeft - 1
             
+            
+            cell.type       = ECellType.ECT_BARRIER 
+            cell._prev      = nil
+            cell._next      = nil
+            cell.flow_type  = EFlowType.EFT_NONE
         end
     end
     
@@ -736,7 +736,7 @@ function GridCreator.shuffle(self)
         
         if (self._barriersCountLeft > 0) then
             if math.random(3) == 1 then
-                self:tryMakeBarrier()   
+                self:tryAddBarrier()   
             end
         end
         
@@ -803,12 +803,14 @@ function GridCreator.createDataLines(self)
         local resultCell = 
         {
             type      = cell.type,
-            flow_type = cell.flow_type,
-            is_start  = cell.is_start,
+            flow_type = tostring(cell.flow_type),
             x         = cell.x,
             y         = cell.y,
         }
-
+        
+        if(resultCell.type == ECellType.ECT_FLOW_POINT)then
+            resultCell.is_start  = cell.is_start
+        end
         
         result[i] = resultCell
         
@@ -832,16 +834,17 @@ function GridCreator.createFormatDataLines(self)
         
         local cell = dataBaseCells[j]
         
-        while cell.flow_type == i do
+        while tostring(cell.flow_type) == tostring(i) do
             
             table.insert(result[flowTypeStr], cell)
+            
             if j < #dataBaseCells then
                 
                 j = j + 1
                 cell = dataBaseCells[j]
                 
             else
-                 
+                
                 table.insert(result[flowTypeStr], cell)
                 break
                 
@@ -866,8 +869,6 @@ function GridCreator.createFunctionDataLines(self)
     
     local dataBaseCells = self:createDataLines()
     
-    print(dataBaseCells)
-    
     result = result..'\t{\n'
     
     local j = 1
@@ -884,7 +885,7 @@ function GridCreator.createFunctionDataLines(self)
         
         local cell = dataBaseCells[j]
         
-        while cell.flow_type == i do
+        while tostring(cell.flow_type) == tostring(i) do
             
             needAddInfoAboutFlowType = true
             
@@ -898,7 +899,7 @@ function GridCreator.createFunctionDataLines(self)
                 j = j + 1
                 cell = dataBaseCells[j]
                 
-                if cell.flow_type ~= i then
+                if tostring(cell.flow_type) ~= tostring(i) then
                     infoAboutFlowType = infoAboutFlowType..'\n' 
                     
                 else
@@ -949,21 +950,23 @@ function GridCreator.gridDataFormat(self)
             
             local cellData = self._gridData[rowIndex][columnIndex]
             
-            
             local cellDataFormat = 
             {
-                flow_type = cellData.flow_type,
                 type      = cellData.type,
-                x         =  columnIndex,
-                y         =  rowIndex,
+                x         = columnIndex,
+                y         = rowIndex,
             }
             
+            local flowType = EFlowType.EFT_NONE
+            
             if(cellData.type == ECellType.ECT_FLOW_POINT)then
-                    
-                    
+                
+                flowType                = cellData.flow_type
                 cellDataFormat.is_start = cellData.is_start
-                    
+                
             end
+            
+            cellDataFormat.flow_type      = tostring(flowType)
             
             result[rowIndex][columnIndex] = cellDataFormat
             
@@ -1050,10 +1053,10 @@ function GridCreator.createFunctionDataGrid(self)
     '\treturn result\n\n'..
     'end'
     
-   result = result..'\n'..'return '..functionName
+    result = result..'\n'..'return '..functionName
     
-   return result
-   
+    return result
+    
 end
 
 function GridCreator.shuffles(self, count)

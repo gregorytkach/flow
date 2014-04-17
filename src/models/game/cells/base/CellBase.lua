@@ -154,13 +154,11 @@ end
 
 function CellBase.init(self, params)
     assert(params               ~= nil)
-    assert(params.flow_type     ~= nil)
-    assert(params.x             ~= nil)
-    assert(params.y             ~= nil)
     
-    self._flowType      = params.flow_type
-    self._x             = params.x
-    self._y             = params.y
+    self._flowType      = assertProperty(params, 'flow_type')
+    self._x             = assertProperty(params, 'x')
+    self._y             = assertProperty(params, 'y')
+    
     self._isPurchased   = false
     
 end
