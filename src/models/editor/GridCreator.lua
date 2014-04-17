@@ -15,11 +15,6 @@ function GridCreator.gridData(self)
     return self._gridData
 end
 
-
-function GridCreator.flowCount(self)
-    return self._flowCount
-end
-
 function GridCreator.rowsCount(self)
     return self._rowsCount
 end
@@ -51,7 +46,7 @@ function GridCreator.init(self, params)
     self._counts        = {}
     
     
-    self._flowCount = params.flowCount
+    self._flowCount             = params.flowCount
     
     self._rowsCount             = params.rows
     self._columnsCount          = params.columns
@@ -62,13 +57,6 @@ function GridCreator.init(self, params)
     self._bridgesCount          = params.bridgesCount
     self._barriersCount         = params.barriersCount
     
-    self:createGrid()
-    
-end
-
-function GridCreator.addFlow(self, value)
-    
-    self._flowCount = self._flowCount + value
     self:createGrid()
     
 end

@@ -42,6 +42,18 @@ function ControllerUIEditor.onViewClicked(self, target, event)
         
     elseif (self._view:buttonFlowTypeAdd() == target) then
         
+        local flowCountNew = self._managerGame:flowCount() + 1
+        
+        if(flowCountNew <= tonumber(EFlowType.EFT_COUNT))then
+            self._managerGame:setFlowCount(flowCountNew)
+        end
+        
+        self._view:buttonFlowTypeRemove():setIsEnabled(true)
+        
+        if(flowCountNew == tonumber(EFlowType.EFT_COUNT))then
+            self._view:buttonFlowTypeAdd():setIsEnabled(false)
+        end        
+        
         if self._managerGame:onAddFlow(1) then
             self._view:labelFlowType():sourceView():setText("Flow type: "..tostring(self._managerGame:gridCreator():flowCount()))
             self._currentState:update(EControllerUpdate.ECUT_EDIT)

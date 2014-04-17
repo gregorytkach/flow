@@ -22,26 +22,30 @@ function ManagerEditor.getDataLines(self)
     return self._dataLines
 end
 
---
--- events
---
+function ManagerEditor.flowCount(self)
+    return self._flowCount
+end
 
-function ManagerEditor.onAddFlow(self, value)
+function ManagerEditor.setFlowCount(self, value)
     
     assert(value ~= nil)
     
-    local result = false
-    
-    local flowCountNew = self._gridCreator:flowCount() + value
-    
-    if flowCountNew <= tonumber(EFlowType.EFT_COUNT) and flowCountNew > 0  then
-        self._gridCreator:addFlow(value)
-        result = true
-        
+    if(self._flowCount == value)then
+        return
     end
     
-    return result
+    self._flowCount = value
+    
+    --todo: remove
+    self._gridCreator._flowCount = value
+    
+    self._gridCreator:createGrid()
+    
 end
+
+--
+-- events
+--
 
 function ManagerEditor.onAddSize(self, value)
     
@@ -127,11 +131,11 @@ function ManagerEditor.init(self, params)
         flowCount       = 2,
     }
     
+    self._flowCount             = 2
+    
     self._gridCreator = GridCreator:new(paramsCreator)
     
     self:createGrid()
-    
-    
     
     ManagerGame.init(self, params)
     
