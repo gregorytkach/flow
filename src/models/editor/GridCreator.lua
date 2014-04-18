@@ -4,9 +4,6 @@ require('game_flow.src.models.game.cells.EFlowType')
 --todo: remove and move all functions to manager editor
 GridCreator     = classWithSuper(Object, 'GridCreator')
 
---self._bridgesCountLeft      = 4
---self._flowTypesCount    = 4
-
 --
 --Properties
 --
@@ -21,33 +18,6 @@ end
 
 function GridCreator.init(self, params)
 end
-
-function GridCreator.addSize(self, value)
-    
-    self._rowsCount = self._rowsCount + value
-    self._columnsCount = self._rowsCount
-    
-    self:createGrid()
-    
-end
-
-function GridCreator.addBridge(self, value)
-    
-    self._bridgesCount      = self._bridgesCount + value
-    self._bridgesCountLeft  = self._bridgesCount
-    self:createGrid()
-    
-end
-
-function GridCreator.addBarrier(self, value)
-    
-    self._barriersCount = self._barriersCount + value
-    self._barriersCountLeft = self._barriersCount
-    self:createGrid()
-    
-end
-
-
 
 function GridCreator.tryAddNeighbour(self, neighbours, cell, flow_type)
     
@@ -603,11 +573,10 @@ function GridCreator.createDataLines(self)
         
         for j = #cellsByType, 1, -1 do
             
-            local cell = cellsByType[j]
-            local needCell = cell.type == ECellType.ECT_FLOW_POINT 
+            local cell      = cellsByType[j]
+            local needCell  = cell.type == ECellType.ECT_FLOW_POINT 
             
             if not needCell then
-                
                 needCell = cell._prev.x ~= cell._next.x and cell._prev.y ~= cell._next.y 
             end
             

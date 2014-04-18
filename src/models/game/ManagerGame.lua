@@ -81,6 +81,8 @@ end
 
 function ManagerGame.onTimerTick(self)
     
+    print(self._timeLeft)
+    
     self._timeLeft = self._timeLeft - 1
     
     self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
@@ -218,9 +220,6 @@ function ManagerGame.tryValidate(self)
 end
 
 function ManagerGame.timerStart(self)
-    
-    print('timer started')
-    
     
     self._timerGame = timer.performWithDelay(application.animation_duration * 4, 
     function() 

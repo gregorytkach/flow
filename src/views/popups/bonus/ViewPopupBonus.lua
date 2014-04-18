@@ -185,7 +185,7 @@ function ViewPopupBonus.placeViews(self)
     
     local viewRewardWidth = self._viewReward:realWidth()
     
-    self._labelReward:sourceView().x = self._viewReward:sourceView().x - viewRewardWidth / 2 + viewRewardWidth * 0.4
+    self._labelReward:sourceView().x = self._viewReward:sourceView().x - viewRewardWidth / 2 + viewRewardWidth * 0.3
     self._labelReward:sourceView().y = self._viewReward:sourceView().y 
     
     self._labelRewardCount:sourceView().x = self._labelReward:sourceView().x + self._labelReward:realWidth() / 2 + 10

@@ -17,7 +17,6 @@ EControllerUpdate =
     ["ECUT_FREE_PURCHASE_ADD_TIME"]     = "ECUT_FREE_PURCHASE_ADD_TIME";
     ["ECUT_FREE_PURCHASE_SHOW_TURN"]    = "ECUT_FREE_PURCHASE_SHOW_TURN";
     ["ECUT_FREE_PURCHASE_RESOLVE"]      = "ECUT_FREE_PURCHASE_RESOLVE";
-    ["ECUT_FREE_BONUS_SPINS"]           = "ECUT_FREE_BONUS_SPINS";
     
     ["ECUT_EDIT"]                       = "ECUT_EDIT";
     ["ECUT_SET_DOGS"]                   = "ECUT_SET_DOGS";

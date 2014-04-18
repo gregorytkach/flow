@@ -74,7 +74,7 @@ function StateMap.update(self, updateType)
         
         self._controllerStateMap:itemsShow()
         
---        self:showPopup(EPopupType.EPT_BONUS)
+        --        self:showPopup(EPopupType.EPT_BONUS)
         
     elseif(updateType == EControllerUpdateBase.ECUT_SCENE_EXIT)then
         

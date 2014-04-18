@@ -29,7 +29,11 @@ function PlayerInfo.setEnergy(self, value)
     
     PlayerInfoBase.setEnergy(self, value)
     
-    --GameInfo:instance():managerBonus():onEnergyChanged()
+    local managerBonusEnergy =  GameInfoBase:instance():managerBonusEnergy()
+    
+    if(managerBonusEnergy ~= nil)then
+        managerBonusEnergy:onEnergyChanged()
+    end
     
 end
 

@@ -42,47 +42,19 @@ function ControllerUIEditor.onViewClicked(self, target, event)
         
     elseif (self._view:buttonFlowTypeAdd() == target) then
         
-        local flowCountNew = self._managerGame:flowCount() + 1
-        
-        if(flowCountNew <= tonumber(EFlowType.EFT_COUNT))then
-            self._managerGame:setFlowCount(flowCountNew)
-        end
-        
-        self._view:buttonFlowTypeRemove():setIsEnabled(true)
-        
-        if(flowCountNew == tonumber(EFlowType.EFT_COUNT))then
-            self._view:buttonFlowTypeAdd():setIsEnabled(false)
-        end        
-        
-        if self._managerGame:onAddFlow(1) then
-            self._view:labelFlowType():sourceView():setText("Flow type: "..tostring(self._managerGame:gridCreator():flowCount()))
-            self._currentState:update(EControllerUpdate.ECUT_EDIT)
-            self._view:buttonFlowTypeAdd():setIsEnabled(self._managerGame:gridCreator():flowCount() ~= tonumber(EFlowType.EFT_COUNT))
-        end
+        self:tryUpdateFlowCount(self._managerGame:flowCount() + 1)
         
     elseif (self._view:buttonFlowTypeRemove() == target) then
         
-        if self._managerGame:onAddFlow(-1) then
-            self._view:labelFlowType():sourceView():setText("Flow type: "..tostring(self._managerGame:gridCreator():flowCount()))
-            self._currentState:update(EControllerUpdate.ECUT_EDIT)
-            self._view:buttonFlowTypeRemove():setIsEnabled(self._managerGame:gridCreator():flowCount() ~= 1)
-        end
+        self:tryUpdateFlowCount(self._managerGame:flowCount() - 1)
         
     elseif (self._view:buttonSizeAdd() == target) then
         
-        if self._managerGame:onAddSize(1) then
-            self._view:labelSize():sourceView():setText("Size: "..tostring(self._managerGame:gridCreator():rowsCount()), EFontType.EFT_0)
-            self._currentState:update(EControllerUpdate.ECUT_EDIT)
-            self._view:buttonSizeAdd():setIsEnabled(self._managerGame:gridCreator():rowsCount() ~= Constants.MAX_GRID_SIZE)
-        end
+        self:tryUpdateGridSize(self._managerGame:gridSize() + 1)
         
     elseif (self._view:buttonSizeRemove() == target) then
         
-        if self._managerGame:onAddSize(-1) then
-            self._view:labelSize():sourceView():setText("Size: "..tostring(self._managerGame:gridCreator():rowsCount()), EFontType.EFT_0)
-            self._currentState:update(EControllerUpdate.ECUT_EDIT)
-            self._view:buttonSizeRemove():setIsEnabled(self._managerGame:gridCreator():rowsCount() ~= Constants.MIN_GRID_SIZE)
-        end
+        self:tryUpdateGridSize(self._managerGame:gridSize() - 1)
         
     elseif (self._view:buttonBridgeAdd() == target) then
         
@@ -126,6 +98,36 @@ function ControllerUIEditor.onViewClicked(self, target, event)
     
 end
 
+function ControllerUIEditor.tryUpdateFlowCount(self, value)
+    
+    if(value > tonumber(EFlowType.EFT_COUNT) or value < 1)then
+        return
+    end
+    
+    self._managerGame:setFlowCount(value)
+    
+    self._view:labelFlowType():sourceView():setText("Flow type: "..tostring(self._managerGame:gridCreator():flowCount()))
+    self._currentState:update(EControllerUpdate.ECUT_EDIT)
+    
+    self._view:buttonFlowTypeAdd():setIsEnabled(value ~= tonumber(EFlowType.EFT_COUNT))
+    self._view:buttonFlowTypeRemove():setIsEnabled(value ~= 1)
+    
+end
+
+function ControllerUIEditor.tryUpdateGridSize(self, value)
+    
+    if value > Constants.MAX_GRID_SIZE or value < Constants.MIN_GRID_SIZE then
+        return 
+    end
+    
+    self._view:labelSize():sourceView():setText("Size: "..tostring(self._managerGame:gridSize()), EFontType.EFT_0)
+    self._currentState:update(EControllerUpdate.ECUT_EDIT)
+    
+    self._view:buttonSizeRemove():setIsEnabled(value ~= Constants.MIN_GRID_SIZE)
+    self._view:buttonSizeAdd():setIsEnabled(value    ~= Constants.MAX_GRID_SIZE)
+    
+end
+
 
 --
 --Methods
@@ -149,8 +151,6 @@ function ControllerUIEditor.init(self)
     self._currentState = GameInfo:instance():managerStates():currentState()
     
 end
-
-
 
 function ControllerUIEditor.cleanup(self)
     

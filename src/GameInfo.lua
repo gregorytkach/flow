@@ -80,20 +80,25 @@ function GameInfo.onGameStartComplete(self, response)
         self._managerBonus:deserialize(data.bonus)
         self._managerTutorial:deserialize(data.tutorial)
         
+        self._managerBonusEnergy:timerStart()
+        
+        if(self._managerPlayers:playerCurrent():freeBonusSpins() == 0)then
+            self._managerBonus:timerStart()
+        end
+        
         local paramsGame = 
         {
             currentLevel = self._managerLevels:firstIncompleteLevel()
         }
         
-        self:onGameStart(ManagerEditor:new(paramsGame))
-        self._managerStates:setState(EStateType.EST_EDITOR)
+        --        self:onGameStart(ManagerEditor:new(paramsGame))
+        --        self._managerStates:setState(EStateType.EST_EDITOR)
         --        
         
         --        self:onGameStart(ManagerGame:new(paramsGame))
         --        self._managerStates:setState(EStateType.EST_GAME)
         
-        
-        --        self._managerStates:setState(EStateType.EST_MAP)
+        self._managerStates:setState(EStateType.EST_MAP)
         
     end
 end

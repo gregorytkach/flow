@@ -43,6 +43,21 @@ function ManagerEditor.gridSize(self)
     return self._gridSize
 end
 
+function ManagerEditor.onAddSize(self, value)
+    
+    assert(value ~= nil)
+    
+    if(value == self._gridSize)then
+        return
+    end
+    
+    self._gridSize = value
+    
+    self._gridCreator:addSize(value)
+    
+end
+
+
 
 function ManagerEditor.bridgesCount(self)
     return self._bridgesCount
@@ -52,25 +67,37 @@ function ManagerEditor.barriersCount(self)
     return self._barriersCount
 end
 
+function GridCreator.addSize(self, value)
+    
+    self._rowsCount = self._rowsCount + value
+    self._columnsCount = self._rowsCount
+    
+    self:createGrid()
+    
+end
+
+function GridCreator.addBridge(self, value)
+    
+    self._bridgesCount      = self._bridgesCount + value
+    self._bridgesCountLeft  = self._bridgesCount
+    self:createGrid()
+    
+end
+
+function GridCreator.addBarrier(self, value)
+    
+    self._barriersCount = self._barriersCount + value
+    self._barriersCountLeft = self._barriersCount
+    self:createGrid()
+    
+end
+
+
 --
 -- events
 --
 
-function ManagerEditor.onAddSize(self, value)
-    
-    assert(value ~= nil)
-    
-    local result = false
-    
-    local rowsCountNew = self._gridCreator:rowsCount() + value
-    
-    if rowsCountNew <= Constants.MAX_GRID_SIZE and rowsCountNew >= Constants.MIN_GRID_SIZE then
-        self._gridCreator:addSize(value)
-        result = true
-    end
-    
-    return result
-end
+
 
 function ManagerEditor.onAddBridge(self, value)
     

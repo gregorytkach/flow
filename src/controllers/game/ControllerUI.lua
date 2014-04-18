@@ -65,6 +65,8 @@ function ControllerUI.init(self)
     self._controllerPurchases = ControllerPurchases:new()
     
     self._view:setViewPurchases(self._controllerPurchases:view())
+    
+    self:update(EControllerUpdate.ECUT_GAME_TIME)
 end
 
 function ControllerUI.update(self, updateType)
