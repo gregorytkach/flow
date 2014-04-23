@@ -72,6 +72,7 @@ function ControllerMapItem.init(self, params)
         view:createImageItem(EResourceType.ERT_STATE_MAP_ITEM_CLOSE)
     end
     
+    
     local paramsController = 
     {
         view = view
@@ -80,6 +81,10 @@ function ControllerMapItem.init(self, params)
     Controller.init(self, paramsController)
     
     self._view:setNumber(self._entry:number())
+    
+    if(self._entry:progress():isComplete())then
+        self._view:button():setIsEnabled(false)
+    end
     
 end
 

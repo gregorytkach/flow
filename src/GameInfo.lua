@@ -91,14 +91,17 @@ function GameInfo.onGameStartComplete(self, response)
             currentLevel = self._managerLevels:firstIncompleteLevel()
         }
         
+        --todo:remove after test 2 level
+        paramsGame.currentLevel = self._managerLevels:levelContainers()[1]:levels()[2]
+        
         --        self:onGameStart(ManagerEditor:new(paramsGame))
         --        self._managerStates:setState(EStateType.EST_EDITOR)
         --        
         
-        --        self:onGameStart(ManagerGame:new(paramsGame))
-        --        self._managerStates:setState(EStateType.EST_GAME)
+        self:onGameStart(ManagerGame:new(paramsGame))
+        self._managerStates:setState(EStateType.EST_GAME)
         
-        self._managerStates:setState(EStateType.EST_MAP)
+        --        self._managerStates:setState(EStateType.EST_MAP)
         
     end
 end

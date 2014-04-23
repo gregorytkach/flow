@@ -40,18 +40,17 @@ function ControllerGrid.init(self)
     self:createCells()
     
     local flowTypes = {}
-    for i, row in ipairs(self._cells)do
-        for i, controllerCell in ipairs(row)do
+    for _, row in ipairs(self._cells)do
+        for _, controllerCell in ipairs(row)do
             
             if(controllerCell:entry():type() == ECellType.ECT_FLOW_POINT)then
                 controllerCell:view():sourceView():toFront()
                 
                 local flowType = controllerCell:entry():flowType()
                 
-                if table.indexOf(flowTypes, flowType) == nil then
-                    
+                if(controllerCell:entry():isStart())then
                     table.insert(flowTypes, flowType)
-                    
+                    print(type(flowType))
                 end
                 
             end
@@ -118,11 +117,13 @@ function ControllerGrid.update(self, updateType, flowType)
                     cell:onInHouse(true)
                     local controllerDog = self._dogsMap[entry:flowType()]
                     
+                    print(type(entry:flowType()))
+                    
                     controllerDog:view():sourceView().isVisible = false
                     
                 elseif  entry:type() == ECellType.ECT_FLOW_POINT    and 
-                        entry:isStart()                             and 
-                        not entry:isPurchased()                     then
+                    entry:isStart()                             and 
+                    not entry:isPurchased()                     then
                     
                     local controllerDog = self._dogsMap[entry:flowType()]
                     
@@ -138,21 +139,21 @@ function ControllerGrid.update(self, updateType, flowType)
         local currentDog  = self._dogsMap[self._managerGame:currentLineFlowType()]
         
         for _, _controllerDog in pairs(self._dogsMap) do
-
+            
             if _controllerDog == currentDog and self._updateType == EControllerUpdate.ECUT_DOG_UP then
                 _controllerDog:view():effect():sourceView().isVisible = true
-
+                
             else
                 _controllerDog:view():effect():sourceView().isVisible = false
                 
             end
         end
         
-       
+        
         for indexRow, row in ipairs(self._cells)do
             for indexColumn, cell in ipairs(row)do
                 local entry = cell:entry()
-              
+                
                 local controllerDog = self._dogsMap[entry:flowType()]
                 
                 if  entry:type() == ECellType.ECT_FLOW_POINT    and 
@@ -162,16 +163,16 @@ function ControllerGrid.update(self, updateType, flowType)
                     controllerDog:currentCell():cellPrevCached() == entry  then
                     
                     controllerDog:setCurrentCell(entry)
-               
+                    
                     
                 elseif (entry:type() == ECellType.ECT_EMPTY or entry:type() == ECellType.ECT_BRIDGE)  and 
-                        entry:cellPrev() ~= nil and 
-                        entry:cellNext() == nil then
+                    entry:cellPrev() ~= nil and 
+                    entry:cellNext() == nil then
                     
                     controllerDog:setCurrentCell(entry)
-                
+                    
                 elseif  entry:type() == ECellType.ECT_FLOW_POINT and 
-                        (entry:cellPrev() ~= nil or (entry:cellNext() == nil and entry:cellNextCached() ~=  nil) or entry == currentCell )then
+                    (entry:cellPrev() ~= nil or (entry:cellNext() == nil and entry:cellNextCached() ~=  nil) or entry == currentCell )then
                     
                     controllerDog:setCurrentCell(entry)
                 end
@@ -229,7 +230,7 @@ function ControllerGrid.update(self, updateType, flowType)
             if flowType == currentLineFlowType or currentLineFlowType == EFlowType.EFT_NONE or currentLineFlowType == nil then
                 controllerDog = self._currentDog
             end
-                
+            
             if currentCellByDog ~= nil and currentCellByDog:type() == ECellType.ECT_FLOW_POINT and not currentCellByDog:isStart() then
                 
                 currentDogByFlowType:view():setInHouse(true)
@@ -242,12 +243,12 @@ function ControllerGrid.update(self, updateType, flowType)
                 currentDogByFlowType:view():setInHouse(false)
                 
                 if  currentDogByFlowType._cell ~= nil then
-                     currentDogByFlowType._cell:controller():onInHouse(false)
-                     currentDogByFlowType._cell = nil
+                    currentDogByFlowType._cell:controller():onInHouse(false)
+                    currentDogByFlowType._cell = nil
                 end
                 
             end
-          
+            
         end
         
         if updateType ~= currentUpdateType then
@@ -266,11 +267,11 @@ function ControllerGrid.update(self, updateType, flowType)
         end
         
         if currentCellByDog ~= nil and currentCellByDog:type() == ECellType.ECT_FLOW_POINT and not currentCellByDog:isStart() then
-                
-                controllerDog:view():setInHouse(true)
-                currentCellByDog:controller():onInHouse(true)
-                
-                controllerDog._cell = currentCellByDog
+            
+            controllerDog:view():setInHouse(true)
+            currentCellByDog:controller():onInHouse(true)
+            
+            controllerDog._cell = currentCellByDog
         end
         
         if controllerDog ~= nil and updateType ~= self._updateType then
@@ -308,7 +309,7 @@ function ControllerGrid.sortDogs(self)
         
         self._dogsList[indexJ + 1] = value
     end
-
+    
     for _, controllerDog in ipairs(self._dogsList) do
         controllerDog._view._sourceView:toFront()
     end

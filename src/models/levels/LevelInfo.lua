@@ -108,16 +108,47 @@ end
 function LevelInfo.deserialize(self, data)
     LevelInfoBase.deserialize(self, data)
     
-    assert(data.data_grid ~= nil)
-    assert(data.data_lines ~= nil)
-    assert(data.time_left ~= nil)
-    
-    self._timeLeft  = tonumber(data.time_left)
-    self._dataGrid  = data.data_grid 
+    self._timeLeft  = tonumber(assertProperty(data, 'time_left'))
+    self._dataGrid  = assertProperty(data, 'data_grid') 
     
     --local json = require('json')
     
-    self._dataLines = data.data_lines
+    self._dataLines = assertProperty(data, 'data_lines') 
+    
+    self:applyPHPHack()
+    
+    
+    if(self._number == 2)then
+        
+        local flowTypes = {}
+        
+        for _, row in ipairs(self._dataGrid)do
+            for _, cellData in  ipairs(row) do
+                print(cellData)
+                
+                if(type(cellData.flow_type) == ELuaType.ELT_NUMBER)then
+                    assert(false)
+                end
+                
+                if(flowTypes[cellData.flow_type] == nil)then
+                    flowTypes[cellData.flow_type] = {}
+                end
+            end
+        end
+        
+        print(self._dataLines)
+    end
+end
+
+--hack: because php server side can't send dictionary instead array
+function LevelInfo.applyPHPHack(self)
+    local dataLinesDup = {}
+    
+    for flowType, dataLine in pairs(self._dataLines)do
+        dataLinesDup[tostring(flowType)] = dataLine
+    end
+    
+    self._dataLines = dataLinesDup
 end
 
 function LevelInfo.createGrid(self, dataGrid)

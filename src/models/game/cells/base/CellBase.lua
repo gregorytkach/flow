@@ -155,7 +155,7 @@ end
 function CellBase.init(self, params)
     assert(params               ~= nil)
     
-    self._flowType      = assertProperty(params, 'flow_type')
+    self._flowType      = assertProperty(params, 'flow_type', ELuaType.ELT_STRING)
     self._x             = assertProperty(params, 'x')
     self._y             = assertProperty(params, 'y')
     
