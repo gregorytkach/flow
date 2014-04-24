@@ -50,7 +50,6 @@ function ControllerGrid.init(self)
                 
                 if(controllerCell:entry():isStart())then
                     table.insert(flowTypes, flowType)
-                    print(type(flowType))
                 end
                 
             end
@@ -116,8 +115,6 @@ function ControllerGrid.update(self, updateType, flowType)
                     
                     cell:onInHouse(true)
                     local controllerDog = self._dogsMap[entry:flowType()]
-                    
-                    print(type(entry:flowType()))
                     
                     controllerDog:view():sourceView().isVisible = false
                     

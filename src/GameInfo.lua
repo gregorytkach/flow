@@ -17,6 +17,7 @@ require('game_flow.src.models.editor.ManagerEditor')
 require('game_flow.src.models.cache.ManagerCacheFlow')
 require('game_flow.src.models.remote.ManagerRemoteFlow')
 require('game_flow.src.models.remote.RemoteConnectorFlow')
+require('game_flow.src.models.purchases.ManagerPurchasesFlow')
 
 require('game_flow.src.views.popups.base.ViewPopupFlowBase')
 
@@ -92,7 +93,7 @@ function GameInfo.onGameStartComplete(self, response)
         }
         
         --todo:remove after test 2 level
-        paramsGame.currentLevel = self._managerLevels:levelContainers()[1]:levels()[2]
+--        paramsGame.currentLevel = self._managerLevels:levelContainers()[1]:levels()[2]
         
         --        self:onGameStart(ManagerEditor:new(paramsGame))
         --        self._managerStates:setState(EStateType.EST_EDITOR)
@@ -142,7 +143,7 @@ function GameInfo.initManagers(self)
     self._managerStates         = ManagerStatesBase:new()
     self._managerString         = ManagerString:new()
     self._managerSounds         = ManagerSounds:new()
-    self._managerPurchases      = ManagerPurchasesBase:new()
+    self._managerPurchases      = ManagerPurchasesFlow:new()
     self._managerBonus          = ManagerBonusBase:new(BonusInfoBase)
     self._managerBonusEnergy    = ManagerBonusEnergyBase:new(BonusInfoBase)
     self._managerPlayers        = ManagerPlayersBase:new(PlayerInfo)

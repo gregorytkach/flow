@@ -81,8 +81,6 @@ end
 
 function ManagerGame.onTimerTick(self)
     
-    print(self._timeLeft)
-    
     self._timeLeft = self._timeLeft - 1
     
     self._currentState:update(EControllerUpdate.ECUT_GAME_TIME)
@@ -146,8 +144,6 @@ function ManagerGame.onPurchaseFlowType(self, flowType, ignoreValidate)
     assert(lineData ~= nil)
     
     for _, cell in ipairs(lineData)do
-        
-        print(cell._x..':'..cell._y)
         
         cell:onPurchased(flowType)
         

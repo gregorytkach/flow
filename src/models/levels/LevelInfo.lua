@@ -124,8 +124,6 @@ function LevelInfo.deserialize(self, data)
         
         for _, row in ipairs(self._dataGrid)do
             for _, cellData in  ipairs(row) do
-                print(cellData)
-                
                 if(type(cellData.flow_type) == ELuaType.ELT_NUMBER)then
                     assert(false)
                 end
@@ -135,8 +133,6 @@ function LevelInfo.deserialize(self, data)
                 end
             end
         end
-        
-        print(self._dataLines)
     end
 end
 

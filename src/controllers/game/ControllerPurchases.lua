@@ -9,82 +9,70 @@ ControllerPurchases = classWithSuper(Controller, 'ControllerPurchases')
 
 
 function ControllerPurchases.onViewClicked(self, target, event)
-    local needShowPopupNoCurrency = false
     
-    local applyPurchase = false
-    
-    if (self._view:buttonResolve() == target) then
+    if (self._view:buttonResolve() == target)
+        then
         
-        if(self._playerCurrent:freePurchaseResolve() > 0)then
+        self._managerPurchases:onTryPurchase(self._purchaseResolve,
+        function()
             
-            self._playerCurrent:setFreePurchaseResolve(self._playerCurrent:freePurchaseResolve() - 1)
-            
-            applyPurchase = true
-            
-        elseif(self._playerCurrent:currencySoft() >= self._purchaseResolve:priceSoft())then
-            
-            self._playerCurrent:setCurrencySoft(self._playerCurrent:currencySoft() - self._purchaseResolve:priceSoft())
-            
-            applyPurchase = true
-            
-        end
-        
-        if(applyPurchase)then
             self._managerGame:onBuyPurchaseResolve()
-        end
+            
+            self:onPurchaseComplete()
+            
+        end,
+        function()
+            self:onPurchaseError()
+        end)
+        
         
     elseif (self._view:buttonShowTurn() == target) then
         
-        if(self._playerCurrent:freePurchaseShowTurn() > 0)then
+        self._managerPurchases:onTryPurchase(self._purchaseShowTurn,
+        function()
             
-            self._playerCurrent:setFreePurchaseShowTurn(self._playerCurrent:freePurchaseShowTurn() - 1)
-            
-            applyPurchase = true
-            
-        elseif(self._playerCurrent:currencySoft() >= self._purchaseShowTurn:priceSoft())then
-            
-            self._playerCurrent:setCurrencySoft(self._playerCurrent:currencySoft() - self._purchaseShowTurn:priceSoft())
-            
-            applyPurchase = true
-            
-        end
-        
-        if(applyPurchase)then
             self._managerGame:onBuyPurchaseShowTurn()
-        end
-        
+            
+            self:onPurchaseComplete()
+            
+        end,
+        function()
+            self:onPurchaseError()
+        end)
         
     elseif (self._view:buttonAddTime() == target) then
         
-        if(self._playerCurrent:freePurchaseAddTime() > 0)then
+        self._managerPurchases:onTryPurchase(self._purchaseAddTime,
+        function()
             
-            self._playerCurrent:setFreePurchaseAddTime(self._playerCurrent:freePurchaseAddTime() - 1)
+            self._managerGame:onBuyAddTime()
             
-            applyPurchase = true
-        elseif(self._playerCurrent:currencySoft() >= self._purchaseAddTime:priceSoft())then
+            self:onPurchaseComplete()
             
-            self._playerCurrent:setCurrencySoft(self._playerCurrent:currencySoft() - self._purchaseAddTime:priceSoft())
-            
-            applyPurchase = true
-        else
-            needShowPopupNoCurrency = true
-        end
+        end,
+        function()
+            self:onPurchaseError()
+        end)
         
-        if(applyPurchase)then
-            self._managerGame:onBuyAddTime()        
-        end
     else
         assert(false)
     end
     
-    if(needShowPopupNoCurrency)then
-        GameInfo:instance():managerStates():currentState():showPopup(EPopupType.EPT_NO_CURRENCY)
+    
+    
+    
+end
+
+function ControllerPurchases.onPurchaseComplete(self)
+    if(not application.sounds)then
+        return
     end
     
-    if(applyPurchase and application.sounds)then
-        audio.play(GameInfoBase:instance():managerSounds():getSound(ESoundType.EST_BUTTON_PURCHASE))
-    end
-    
+    audio.play(GameInfoBase:instance():managerSounds():getSound(ESoundType.EST_BUTTON_PURCHASE))
+end
+
+function ControllerPurchases.onPurchaseError(self)
+    GameInfo:instance():managerStates():currentState():showPopup(EPopupType.EPT_NO_CURRENCY)
 end
 
 --
@@ -105,9 +93,10 @@ function ControllerPurchases.init(self)
     
     Controller.init(self, paramsController)
     
-    self._managerGame    = GameInfo:instance():managerGame()
-    self._playerCurrent  = GameInfo:instance():managerPlayers():playerCurrent()
-    self._textFormatFree = GameInfo:instance():managerString():getString(EStringType.EST_GAME_PURCHASE_FREE)
+    self._managerGame       = GameInfo:instance():managerGame()
+    self._managerPurchases  = GameInfo:instance():managerPurchases()
+    self._playerCurrent     = GameInfo:instance():managerPlayers():playerCurrent()
+    self._textFormatFree    = GameInfo:instance():managerString():getString(EStringType.EST_GAME_PURCHASE_FREE)
     
     local purchases = GameInfo:instance():managerPurchases():purchases()
     
