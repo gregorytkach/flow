@@ -15,14 +15,18 @@ function ControllerPopupShopItem.onViewClicked(self, target, event)
             
             self._managerPurchases:onTryPurchase(self._entry, 
             function()
+                self._view:buttonBuy():setIsEnabled(false)
+                
                 if(self._entry:type() == EPurchaseTypeBase.EPT_CURRENCY_SOFT)then
                     self._playerCurrent:setCurrencySoft(self._playerCurrent:currencySoft() + self._entry:contentCount())
                 elseif(self._entry:type() == EPurchaseTypeBase.EPT_ENERGY)then
                     self._playerCurrent:setEnergy(self._playerCurrent:energy() + self._entry:contentCount())
                 else
                     assert(false, self._entry:type())
-                    
                 end
+            end,
+            function()
+                self._view:buttonBuy():setIsEnabled(true)
             end)
             
         else
