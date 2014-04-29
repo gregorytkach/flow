@@ -2,8 +2,8 @@ local function getDataBonus()
     
     local result = 
     {
-        time_period  = 10,
-        time_left    = 5
+        time_period  = 12 * 60 * 60,
+        time_left    = 0
     }
     
     local bonuses = 

@@ -161,7 +161,7 @@ function ViewUIMap.placeViews(self)
     self._viewTimeEnergy:sourceView().y = self._buttonBuyEnergy:sourceView().y + self._buttonBuyEnergy:realHeight() / 2 +  self._viewTimeEnergy:realHeight() / 2
     
     self._labelTimeEnergy:sourceView().x = self._viewTimeEnergy:sourceView().x
-    self._labelTimeEnergy:sourceView().y = self._viewTimeEnergy:sourceView().y
+    self._labelTimeEnergy:sourceView().y = self._viewTimeEnergy:sourceView().y - 1
     
     
     local borderLeft    = self._buttonSound:sourceView().x - self._buttonSound:realWidth() / 2

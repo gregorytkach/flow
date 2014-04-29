@@ -93,10 +93,6 @@ function StateMap.update(self, updateType)
         updateType == EControllerUpdate.ECUT_FREE_PURCHASE_RESOLVE)then
         
         --do nothing
-    elseif(updateType == EControllerUpdate.ECUT_FREE_BONUS_SPINS)then
-        local popupBonus = self:getPopup(EPopupType.EPT_BONUS)
-        
-        popupBonus:update(updateType)
     else
         assert(false, updateType)
     end

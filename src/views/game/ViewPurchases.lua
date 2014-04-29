@@ -18,6 +18,8 @@ function ViewPurchases.setTextButtonResolve(self, value, isIconVisible)
     else
         self._iconCurrencyResolve:hide()
     end
+    
+    self:placeIconCurrencyResolve()
 end
 
 function ViewPurchases.buttonAddTime(self)
@@ -34,6 +36,8 @@ function ViewPurchases.setTextButtonAddTime(self, value, isIconVisible)
     else
         self._iconCurrencyAddTime:hide()
     end
+    
+    self:placeIconCurrencyAddTime()
 end
 
 function ViewPurchases.buttonShowTurn(self)
@@ -50,6 +54,8 @@ function ViewPurchases.setTextButtonShowTurn(self, value, isIconVisible)
     else
         self._iconCurrencyShowTurn:hide()
     end
+    
+    self:placeIconCurrencyShowTurn()
 end
 
 
@@ -104,30 +110,49 @@ function ViewPurchases.placeViews(self)
     self._buttonAddTime:sourceView().x = 0 + self._buttonAddTime:realWidth() / 2 
     self._buttonAddTime:sourceView().y = 0
     
-    self._iconCurrencyAddTime:sourceView().x = self._buttonAddTime:sourceView().x + self._buttonAddTime:realWidth() / 2  - self._iconCurrencyAddTime:realWidth() - 2
-    self._iconCurrencyAddTime:sourceView().y = self._buttonAddTime:sourceView().y + self._buttonAddTime:realHeight() / 2 - self._iconCurrencyAddTime:realHeight() - 7
-    
     self._labelAddTime:sourceView().x = self._buttonAddTime:sourceView().x + self._buttonAddTime:realWidth() / 2 - 38
     self._labelAddTime:sourceView().y = self._buttonAddTime:sourceView().y + self._buttonAddTime:realHeight() / 2 - 22
+    
+    self:placeIconCurrencyAddTime()
     
     self._buttonResolve:sourceView().x = self._buttonAddTime:sourceView().x + self._buttonAddTime:realWidth() / 2 + self._buttonResolve:realWidth() / 2
     self._buttonResolve:sourceView().y = 0
     
-    self._iconCurrencyResolve:sourceView().x = self._buttonResolve:sourceView().x + self._buttonResolve:realWidth() / 2  - self._iconCurrencyResolve:realWidth() - 2
-    self._iconCurrencyResolve:sourceView().y = self._buttonResolve:sourceView().y + self._buttonResolve:realHeight() / 2 - self._iconCurrencyResolve:realHeight() - 7
-    
     self._labelResolve:sourceView().x = self._buttonResolve:sourceView().x + self._buttonResolve:realWidth() / 2 - 38
     self._labelResolve:sourceView().y = self._buttonResolve:sourceView().y + self._buttonResolve:realHeight() / 2 - 22
+    
+    self:placeIconCurrencyResolve()
     
     self._buttonShowTurn:sourceView().x = self._buttonResolve:sourceView().x + self._buttonResolve:realWidth() / 2 + self._buttonShowTurn:realWidth() / 2 
     self._buttonShowTurn:sourceView().y = 0
     
-    self._iconCurrencyShowTurn:sourceView().x = self._buttonShowTurn:sourceView().x + self._buttonShowTurn:realWidth() / 2  - self._iconCurrencyShowTurn:realWidth() - 2
-    self._iconCurrencyShowTurn:sourceView().y = self._buttonShowTurn:sourceView().y + self._buttonShowTurn:realHeight() / 2 - self._iconCurrencyShowTurn:realHeight() - 7
     
     self._labelShowTurn:sourceView().x = self._buttonShowTurn:sourceView().x + self._buttonShowTurn:realWidth() / 2 - 38
     self._labelShowTurn:sourceView().y = self._buttonShowTurn:sourceView().y + self._buttonShowTurn:realHeight() / 2 - 22
     
+    self:placeIconCurrencyShowTurn()
+end
+
+function ViewPurchases.placeIconCurrencyAddTime(self)
+    local labelSource = self._labelAddTime:sourceView()
+    
+    self._iconCurrencyAddTime:sourceView().x = labelSource.x + self._labelAddTime:realWidth() / 2  + self._iconCurrencyAddTime:realWidth() / 2
+    self._iconCurrencyAddTime:sourceView().y = labelSource.y + 1
+end
+
+function ViewPurchases.placeIconCurrencyShowTurn(self)
+    local labelSource = self._labelShowTurn:sourceView()
+    
+    self._iconCurrencyShowTurn:sourceView().x = labelSource.x + self._labelShowTurn:realWidth() / 2  + self._iconCurrencyShowTurn:realWidth() / 2
+    self._iconCurrencyShowTurn:sourceView().y = labelSource.y + 1
+end
+
+function ViewPurchases.placeIconCurrencyResolve(self)
+    
+    local labelSource = self._labelResolve:sourceView()
+    
+    self._iconCurrencyResolve:sourceView().x = labelSource.x + self._labelResolve:realWidth() / 2  + self._iconCurrencyResolve:realWidth() / 2
+    self._iconCurrencyResolve:sourceView().y = labelSource.y + 1
 end
 
 function ViewPurchases.cleanup(self)

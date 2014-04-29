@@ -17,8 +17,6 @@ function PlayerInfo.setFreeBonusSpins(self, value)
     self._freeBonusSpins = value
     
     self:trySaveProgress()
-    
-    self:tryUpdateCurrentState(EControllerUpdate.ECUT_FREE_BONUS_SPINS)
 end
 
 

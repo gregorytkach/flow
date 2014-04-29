@@ -130,21 +130,6 @@ function ControllerPopupBonus.updateTime(self)
     
 end
 
-function ControllerPopupBonus.update(self, updateType)
-    if(updateType == EControllerUpdate.ECUT_FREE_BONUS_SPINS)then
-        
-        if(self._playerCurrent:freeBonusSpins() > 0)then
-            --        else
-            --            self._managerBonus:timerStart()
-        end
-        
-    else
-        assert(false)
-    end
-end
-
-
-
 function ControllerPopupBonus.updateButtons(self, force)
     
     local freeBonusSpins         = self._playerCurrent:freeBonusSpins()
