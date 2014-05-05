@@ -56,7 +56,16 @@ function ViewUIMap.setTimeEnergy(self, value)
     
     local text = string.format("%.2d:%.2d", value / 60 % 60, value % 60)
     
+    self:setTimerIsVisible(value > 0)
+    
     self._labelTimeEnergy:sourceView():setText(text)
+end
+
+function ViewUIMap.setTimerIsVisible(self, value)
+    assert(value ~= nil)
+    
+    self._viewTimeEnergy:sourceView().isVisible  = value
+    self._labelTimeEnergy:sourceView().isVisible = value
 end
 
 function ViewUIMap.setTimeBonus(self, value)

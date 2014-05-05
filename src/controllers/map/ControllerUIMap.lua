@@ -8,7 +8,7 @@ ControllerUIMap = classWithSuper(Controller, 'ControllerUIMap')
 
 function ControllerUIMap.onViewClicked(self, target, event)
     
-    if (target == self._view:buttonSound()) then
+    if (target == self._view:buttonSoundDisabled()) then
         
         application.sounds  = true
         application.music   = true
@@ -18,7 +18,7 @@ function ControllerUIMap.onViewClicked(self, target, event)
         
         self:updateButtonSound()
         
-    elseif(target == self._view:buttonSoundDisabled())then
+    elseif(target == self._view:buttonSound())then
         
         application.sounds  = false
         application.music   = false

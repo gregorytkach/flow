@@ -146,8 +146,6 @@ function ControllerPopupBonus.updateButtons(self, force)
     
     self._isBonusAvailable  = isBonusAvailable
     
-    print('change bonus state: '..tostring(self._isBonusAvailable))
-    
     if(isPlayerHaveFreeSpins) then
         --todo: move to manager string
         self._view:buttonSpin():label():sourceView():setText("FREE: "..tostring(freeBonusSpins))

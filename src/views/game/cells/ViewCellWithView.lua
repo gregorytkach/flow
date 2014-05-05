@@ -31,6 +31,8 @@ function ViewCellWithView.init(self, params)
     
     --cache real width without images
     self._realWidth = ViewCell.realWidth(self)
+    self._realHeight = ViewCell.realHeight(self)
+    
     
     local entry = self._controller:entry()
     
@@ -74,6 +76,21 @@ function ViewCellWithView.init(self, params)
         self._viewFull:sourceView().isVisible = false
     end
     
+end
+
+function ViewCellWithView.establishBounds(self)
+    local widthHalf     = self._realWidth  / 2
+    local heightHalf    = self._realHeight / 2
+    
+    local xGlobal, yGlobal = self._sourceView:localToContent(0, 0)
+    
+    self._x0 = xGlobal - widthHalf
+    self._x1 = xGlobal + widthHalf
+    
+    self._y0 = yGlobal - heightHalf
+    self._y1 = yGlobal + heightHalf
+    
+    self._boundsEstablished = true
 end
 
 function ViewCellWithView.placeViews(self)

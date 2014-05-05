@@ -20,7 +20,6 @@ function ViewPopupGameOver.init(self, params)
     
     self._viewPenalty   = self:createSprite(managerResources:getAsImage(EResourceType.ERT_POPUP_GAME_OVER_VIEW_PENALTY))
     
-    --todo: review "-1
     self._lavelPenalty  = self:createLabel("-1", EFontType.EFT_0, ELabelTextAlign.ELTA_RIGHT)
     self._lavelPenalty:sourceView():setColorHex("0xFFB600")
     self._iconCurrency  = self:createSprite(managerResources:getAsImage(EResourceType.ERT_ICON_ENERGY))

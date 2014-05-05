@@ -17,7 +17,6 @@ end
 
 function ControllerCell.touch(self, event)
     
-    
     if(event.phase == ETouchEvent.ETE_BEGAN) then
         
         if(self._view:isInsideEvent(event))then
