@@ -191,26 +191,40 @@ function ManagerGame.init(self, params)
 end
 
 function ManagerGame.tryValidate(self)
-    local isPlayerWIn = true
+    local isPlayerWin = true
     
-    for _, row in ipairs(self._grid) do
-        for _, cell in ipairs(row)do
-            
-            if(cell:type() ~= ECellType.ECT_BARRIER)then
-                if(cell:flowType() == EFlowType.EFT_NONE)then
-                    isPlayerWIn = false
-                    
-                    break
-                end
-            end
-        end
-        
-        if(not isPlayerWIn)then
+    local cellsFlowPoints = self:getCellsByType(ECellType.ECT_FLOW_POINT)
+    
+    for _, cell in ipairs(cellsFlowPoints)do
+        if(not cell:includeInLine())then
+            isPlayerWin = false
             break
         end
     end
     
-    if(isPlayerWIn)then
+    if(isPlayerWin)then
+        
+        for _, row in ipairs(self._grid) do
+            for _, cell in ipairs(row)do
+                
+                if(cell:type() ~= ECellType.ECT_BARRIER)then
+                    if(cell:flowType() == EFlowType.EFT_NONE)then
+                        isPlayerWin = false
+                        
+                        break
+                    end
+                end
+            end
+            
+            if(not isPlayerWin)then
+                break
+            end
+        end
+        
+    end
+    
+    
+    if(isPlayerWin)then
         self:onPlayerWin()
     end
 end

@@ -42,6 +42,10 @@ function CellBase.cellNext(self)
     return self._cellNext
 end
 
+function CellBase.includeInLine(self)
+    return self._cellNext ~= nil or self._cellPrev ~= nil
+end
+
 function CellBase.setCellNext(self, value)
     
     
