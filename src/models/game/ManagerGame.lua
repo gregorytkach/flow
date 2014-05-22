@@ -143,9 +143,17 @@ function ManagerGame.onPurchaseFlowType(self, flowType, ignoreValidate)
     
     assert(lineData ~= nil)
     
+    local prevCell = nil
+    
     for _, cell in ipairs(lineData)do
         
         cell:onPurchased(flowType)
+        
+        if(prevCell ~= nil)then
+            prevCell:setCellNext(cell)
+        end
+        
+        prevCell = cell
         
     end
     
