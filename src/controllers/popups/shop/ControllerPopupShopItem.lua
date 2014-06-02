@@ -14,7 +14,7 @@ function ControllerPopupShopItem.onViewClicked(self, target, event)
         if(self._view:buttonBuy() == target)then
             
             self._managerPurchases:onTryPurchase(self._entry, 
-            function()
+            function() --complete purchase
                 self._view:buttonBuy():setIsEnabled(false)
                 
                 if(self._entry:type() == EPurchaseTypeBase.EPT_CURRENCY_SOFT)then
@@ -25,7 +25,7 @@ function ControllerPopupShopItem.onViewClicked(self, target, event)
                     assert(false, self._entry:type())
                 end
             end,
-            function()
+            function() --error purhcase
                 self._view:buttonBuy():setIsEnabled(true)
             end)
             
