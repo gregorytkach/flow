@@ -62,6 +62,9 @@ end
 --
 
 function GameInfo.onGameStartComplete(self, response)
+    --todo: remove
+    print('response status is '..response:status())
+    
     if(response:status() == EResponseType.ERT_OK)then
         local data = response:response()
         
