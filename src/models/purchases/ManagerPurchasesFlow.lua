@@ -46,3 +46,7 @@ function ManagerPurchasesFlow.cleanup(self)
     Object.cleanup(self)
 end
 
+function ManagerPurchasesFlow.deserialize(self, data)
+    ManagerPurchasesBase.deserialize(self, data)
+end
+
